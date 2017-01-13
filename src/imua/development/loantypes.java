@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -28,6 +29,8 @@ public class loantypes extends javax.swing.JFrame {
         initComponents();
         setTilteImage();
         findUsers();
+        btnGroup.add(jRadioButtonA);
+        btnGroup.add(jRadioButtonN);
     }
      private void setTilteImage(){
      Methods n=new Methods();
@@ -49,9 +52,9 @@ public class loantypes extends javax.swing.JFrame {
       ResultSet rs = st.executeQuery(searchQuery);
       while (rs.next())
       {
-        loantypesholder user = new loantypesholder(rs.getString("id"), rs.getString("name"),rs.getString("rate"),rs.getString("appfee"),rs.getString("penalt"),rs.getString("balance")
-        ,rs.getString("lv1"),rs.getString("lv2"),rs.getString("lv3"),rs.getString("lv4"),rs.getString("lv5"),rs.getString("lv6"),rs.getString("lv7"),
-        rs.getString("lv8"),rs.getString("lv9"),rs.getString("lv10"));
+        loantypesholder user = new loantypesholder(rs.getString("id"), rs.getString("name"),
+                rs.getString("rate"),rs.getString("appfee"),rs.getString("penalt"),rs.getString("balance"),rs.getString("rateTime"),rs.getString("ratePer"),rs.getString("applicable")
+        );
         
         usersList.add(user);
       }
@@ -71,27 +74,20 @@ public class loantypes extends javax.swing.JFrame {
     ArrayList<loantypesholder> users = ListUsers();
     DefaultTableModel model = new DefaultTableModel();
     
-    model.setColumnIdentifiers(new Object[] { "ID", "Name","Rate","Aplication","Penalty","Balance","<5,000","<10,000","<15,000","<20,000","<25,000","<30,000",
-        "<40,000","<50,000","<60,000","+60,000" });
-    Object[] row = new Object[16];
+    model.setColumnIdentifiers(new Object[] { "ID", "Name","Rate","In","Aplication","Penalty","Balance" });
+    Object[] row = new Object[7];
     for (int i = 0; i < users.size(); i++)
     {
       row[0] = ((loantypesholder)users.get(i)).getId();
       row[1] = ((loantypesholder)users.get(i)).getName();
         row[2] = ((loantypesholder) users.get(i)).getRate();
-        row[3] = ((loantypesholder) users.get(i)).getAppFee();
-        row[4] = ((loantypesholder) users.get(i)).getPenalty();
-        row[5] = ((loantypesholder) users.get(i)).getBalance();
-        row[6] = ((loantypesholder) users.get(i)).getLv1();
-        row[7] = ((loantypesholder) users.get(i)).getLv2();
-        row[8] = ((loantypesholder) users.get(i)).getLv3();
-        row[9] = ((loantypesholder) users.get(i)).getLv4();
-        row[10] = ((loantypesholder) users.get(i)).getLv5();
-        row[11] = ((loantypesholder) users.get(i)).getLv6();
-        row[12] = ((loantypesholder) users.get(i)).getLv7();
-        row[13] = ((loantypesholder) users.get(i)).getLv8();
-        row[14] = ((loantypesholder) users.get(i)).getLv9();
-        row[15] = ((loantypesholder) users.get(i)).getLv10();
+        String rateper = ((loantypesholder) users.get(i)).getRatePer();
+        String ratetime = ((loantypesholder) users.get(i)).getRateTime();
+        row[3] = ratetime+" "+rateper;
+        row[4] = ((loantypesholder) users.get(i)).getAppFee();
+        row[5] = ((loantypesholder) users.get(i)).getPenalty();
+        row[6] = ((loantypesholder) users.get(i)).getBalance();
+       
       
      
       
@@ -149,35 +145,22 @@ public class loantypes extends javax.swing.JFrame {
         tpenalty = new javax.swing.JTextField();
         tbalance = new javax.swing.JTextField();
         tname = new javax.swing.JTextField();
-        tlv2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        tlv1 = new javax.swing.JTextField();
-        tlv4 = new javax.swing.JTextField();
-        tlv3 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        tlv6 = new javax.swing.JTextField();
-        tlv5 = new javax.swing.JTextField();
-        tlv7 = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        tlv8 = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        tlv9 = new javax.swing.JTextField();
-        tlv10 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        txtIntrestPer = new javax.swing.JLabel();
+        jRadioButtonA = new javax.swing.JRadioButton();
+        jRadioButtonN = new javax.swing.JRadioButton();
 
         jTextField14.setText("jTextField14");
 
@@ -211,18 +194,6 @@ public class loantypes extends javax.swing.JFrame {
 
         jLabel2.setText("NAME");
 
-        tlv4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tlv4ActionPerformed(evt);
-            }
-        });
-
-        tlv3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tlv3ActionPerformed(evt);
-            }
-        });
-
         jLabel3.setText("ID");
 
         jLabel4.setText("RATE");
@@ -232,32 +203,6 @@ public class loantypes extends javax.swing.JFrame {
         jLabel6.setText("PENALTY");
 
         jLabel7.setText("*BALANCE");
-
-        jLabel8.setText("<5000");
-
-        jLabel9.setText("<10,000");
-
-        jLabel10.setText("<15000");
-
-        jLabel11.setText("<20,000");
-
-        jLabel12.setText("<30,000");
-
-        tlv6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tlv6ActionPerformed(evt);
-            }
-        });
-
-        jLabel13.setText("<25000");
-
-        jLabel14.setText("<40,000");
-
-        jLabel15.setText("<50,000");
-
-        jLabel16.setText("<60,000");
-
-        jLabel17.setText("60001+");
 
         jButton1.setText("ADD");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -280,75 +225,98 @@ public class loantypes extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CHOOSE", "Monthly", "Weekly", "Yearly", "Daily" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
+        jLabel8.setText("PER");
+
+        jLabel9.setText("NO");
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner1StateChanged(evt);
+            }
+        });
+
+        jRadioButtonA.setText("APPLICABLE");
+        jRadioButtonA.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButtonAItemStateChanged(evt);
+            }
+        });
+
+        jRadioButtonN.setText("NOT APPLICABLE");
+        jRadioButtonN.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButtonNItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(85, 85, 85)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(jButton3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(jLabel3))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel13))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(tid, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(tid, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(tpenalty, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(tlv1, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addComponent(trate, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jLabel14)
-                                    .addComponent(tlv9, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addComponent(tpenalty, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                                    .addComponent(trate, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                                    .addComponent(jLabel4)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(tlv3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(tlv7, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tlv5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(tappfee)
-                                .addComponent(tname)
-                                .addComponent(tbalance)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel9)
-                                .addComponent(jLabel11)
-                                .addComponent(tlv2)
-                                .addComponent(jLabel12)
-                                .addComponent(jLabel17)
-                                .addComponent(tlv10)
-                                .addComponent(tlv8)
-                                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                                .addComponent(tlv6)
-                                .addComponent(tlv4)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(tappfee)
+                            .addComponent(tname)
+                            .addComponent(tbalance)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jButton3)))
+                        .addGap(60, 60, 60)
+                        .addComponent(txtIntrestPer))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8)
+                            .addComponent(jRadioButtonA))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jRadioButtonN, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,47 +347,21 @@ public class loantypes extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tpenalty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tbalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonA)
+                    .addComponent(jRadioButtonN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tlv1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tlv2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tlv4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tlv3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tlv6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tlv5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel14))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tlv8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tlv7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tlv9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tlv10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(txtIntrestPer, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(175, 175, 175)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -432,18 +374,6 @@ public class loantypes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tlv4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tlv4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tlv4ActionPerformed
-
-    private void tlv3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tlv3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tlv3ActionPerformed
-
-    private void tlv6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tlv6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tlv6ActionPerformed
-
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         int i = this.table.getSelectedRow();
 
@@ -454,20 +384,17 @@ public class loantypes extends javax.swing.JFrame {
         this.tname.setText(model.getValueAt(i, 1).toString());
       //  this.tname.setText(model.getValueAt(i, 2).toString());
         this.trate.setText(model.getValueAt(i, 2).toString());
-        this.tappfee.setText(model.getValueAt(i, 3).toString());
+        this.tappfee.setText(model.getValueAt(i, 4).toString());
+        if(model.getValueAt(i, 3).toString().equals("0 0")){
+            this.txtIntrestPer.setText("NOT APPLICABLE");
+        }else{
+           this.txtIntrestPer.setText(model.getValueAt(i, 3).toString()); 
+        }
         
-        this.tpenalty.setText(model.getValueAt(i, 4).toString());
-        this.tbalance.setText(model.getValueAt(i, 5).toString());
-        this.tlv1.setText(model.getValueAt(i, 6).toString());
-        this.tlv2.setText(model.getValueAt(i, 7).toString());
-        this.tlv3.setText(model.getValueAt(i, 8).toString());
-        this.tlv4.setText(model.getValueAt(i, 9).toString());
-        this.tlv5.setText(model.getValueAt(i, 10).toString());
-        this.tlv6.setText(model.getValueAt(i, 11).toString());
-        this.tlv7.setText(model.getValueAt(i, 12).toString());
-        this.tlv8.setText(model.getValueAt(i, 13).toString());
-        this.tlv9.setText(model.getValueAt(i, 14).toString());
-          this.tlv10.setText(model.getValueAt(i, 15).toString());
+        this.tpenalty.setText(model.getValueAt(i, 5).toString());
+        this.tbalance.setText(model.getValueAt(i, 6).toString());
+        
+      
     }//GEN-LAST:event_tableMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -485,7 +412,41 @@ check(3);
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
        Main.a = 1;
     }//GEN-LAST:event_formWindowClosed
-private void insert(){
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+       
+        ratePer=jComboBox1.getSelectedItem().toString(); 
+        rateTime=jSpinner1.getValue().toString();
+        updateIntrestPerTxt();
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+         //frequency=(Integer)jSpinnerFrequency.getValue();
+         
+      rateTime=jSpinner1.getValue().toString();
+       updateIntrestPerTxt();
+    }//GEN-LAST:event_jSpinner1StateChanged
+String ratePer="0";
+String rateTime="0";
+    private void jRadioButtonAItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonAItemStateChanged
+        applicableStatus="A";
+        //ratePer=jComboBox1.getSelectedItem().toString();  
+       // rateTime=jSpinner1.getValue().toString();
+    }//GEN-LAST:event_jRadioButtonAItemStateChanged
+
+    private void jRadioButtonNItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonNItemStateChanged
+applicableStatus="NA"    ;  
+        ratePer="0";  
+        rateTime="0";
+    }//GEN-LAST:event_jRadioButtonNItemStateChanged
+private void  updateIntrestPerTxt(){
+     int  noOf=(Integer)jSpinner1.getValue();
+     String perItem=jComboBox1.getSelectedItem().toString();
+     String text=(String.valueOf(noOf)+" "+perItem);
+     txtIntrestPer.setText(text);
+     
+}
+    private void insert(){
     try
       {
         String stru = this.tid.getText().toString();
@@ -506,11 +467,9 @@ private void insert(){
         }
         else
         {
-String query = "INSERT INTO `accounttypes`(`id`, `name`, `rate`,`appfee`,`penalt`,`balance`,`lv1`,`lv2`,`lv3`,`lv4`,`lv5`,`lv6`,`lv7`,`lv8`,`lv9`,`lv10`)"
+String query = "INSERT INTO `accounttypes`(`id`, `name`, `rate`,`appfee`,`penalt`,`balance`,`rateTime`,`ratePer`,`applicable`)"
  + " VALUES ('" + this.tid.getText() + "','" + this.tname.getText() + "','" + this.trate.getText() + "','" + this.tappfee.getText() + "','" + this.tpenalty.getText() + "'"
-        + ",'" + this.tbalance.getText() + "','" + this.tlv1.getText() + "','" + this.tlv2.getText() + "','" + this.tlv3.getText() + "','" + this.tlv4.getText() + "'"
-        + ",'" + this.tlv5.getText() + "','" + this.tlv6.getText() + "','" + this.tlv7.getText() + "','" + this.tlv8.getText() + "','" + this.tlv9.getText() + "'"
-        + ",'" + this.tlv10.getText() + "')";
+        + ",'" + this.tbalance.getText() + "','"+rateTime+"','"+ratePer+"','"+applicableStatus+"')";
           
           executeSQlQuery(query, "Inserted");
         }
@@ -526,10 +485,8 @@ String query = "INSERT INTO `accounttypes`(`id`, `name`, `rate`,`appfee`,`penalt
 private void update(){
     String query = "UPDATE `accounttypes` SET `name`='" + this.tname.getText() + "',`rate`= '" + this.trate.getText() + "'"
             + ",`appfee`= '" + this.tappfee.getText() + "',`penalt`= '" + this.tpenalty.getText() + "',`balance`= '" + this.tbalance.getText() + "',"
-            + "`lv1`= '" + this.tlv1.getText() + "'"
-            + ",`lv2`= '" + this.tlv2.getText() + "',`lv3`= '" + this.tlv3.getText() + "',`lv4`= '" + this.tlv4.getText() + "',`lv5`= '" + this.tlv5.getText() + "'"
-            + ",`lv6`= '" + this.tlv6.getText() + "',`lv7`= '" + this.tlv7.getText() + "',`lv8`= '" + this.tlv8.getText() + "',`lv9`= '" + this.tlv9.getText() + "'"
-            + ",`lv10`= '" + this.tlv10.getText() + "'";
+            + "`ratePer`= '"+ratePer+"',`rateTime`='"+rateTime+"',"
+            + "`applicable`='"+applicableStatus+"'WHERE id= '" + this.tid.getText()+"'";
       
       executeSQlQuery(query, "Updated");
 }
@@ -539,22 +496,26 @@ public void delete(){
     executeSQlQuery(query, "Deleted");
 }
 public void check(int a){
+    
+    
+    if(applicableStatus.equals("A")&&txtIntrestPer.getText().isEmpty()){
+          JOptionPane.showMessageDialog(null, "Empty fields Detected");
+         // clear();
+    }
+    else{
     if(tid.getText().isEmpty()||
         tname.getText().isEmpty()||
         trate.getText().isEmpty()||
             tappfee.getText().isEmpty()||
+            applicableStatus.isEmpty()||
             tpenalty.getText().isEmpty()||
-            tbalance.getText().isEmpty()||
-            tlv1.getText().isEmpty()||
-            tlv2.getText().isEmpty()||
-            tlv3.getText().isEmpty()||
-            tlv4.getText().isEmpty()||
-            tlv5.getText().isEmpty()||
-            tlv6.getText().isEmpty()||
-            tlv7.getText().isEmpty()||
-            tlv8.getText().isEmpty()||
-            tlv9.getText().isEmpty()||
-            tlv10.getText().isEmpty()){
+            tbalance.getText().isEmpty()
+            
+            
+            
+            
+            
+            ){
         JOptionPane.showMessageDialog(null, "Empty fields Detected");
         
     }
@@ -574,6 +535,7 @@ public void check(int a){
             
         }
     }
+    }
 }
 public void clear(){
     tid.setText("");
@@ -582,16 +544,13 @@ public void clear(){
     tappfee.setText("");
     tpenalty.setText("");
     tbalance.setText("");
-    tlv1.setText("");
-    tlv2.setText("");
-    tlv3.setText("");
-    tlv4.setText("");
-    tlv5.setText("");
-    tlv6.setText("");
-    tlv7.setText("");
-    tlv8.setText("");
-    tlv9.setText("");
-    tlv10.setText("");
+    applicableStatus="";
+    ratePer="0";
+    rateTime="0";
+    txtIntrestPer.setText("");
+    btnGroup.clearSelection();
+    
+   
 }
     /**
      * @param args the command line arguments
@@ -632,15 +591,8 @@ public void clear(){
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -649,24 +601,23 @@ public void clear(){
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JRadioButton jRadioButtonA;
+    private javax.swing.JRadioButton jRadioButtonN;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTable table;
     private javax.swing.JTextField tappfee;
     private javax.swing.JTextField tbalance;
     private javax.swing.JTextField tid;
-    private javax.swing.JTextField tlv1;
-    private javax.swing.JTextField tlv10;
-    private javax.swing.JTextField tlv2;
-    private javax.swing.JTextField tlv3;
-    private javax.swing.JTextField tlv4;
-    private javax.swing.JTextField tlv5;
-    private javax.swing.JTextField tlv6;
-    private javax.swing.JTextField tlv7;
-    private javax.swing.JTextField tlv8;
-    private javax.swing.JTextField tlv9;
     private javax.swing.JTextField tname;
     private javax.swing.JTextField tpenalty;
     private javax.swing.JTextField trate;
+    private javax.swing.JLabel txtIntrestPer;
     // End of variables declaration//GEN-END:variables
+
+ButtonGroup btnGroup=new ButtonGroup();
+String applicableStatus="";
+
+
 }

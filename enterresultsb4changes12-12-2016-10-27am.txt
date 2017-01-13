@@ -1,0 +1,975 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package sms;
+
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+/**
+ *
+ * @author kimani kogi
+ */
+public class Form1Exams extends javax.swing.JFrame {
+     DefaultTableModel model = new DefaultTableModel();
+  static int aa;
+  //subject to be enterd  ,converted to lower case
+String subjectin="null";
+//subject combo box values
+ String a="MATHS"  ; String b="ENG"  ; String c="KISWA"  ; String d="PHY"  ; String e="CHEM"  ; String f="BIO"  ; String g="GEO"  ; 
+ String h="HIST"  ;String i="CRE"  ; String j="AGRI"  ; String k="BS"  ; String l="FRENCH"    ; 
+ //subjects into array
+ String[]subjects={a,b,c,d,e,f,g,h,i,j,k,l};
+//exam type radio buttons ie end of term,mid term,opener
+ ButtonGroup editableGroup = new ButtonGroup();
+  int p=0;//end of term
+  int np=0;//mid term
+  int npp=0;//opener
+  int nppp=0;//other
+  
+  //term of year ie first term ,second term etc
+  int term=0;
+  // year of school
+ static int year=0;
+  //exam id
+  int termid=0;
+  int cntrltbl=0;
+  static String title;
+ 
+   String filePath;
+   String fileurlp = null;
+   int found=0;
+    /**
+     * Creates new form Form1Exams
+     */
+    public Form1Exams() {
+        
+        
+    this.table = new JTable(this.model);
+    this.sid = new JTextField();
+    final TableRowSorter<TableModel> rowSorter = new TableRowSorter(this.table.getModel());
+    this.table.setRowSorter(rowSorter);
+    sid.getDocument().addDocumentListener(new DocumentListener()
+    {
+      public void insertUpdate(DocumentEvent e)
+      {
+        String text = Form1Exams.this.sid.getText();
+        if (text.trim().length() == 0) {
+          rowSorter.setRowFilter(null);
+        } else {
+          rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, new int[0]));
+        }
+      }
+      
+      public void removeUpdate(DocumentEvent e)
+      {
+        String text = Form1Exams.this.sid.getText();
+        if (text.trim().length() == 0) {
+          rowSorter.setRowFilter(null);
+        } else {
+          rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, new int[0]));
+        }
+      }
+      
+      public void changedUpdate(DocumentEvent e)
+      {
+        throw new UnsupportedOperationException("Not supported yet.");
+      }
+    });
+        
+        initComponents();
+        
+       // findUsers();
+       //action and statechanged listner for term radio buttons 
+    editableGroup.add(eot);
+    editableGroup.add(mt);
+    editableGroup.add(opener);
+    eot.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            cntrltbl();
+          p=1;
+          np=0;
+          npp=0;
+          
+
+        }
+    });
+
+    //add disallow listener
+    mt.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            cntrltbl();
+ p=0;          
+ np=1;
+npp=0;
+
+        }
+    });
+     opener.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            cntrltbl();
+           
+
+p=0;
+np=0;
+npp=1;
+
+        }
+    });
+       // sid.setText(A);
+         this.sid.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent b)
+              
+      {
+          icon.setIcon(null);
+          found=0;
+        try
+        {
+            select();
+            if(found==0){
+            showimg();
+            }
+        }
+        catch (Exception ex)
+        {
+          Logger.getLogger(Form1Exams.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
+    });
+         //title();
+    }
+  //  public void setTitle(int yr){
+        
+   // }
+    public void title(String title){
+        this.setTitle(title);
+    }
+     public void showimg()
+    throws Exception
+  {
+    this.icon.setIcon(null);
+    this.icon.setText(" no image");
+    try
+    {
+        methods m=new methods();
+       // Connection con = m.getConnection();
+      Connection con = m.getConnections();
+      Statement st2 = con.createStatement();
+      
+      ResultSet res7 = st2.executeQuery("SELECT imgurl FROM students  WHERE id=" + this.sid.getText() + "");
+      if (res7.next())
+      {
+        this.filePath = res7.getString("imgurl");
+        
+        st2.close();
+        res7.close();
+        con.close();
+        String op = "image";
+        if (this.filePath.equals(op))
+        {
+          this.icon.setIcon(null);
+          this.icon.setIcon(null);
+          this.icon.setText(" no image");
+        }
+        else
+        {
+          BufferedImage img = null;
+          try
+          {
+           img = ImageIO.read(new java.io.File(this.filePath));
+            this.fileurlp = this.filePath.replace("\\", "\\\\");
+          }
+          catch (IOException e)
+          {
+            JOptionPane.showMessageDialog(null, "error loading image \n  make sure image is in images folder ");
+            
+            this.icon.setIcon(null);
+            this.icon.setText(" no image");
+          }
+          Image dimg = img.getScaledInstance(this.icon.getWidth(), this.icon.getHeight(), 4);
+          
+          ImageIcon icon = new ImageIcon(dimg);
+          this.icon.setText("");
+          this.icon.setIcon(icon);
+        }
+      }
+      else
+      {
+        JOptionPane.showMessageDialog(null, "error loading image \n  make sure image is in images folder ");
+      }
+    }
+    catch (Exception ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+  }
+  
+public ArrayList<ExamDbDataHolder> ListUsers(String ValToSearch)
+  {
+    ArrayList<ExamDbDataHolder> usersList = new ArrayList();
+    try
+    {
+     methods m=new methods();
+        Connection con = m.getConnection();
+      Statement st = con.createStatement();
+       Statement st1 = con.createStatement();
+      String searchQuery = "SELECT * FROM `exam` WHERE `sid` ='" + ValToSearch + "'AND `year`='"+year+"'";
+       String s="SELECT maths+eng+kiswa+phy+chem+bio+geo+hist+agri+cre+bs From `exam`WHERE CONCAT(`sid`) LIKE '%" + ValToSearch + "%' ";
+      //String searchQuery = "SELECT * FROM `exam` WHERE CONCAT(`sid`) LIKE '%" + ValToSearch + "%'";
+      ResultSet rs = st.executeQuery(searchQuery);
+      ResultSet rs1 = st1.executeQuery(s);
+      while (rs.next()&&rs1.next())
+           `Mathematics` varchar(70) NOT NULL DEFAULT '0',
+  `English` varchar(70) NOT NULL DEFAULT '0',
+  `kiswahili` varchar(70) NOT NULL DEFAULT '0',
+  `Physics` varchar(70) NOT NULL DEFAULT '0',
+  `Chemistry` varchar(70) NOT NULL DEFAULT '0',
+  `Biology` varchar(70) NOT NULL DEFAULT '0',
+  `Histroy` varchar(70) NOT NULL DEFAULT '0',
+  `Geography` varchar(70) NOT NULL DEFAULT '0',
+  `Cre` varchar(70) NOT NULL DEFAULT '0',
+  `Ire` varchar(70) NOT NULL DEFAULT '0',
+  `Hre` varchar(70) NOT NULL DEFAULT '0',
+  `Agriculture` varchar(70) NOT NULL DEFAULT '0',
+  `Homescience` varchar(70) NOT NULL DEFAULT '0',
+  `Artanddesign` varchar(70) NOT NULL DEFAULT '0',
+  `Computer` varchar(70) NOT NULL DEFAULT '0',
+  `Buildingconstruction` varchar(70) NOT NULL DEFAULT '0',
+  `Woodwork` varchar(70) NOT NULL DEFAULT '0',
+  `Metalwork` varchar(70) NOT NULL DEFAULT '0',
+  `Music` varchar(70) NOT NULL DEFAULT '0',
+  `French` varchar(70) NOT NULL DEFAULT '0',
+  `German` varchar(70) NOT NULL DEFAULT '0',
+  `Arabic` varchar(70) NOT NULL DEFAULT '0',
+  `Business` varchar(70) NOT NULL DEFAULT '0',
+          
+      {
+        ExamDbDataHolder user = new ExamDbDataHolder(rs.getInt("sid"),rs.getString("uniq"), rs.getString("Mathematics"), rs.getString("eng"), rs.getString("kiswa")
+                ,rs.getString("phy"),rs.getString("chem"),rs.getString("bio"),rs.getString("hist"),rs.getString("geo"),
+                rs.getString("cre"),rs.getString("agri"),rs.getString("bs"),rs1.getInt(1));
+        
+        usersList.add(user);
+      }
+      st.close();
+      rs.close();
+      con.close();
+    }
+    catch (Exception ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    return usersList;
+  }
+String classs="null";
+    public void select()
+    throws Exception
+  {
+      methods m=new methods();
+        Connection con = m.getConnection();
+    //Connection con = getConnection();
+    Statement st2 = con.createStatement();
+    //added where form=? to avoid filing form 1 marks  in form 2 jframe and such 
+    //12/10/2016 saturday 
+   String yr=String.valueOf(year);
+    ResultSet res7 = st2.executeQuery("SELECT DISTINCT fname,class FROM students  WHERE id='" + this.sid.getText() + "' AND form='"+yr+"'");
+    Statement st = con.createStatement();
+  
+    ResultSet res = st.executeQuery("SELECT class FROM students  WHERE id='" + this.sid.getText() + "'");
+  
+    if (res7.next())
+    {
+        classs=res7.getString("class");
+      this.sname.setText(res7.getString("fname"));
+     
+    }
+    else{
+        found=1;
+        JOptionPane.showMessageDialog(null, "not found");
+    }
+    st2.close();
+   
+  
+    con.close();
+  }
+  
+  public void findUsers()
+  {
+    ArrayList<ExamDbDataHolder> users = ListUsers(this.sid.getText());
+    DefaultTableModel model = new DefaultTableModel();
+    
+    model.setColumnIdentifiers(new Object[] { " STUDENT ID", "UNIQUE", "MATHS", "ENG", "KISW",
+        "PHY", "CHEM", "BIO", "HIST", "GEO", "CRE", "AGRI", "B/S"});
+    Object[] row = new Object[13];
+    for (int i = 0; i < users.size(); i++)
+    {
+        
+      row[0] = ((ExamDbDataHolder)users.get(i)).getSid();
+      row[1] = ((ExamDbDataHolder)users.get(i)).getUnique();
+      row[2] = ((ExamDbDataHolder)users.get(i)).getMaths();
+      row[3] = ((ExamDbDataHolder)users.get(i)).getEng();
+      row[4] = ((ExamDbDataHolder)users.get(i)).getKiswa();
+      row[5] = ((ExamDbDataHolder)users.get(i)).getPhy();
+      row[6] = ((ExamDbDataHolder)users.get(i)).getChem();
+      row[7] = ((ExamDbDataHolder)users.get(i)).getBio();
+      row[8] = ((ExamDbDataHolder)users.get(i)).getHist();
+      row[9] = ((ExamDbDataHolder)users.get(i)).getGeo();
+      row[10] = ((ExamDbDataHolder)users.get(i)).getCre();
+      row[11] = ((ExamDbDataHolder)users.get(i)).getAgri();
+      row[12] = ((ExamDbDataHolder)users.get(i)).getBs();
+    
+      
+      model.addRow(row);
+    }
+    this.table.setModel(model);
+  }
+   public void executeSQlQuery(String query, String message)
+           
+  {
+   methods m=new methods();
+   Connection con = m.getConnection();
+    try
+    {
+      Statement st = con.createStatement();
+      if (st.executeUpdate(query) == 1)
+      {
+        //  Form1Exams n=new Form1Exams();
+        
+        DefaultTableModel model = (DefaultTableModel)this.table.getModel();
+        
+        model.setRowCount(0);
+        
+        findUsers();
+        
+        JOptionPane.showMessageDialog(null, "Marks " + message + " Succefully");
+      }
+      else
+      {
+        JOptionPane.showMessageDialog(null, "Marks Not " + message);
+       // JOptionPane.showMessageDialog(null, "MAKE SURE THE BOOK ID IS NOT ALREADY BEING USED \nCHECK THE BOOK DETAILS ENTERED FOR ERRORS ie ID SHOULD BE NUMBERS ONLY");
+      }
+      st.close();
+      con.close();
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+  }
+
+  public void table(){
+      //  Form1Exams n=new Form1Exams();
+          
+        DefaultTableModel model = (DefaultTableModel)this.table.getModel();
+        
+        model.setRowCount(0);
+        
+        findUsers();
+  }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        sname = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        subject = new javax.swing.JTextField();
+        sid = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        icon = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        eot = new javax.swing.JRadioButton();
+        mt = new javax.swing.JRadioButton();
+        opener = new javax.swing.JRadioButton();
+        jButton2 = new javax.swing.JButton();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
+        subjectup = new javax.swing.JTextField();
+        lblsubject = new javax.swing.JLabel();
+        jComboBoxExam = new javax.swing.JComboBox<>();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel2.setBackground(java.awt.Color.white);
+
+        table.setBackground(new java.awt.Color(204, 255, 204));
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setRowHeight(40);
+        table.setRowMargin(4);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(table);
+
+        sname.setEditable(false);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SUBJECT", subjects[0], subjects[1], subjects[2], subjects[3], subjects[4], subjects[5], subjects[6], subjects[7], subjects[8],subjects[9],subjects[10],subjects[11]}));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        sid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                sidKeyReleased(evt);
+            }
+        });
+
+        jLabel2.setText("ADM NO");
+
+        jLabel3.setText("NAME");
+
+        icon.setText("image");
+
+        jButton1.setText("ENTER");
+        jButton1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jButton1StateChanged(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        eot.setText("END OF TERM");
+
+        mt.setText("MID-TERM");
+
+        opener.setText("OPENER");
+
+        jButton2.setText("CLEAR");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chose Term", "Term 1", "Term 2", "Term 3" }));
+        jComboBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox2ItemStateChanged(evt);
+            }
+        });
+
+        jButton3.setText("UPDATE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        lblsubject.setText("Subject");
+
+        jComboBoxExam.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxExamItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sid, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(subjectup, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(eot)
+                            .addComponent(mt)
+                            .addComponent(opener)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(sname, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(subject, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jComboBoxExam, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(lblsubject))
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(icon, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(eot)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(mt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(opener)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBoxExam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sid, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sname, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(subject, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(lblsubject)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(subjectup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addGap(67, 67, 67))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+    }                                          
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {                                            
+      // String [] i={"Show","Hide", "Show/Hide"};
+      cntrltbl();
+      //subject jcombo box 
+      if(evt.getItem()!=""&&evt.getStateChange()==ItemEvent.SELECTED&&evt.getItem()!="SUBJECT"){
+       // subjectin=subjects[0];
+      
+       //change to lower case to lingana with db field names and array names
+      subjectin=evt.getItem().toString().toLowerCase();
+    // JOptionPane.showMessageDialog(null, subjectin);
+      
+       
+       // JOptionPane.showMessageDialog(null, "male");
+     }
+      else{
+         subjectin="null";  
+      }
+
+    }                                           
+ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+     found=0;
+     try {
+             select();
+         } catch (Exception ex) {
+             Logger.getLogger(Form1Exams.class.getName()).log(Level.SEVERE, null, ex);
+         }
+     if(found==0){
+     cntrltbl();
+     insertvalidator();
+     }
+     else{
+         ;
+         JOptionPane.showMessageDialog(null, "CANT FIND SUCH STUDENT");
+     }
+    } 
+ 
+  public void insertvalidator(){
+       if ((p==1&&np==1&&npp==1)||p==0&&npp==0&&np==0||p==1&&np==1||npp==1&&p==1||np==1&&npp==1) {
+            JOptionPane.showMessageDialog(null, "you must select one of the check boxes");
+            p=0;
+            np=0;
+            npp=0;
+           
+     }
+       else{
+           if(p==1){
+              termid=p; 
+           }
+           else if(np==1){
+               termid=2;
+           }
+           else{
+               termid=3;
+           }
+           validatetermid();
+  
+    
+       }
+    
+}
+  public void validatetermid(){
+      if(term==0||subjectin.equals("null")){
+          
+          JOptionPane.showMessageDialog(null, "You must select The term");
+      }
+      else{
+      insertquery();
+      }
+      
+  }
+ 
+ 
+ public void insertquery(){
+
+   methods m=new methods();
+    String sidi = this.sid.getText();
+    String sname = this.sname.getText();
+    String subject = this.subject.getText();
+    if ((sidi.equals(""))  || (subject.equals(""))) {
+      JOptionPane.showMessageDialog(null, "make sure all fields are filed");
+    } 
+    else {
+        try{
+     String uniq=unig();
+     String stru = uniq;
+        
+        Connection con = m.getConnection();
+        String str = "";
+        
+        str = "select * from exam where  uniq =?";
+        
+        PreparedStatement pst = con.prepareStatement(str);
+        
+        pst.setString(1, stru);
+        
+        ResultSet rs = pst.executeQuery();
+        if (rs.next())
+        {
+             // JOptionPane.showMessageDialog(null, uniq+"A Student WITH SUCH an ID  (" + this.sid.getText() + ")  ALREADY EXIST \n ");
+       
+            checksubject();
+          //JOptionPane.showMessageDialog(null, uniq+"A Student WITH SUCH an ID  (" + this.sid.getText() + ")  ALREADY EXIST \n ");
+       
+        }
+        else{
+            insert();
+        }
+    }
+        catch(Exception a){
+            
+        }
+
+   }
+ }
+ public void checksubject(){
+     
+ try{
+     methods m=new methods();
+       String uniq=unig();
+     String stru = uniq;
+        String sidi = this.sid.getText();
+    String sname = this.sname.getText();
+    String subject = this.subject.getText(); 
+     String  str = "select "+subjectin+" from exam where  uniq =?";
+    // String stru=sidi;  
+      Connection con = m.getConnection();
+        PreparedStatement pst = con.prepareStatement(str);
+      
+        pst.setString(1, stru);
+      
+        
+        ResultSet rs = pst.executeQuery();
+       
+        if (rs.next())
+        {
+            String y=rs.getString(subjectin);
+            
+            if(y.equals("0")){
+               update();
+            }
+             else
+            {
+                    JOptionPane.showMessageDialog(null, y +"Subject marks for this subject already enterd");
+         
+        }
+            
+        con.close();
+        rs.close();
+        pst.close();
+        }
+        else{
+             JOptionPane.showMessageDialog(null,"Error");
+         
+           // insert();
+        }
+        }
+        catch(Exception a){
+                JOptionPane.showMessageDialog(null,a+" Error");
+                }
+ 
+ }
+  public void update(){
+   String uniq=unig();
+    // methods m=new methods();
+      String query1 = "UPDATE `exam` SET `"+subjectin+"`='" + this.subject.getText() + "'"
+                       + " WHERE `uniq` = '" + uniq + "'";
+       executeSQlQuery(query1, "Updated");
+ }
+ 
+ public String unig(){
+  String sidi = this.sid.getText();
+  String yr=String.valueOf(year);
+  String terms=String.valueOf(term);
+  String termsid=String.valueOf(termid);
+  String uniq=yr+terms+termsid+sidi;
+  return uniq;
+ }
+ public void insert(){
+     String uniq=unig();
+     String yr=String.valueOf(year);
+     // methods m=new methods();
+    // String classs="west";
+     String query = "INSERT INTO `exam`(`year`,`sid`,`class`, `"+subjectin+"`,`term`,`termid`,`uniq`,`updated_at`) VALUES ('"+yr+"','" 
+             + this.sid.getText() + "','" + classs+ "','" + this.subject.getText() + "','" + term + "','" + termid + "','" + uniq + "',now())";
+          
+          executeSQlQuery(query, "Inserted");
+ }
+    private void jButton1StateChanged(javax.swing.event.ChangeEvent evt) {                                      
+        // TODO add your handling code here:
+    }                                     
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        clear();
+    }                                        
+public void clear(){
+    sid.setText("");
+    sname.setText("");
+    subject.setText("");
+    subjectup.setText("");
+    icon.setIcon(null);
+    editableGroup.clearSelection();
+    jComboBox1.setSelectedIndex(0);
+    jComboBox2.setSelectedIndex(0);
+    filePath=null;
+    fileurlp = null;
+    
+}
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {                                            
+     cntrltbl();
+        String [] terms={"Term 1","Term 2","Term 3"};
+        if(evt.getItem()==terms[0]&&evt.getStateChange()==ItemEvent.SELECTED){
+      term=1;
+     // JOptionPane.showMessageDialog(null, term);
+     }
+        else if(evt.getItem()==terms[1]&&evt.getStateChange()==ItemEvent.SELECTED){
+        term=2;
+       // JOptionPane.showMessageDialog(null, term);
+    }
+        else if(evt.getItem()==terms[2]&&evt.getStateChange()==ItemEvent.SELECTED){
+            term=3;
+           // JOptionPane.showMessageDialog(null, term);
+            
+        }
+        
+    }                                           
+
+    private void sidKeyReleased(java.awt.event.KeyEvent evt) {                                
+     this.icon.setText(""); 
+     
+//         try {
+//             select();
+//         } catch (Exception ex) {
+//             Logger.getLogger(Form1Exams.class.getName()).log(Level.SEVERE, null, ex);
+//         }
+        cntrltbl();
+        findUsers();
+    }                               
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    if(cntrltbl==0){
+        JOptionPane.showMessageDialog(null, "no selected item");
+    }  
+    else{
+        updatein();
+    }
+    }                                        
+public void updatein(){
+    // String uniq=handleTableMouseEvent();
+    // methods m=new methods();
+      String query1 = "UPDATE `exam` SET `"+subjectin+"`='" + this.subjectup.getText() + "'"
+                       + " WHERE `uniq` = '" + uniqn+ "'";
+       executeSQlQuery(query1, "Updated");
+}
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {                                   
+  int a=0;
+ cntrltbl=1;
+  for(int i=0;i<subjects.length;i++){
+      if(subjectin.equalsIgnoreCase(subjects[i])){
+         // JOptionPane.showMessageDialog(null, subjects[i]);
+          a=i+2;
+         handleTableMouseEvent(a);  
+      }
+  }
+  
+    
+  
+    }                                  
+
+    private void jComboBoxExamItemStateChanged(java.awt.event.ItemEvent evt) {                                               
+        // TODO add your handling code here:
+    }                                              
+public void cntrltbl(){
+     cntrltbl=0;
+     lblsubject.setText("Subject");
+     subjectup.setText("");
+}
+    public String handleTableMouseEvent(int index){
+   
+    int i = this.table.getSelectedRow();
+    
+    TableModel model = this.table.getModel();
+    lblsubject.setText(subjectin);
+    this.subjectup.setText(model.getValueAt(i, index).toString());
+    uniqn=(model.getValueAt(i, 1).toString());
+    return h;
+}
+    String uniqn="000";
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Form1Exams.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Form1Exams.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Form1Exams.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Form1Exams.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Form1Exams().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JRadioButton eot;
+    private javax.swing.JLabel icon;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBoxExam;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblsubject;
+    private javax.swing.JRadioButton mt;
+    private javax.swing.JRadioButton opener;
+    private javax.swing.JTextField sid;
+    private javax.swing.JTextField sname;
+    private javax.swing.JTextField subject;
+    private javax.swing.JTextField subjectup;
+    private javax.swing.JTable table;
+    // End of variables declaration                   
+}

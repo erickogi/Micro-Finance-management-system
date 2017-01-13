@@ -223,9 +223,12 @@ pst.close();
     private void open(){
         
       
-            
-           Main.a=1;
+           // Main n=new Main();
+          Main.a=1;
+          Main.checkTodays();
             this.dispose();
+            
+            // n.checkTodays();
          // this.setVisible(false);
         
          

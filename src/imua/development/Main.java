@@ -11,12 +11,19 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,23 +38,187 @@ static int on;
     public Main() {
         initComponents();
        
-       
+       setTitle();
         
        
-    Methods n=new Methods();
-   String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+   
     pic();
     
      getTime();
        if(a==0){
          login();
        }
+       
     // getTime();
         
     }
+    public void setTitle(){
+         Methods n=new Methods();
+   String t= n.setTitle();
+    this.setTitle(t);
+    String i=n.setIconImage();
+    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+    }
+    
+    public void check(){
+Thread log=new Thread(){
+public void run(){
+    
+     try{
+      sleep(10000);
+      checkTodays();
+     }
+      catch(Exception b){
+         System.out.println("Error");
+      }
+} 
+      }   ;  
+      log.start();
+  }  
+    
+    public static void checkTodays(){
+       Calendar  c= Calendar.getInstance();
+         HashMap<String,String>todays=new HashMap<String,String>();
+      Date today=c.getTime();
+       java.util.Date d=(today);
+     
+     java.sql.Date DATE=new java.sql.Date(d.getTime());
+      try {
+          Methods n = new Methods();
+          
+          Connection con =n. getConnection();
+          
+          Statement st = con.createStatement();
+          String searchQuery = "SELECT * FROM `loans`WHERE targetdate='" + DATE + "' ";
+          ResultSet rs = st.executeQuery(searchQuery);
+          while (rs.next())
+          {
+              
+           todays.put(rs.getString("id"), rs.getString("installmentamount"));
+            
+          }
+          st.close();
+          rs.close();
+          con.close();
+          
+          if(todays.size()>0){
+           int dialogButton=
+        
+        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS REPAYMENT EXPECTED TODAY \n Select YES to check them out ");
+        if(dialogButton==JOptionPane.YES_OPTION){
+            
+        }  
+              
+         // JOptionPane.showMessageDialog(null, todays.size()+ "LOANS REPAYMENT EXPECTED TODAY");
+          }
+          checkLoanApplications();
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      
+      //c.add(Calendar.MONTH, hw);
+      
+    } 
+    private static void checkLoanApplications(){
+             //  Calendar  c= Calendar.getInstance();
+         HashMap<String,String>todays=new HashMap<String,String>();
+//      Date today=c.getTime();
+//       java.util.Date d=(today);
+//     
+//     java.sql.Date DATE=new java.sql.Date(d.getTime());
+      try {
+          Methods n = new Methods();
+          
+          Connection con =n. getConnection();
+          
+          Statement st = con.createStatement();
+          String searchQuery = "SELECT * FROM `applications` ";
+          ResultSet rs = st.executeQuery(searchQuery);
+          while (rs.next())
+          {
+              
+           todays.put(rs.getString("id"), rs.getString("amount"));
+            
+          }
+          st.close();
+          rs.close();
+          con.close();
+          
+          if(todays.size()>0){
+        int dialogButton=
+        
+        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS APPLICATIONS AVAILABLE \n Select YES to check them out ");
+        if(dialogButton==JOptionPane.YES_OPTION){
+                   // Main.setEnabled(false);
+        ProcessLoan a=new ProcessLoan();
+         //a.typeoftransaction="withdrawal";
+        a.setVisible(true);
+        } 
+              
+              
+         // JOptionPane.showMessageDialog(null, todays.size()+ "LOANS APPLICATIONS AVAILABLE");
+          }
+          checkLoanRepayments();
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      
+    }
+    public static  void checkLoanRepayments(){
+         Calendar  c= Calendar.getInstance();
+         HashMap<String,String>todays=new HashMap<String,String>();
+         Date today=addOne(c.getTime(),-2);
+         
+         java.util.Date d=(today);
+  
+         java.sql.Date DATE=new java.sql.Date(d.getTime());
+      try {
+          Methods n = new Methods();
+          String nl="null";
+          Connection con =n. getConnection();
+          
+          Statement st = con.createStatement();
+          String searchQuery = "SELECT * FROM `loans`WHERE targetdate<'" + DATE + "'AND todaypay='"+nl+"' ";
+          ResultSet rs = st.executeQuery(searchQuery);
+          while (rs.next())
+          {
+              
+           todays.put(rs.getString("id"), rs.getString("installmentamount"));
+            
+          }
+          st.close();
+          rs.close();
+          con.close();
+          
+          if(todays.size()>0){
+        int dialogButton=
+        
+        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
+        if(dialogButton==JOptionPane.YES_OPTION){
+            
+        }
+          //JOptionPane.showMessageDialog(null, todays.size()+ "  LOANS DEFAULTED ");
+          }
+          //checkLoanRepayments();
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+
+     public static Date addOne(Date date,int hw){
+      Calendar  c= Calendar.getInstance();
+      c.setTime(date);
+      c.add(Calendar.DATE, hw);
+   //   c.add(Calendar.WEEK_OF_MONTH, hw);
+      
+      return c.getTime();
+  }
+    
+    
+    
   public void login(){
 Thread log=new Thread(){
 public void run(){
@@ -69,8 +240,13 @@ public void run(){
         //this.setVisible(true);
         this.setEnabled(false);
         a.setVisible(true);
+        
       
     }
+    
+    
+    
+    
     public void seten(){
         this.setEnabled(true);
     }
@@ -93,6 +269,7 @@ public void run(){
         jButton5 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txttymer = new javax.swing.JLabel();
@@ -184,26 +361,36 @@ public void run(){
             }
         });
 
+        jButton7.setText("Loan Processing");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -221,6 +408,8 @@ public void run(){
                 .addComponent(jButton3)
                 .addGap(24, 24, 24)
                 .addComponent(jButton6)
+                .addGap(18, 18, 18)
+                .addComponent(jButton7)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -563,10 +752,10 @@ Calendar cal=new GregorianCalendar();
         int min=cal.get(Calendar.MINUTE);
         if(min==1){
             
-           x="PM";
+           //x="PM";
        }
        else{
-            x="AM";
+           // x="AM";
        }
         int hour=cal.get(Calendar.HOUR);
         txttymer.setText("DATE:   "+day+" "+z+" "+year+"   TIME:  "+hour+":"+min+":"+second+":"+x);
@@ -624,7 +813,18 @@ clock.start();
          //a.typeoftransaction="withdrawal";
         a.setVisible(true);
     }
-    
+     public void openLoanProcessing(){
+        this.setEnabled(false);
+        ProcessLoan a=new ProcessLoan();
+         //a.typeoftransaction="withdrawal";
+        a.setVisible(true);
+    }
+//      public static void openLoanProcessings(){
+//        this.setEnabled(false);
+//        ProcessLoan a=new ProcessLoan();
+//         //a.typeoftransaction="withdrawal";
+//        a.setVisible(true);
+//    }
     public void openWithdrawForm(){
         openWithdrawal();
     }
@@ -701,7 +901,8 @@ clock.start();
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+         loanpayment a=new loanpayment();
+        a.setVisible(true);
         
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -767,6 +968,10 @@ clock.start();
         n.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+openLoanProcessing();       
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -811,6 +1016,7 @@ clock.start();
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

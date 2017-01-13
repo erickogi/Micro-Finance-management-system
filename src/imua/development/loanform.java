@@ -5,7 +5,7 @@
  */
 package imua.development;
 
-import static imua.development.Deposit.typeoftransaction;
+//import static imua.development.Deposit.typeoftransaction;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -44,11 +44,11 @@ static int y=0;
     public loanform() {
         initComponents();
         setTilteImage();
-        findUsers();
+        findLoans();
         accountsTypes();
         
     }
-     public void findUsers()
+     public void findLoans()
   {
       Methods m=new Methods();
     ArrayList<String> usersList =  m.ListLoanTypes();
@@ -260,6 +260,7 @@ JOptionPane.showMessageDialog(null,"rs ");
        
         
         JOptionPane.showMessageDialog(null, message + " Succefully");
+        clear();
         //refreshTable();
       }
       else
@@ -306,7 +307,6 @@ JOptionPane.showMessageDialog(null,"rs ");
         txtLoan = new javax.swing.JTextField();
         BtnConfirm = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         txtOccupation = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -316,16 +316,12 @@ JOptionPane.showMessageDialog(null,"rs ");
         txtAccountType = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        Weeks = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         installments = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         txtPeriod = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(300, 80));
@@ -381,10 +377,6 @@ JOptionPane.showMessageDialog(null,"rs ");
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(204, 102, 255));
-        jLabel11.setText("Payment Duration");
-
         jLabel18.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 18)); // NOI18N
         jLabel18.setText("Customer Loan Request Information Form");
 
@@ -417,10 +409,6 @@ JOptionPane.showMessageDialog(null,"rs ");
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel25.setText("User Info");
 
-        jSpinner1.setEnabled(false);
-
-        Weeks.setText("Weeks");
-
         jLabel27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel27.setText("Gatantee Info");
 
@@ -444,10 +432,6 @@ JOptionPane.showMessageDialog(null,"rs ");
             }
         });
 
-        jLabel2.setText("Installments");
-
-        jLabel12.setText("Duration");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -457,97 +441,82 @@ JOptionPane.showMessageDialog(null,"rs ");
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(48, 48, 48)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(jLabel20))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(jLabel19)))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txtSirname, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel10))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                                        .addComponent(jLabel11))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtOtherName, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtTown, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(172, 172, 172)
-                                .addComponent(jLabel21))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel1)
-                                            .addComponent(jLabel3))
-                                        .addGap(27, 27, 27)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(36, 36, 36)
-                                        .addComponent(jLabel25)))))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addContainerGap()
+                                .addComponent(jLabel20))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel27)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(71, 71, 71))
+                                .addContainerGap()
+                                .addComponent(jLabel19)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtSirname, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(34, 34, 34)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel24)
-                                            .addComponent(BtnConfirm)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(Weeks, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtLoan)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(installments, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabel2))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel12)
-                                                    .addComponent(txtPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addGap(62, 62, 62))))
+                                    .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtOtherName, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTown, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(jLabel18)))
-                .addContainerGap(80, Short.MAX_VALUE))
+                        .addGap(172, 172, 172)
+                        .addComponent(jLabel21))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel3))
+                                .addGap(27, 27, 27)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addComponent(jLabel25)))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel24)
+                            .addComponent(BtnConfirm)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtLoan)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(installments, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(142, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(161, 161, 161)
+                .addComponent(jLabel18)
+                .addContainerGap(224, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel27))
+                .addGap(164, 164, 164))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,41 +571,37 @@ JOptionPane.showMessageDialog(null,"rs ");
                         .addGap(14, 14, 14)
                         .addComponent(jButton3)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(installments)
-                            .addComponent(txtPeriod))
-                        .addGap(18, 18, 18)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel11))
-                            .addComponent(jLabel8))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel21))
-                    .addComponent(Weeks, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(installments)
+                                    .addComponent(txtPeriod))
+                                .addGap(18, 18, 18))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton1)))))
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
-                    .addComponent(txtAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel27))
+                    .addComponent(txtAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                    .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -703,15 +668,10 @@ JOptionPane.showMessageDialog(null,"rs ");
 
     
 
-    private void txtLoanKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoanKeyReleased
-
-       
-    }//GEN-LAST:event_txtLoanKeyReleased
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       getId();
+        getId();
         garanters n = new garanters();
-       n.setVisible(true);
+        n.setVisible(true);
       // this.setEnabled(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 public  String getId(){
@@ -724,80 +684,15 @@ public  String getId(){
     }
     return ID;
 }
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-if(loanType==null){
-    JOptionPane.showMessageDialog(null, "Select LoanType First");
-}
-else{
-   String loan= txtLoan.getText();
-   String accBal=txtBalance.getText();
-    getLoanTypeInfo();
-    //JOptionPane.showMessageDialog(null, ballevel);
-    double requestedAmount=Double.valueOf(loan);
-    double accountBalance=Double.valueOf(accBal);
-    int balLevelRequired=Integer.valueOf(ballevel);
-    try{
-        if(requestedAmount>(accountBalance*balLevelRequired)){
-            JOptionPane.showMessageDialog(null, "Loan Limit Exceded");
-        }
-        else{
-            double appfeev=Double.valueOf(appfee);
-          String installmentsp =  checkRange(loan);
-          double installmentper=Double.valueOf(installmentsp);
-          double calrate=Double.valueOf(rate);
-          double appfeedone=(appfeev*requestedAmount);
-          double calIntrest=requestedAmount+(calrate*requestedAmount)+appfeedone;
-         double weeks=((calIntrest/installmentper));
-         
-         double tj=weeks%1;
-         if(tj!=0){
-              //JOptionPane.showMessageDialog(null, tj+ "  "+calIntrest);
-          int wek=(int)(weeks);
-          txtPeriod.setText(String.valueOf(wek+1));
-          installments.setText(String.valueOf(installmentper));
-         }
-         else{
-             int wek=(int)(weeks);
-          txtPeriod.setText(String.valueOf(wek));
-          installments.setText(String.valueOf(installmentper));
-         }
-          
-         
-          
-          
-        }
-    }
-    catch(Exception a){
-        
-        
-    }
-   
-   }
-        
-        
-        
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-     //  String accounts[] = {"Regular Acc", "Projects Acc", "Table Acc"};
-        if (evt.getItem() == "Loan Type"||evt.getItem() == "choose" && evt.getStateChange() == ItemEvent.SELECTED) {
-          
-        } //else if (evt.getItem().toString().contains("Business") && evt.getStateChange() == ItemEvent.SELECTED) {
-           
-         else {
-          loanType=evt.getItem().toString();
-        }
-    }//GEN-LAST:event_jComboBox1ItemStateChanged
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        check();
     }//GEN-LAST:event_jButton2ActionPerformed
-public void check(){
+String loanType;
+    public void check(){
     if(loanType==null||
             txtId.getText().isEmpty()||
-            installments.getText().isEmpty()||
-            txtPeriod.getText().isEmpty()||
+           // installments.getText().isEmpty()||
+           // txtPeriod.getText().isEmpty()||
             txtLoan.getText().isEmpty()){
         JOptionPane.showMessageDialog(null, "SOME DATA IS MISSING");
     }
@@ -812,87 +707,217 @@ public void check(){
         JOptionPane.showConfirmDialog(null, "Confirm This \n  LOAN OF  "+ this.txtLoan.getText() +"  \n TO  "+txtId.getText());
         if(dialogButton==JOptionPane.YES_OPTION){
         if(y>0){
-    String i="null";
-     String query = "INSERT INTO loans(`id`,`loantype`, `installmentamount`,`period`,`requested`,`loanbalance`,`default`,`todaypay`,`givenOn`,`updated_at`)"
-             + " VALUES ('" + this.txtId.getText() + "','" + this.loanType+ "','" + this.installments.getText() + "','" + this.txtPeriod.getText() + "'"
-             + ",'" + this.txtLoan.getText() + "','" + this.txtLoan.getText() + "','"+i+"','"+i+"',"
-             + "now(),now())";
-          
-          executeSQlQuery(query, "Inserted");
+            String garantersstatus="full";
+            String i="Accepted";
+            
+            ActualInsert(garantersstatus,i);
           
           
         }
         else{
-             JOptionPane.showMessageDialog(null, "Fill  Guarantors form first");
+            
+            Object []options={"GO BACK","CONTINUE ANYWAY","CANCEL"};
+           int btn= JOptionPane.showOptionDialog(null, "GURANTERS FORM NOT FIELD","CONFIRM",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+            if(btn==1){
+                  String garantersstatus="void";
+                 String i="Not Accepted";
+                 ActualInsert(garantersstatus,i);
+            }
+            else if(btn==2){
+               clear();
+            }
+            else{
+                //clear();
+            }
+             //JOptionPane.showConfirmDialog(null, " Guarantors form Not Filled Click ye ");
+            // JOptionPane.showMessageDialog(null, btn);
         }
     }
 }
+    public void ActualInsert(String garantersstatus,String loanStatus){
+        String query = "INSERT INTO applications(`id`,`type`, `amount`,`status`,`guranters`,`name`,`updated_at`)"
+             + " VALUES ('" + this.txtId.getText() + "','" + this.loanType+ "','" + this.txtLoan.getText()+ "','" + loanStatus + "',"
+             + "'" + garantersstatus+ "'"
+             + ",'" + this.txtSirname.getText() + "',now())";
+          
+             executeSQlQuery(query, "Inserted");
+    }
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
        Main.a=1; // TODO add your handling code here:
     }//GEN-LAST:event_formWindowClosed
-private String checkRange(String value){
-    try{
-        Double val=Double.valueOf(value);
-    if(val<=5000){
-        range=lv1;
-      }
-    else if(val>5000&&val<=10000){
-        range=lv2;
-    }
-    else if(val>10000&&val<=15000){
-        range=lv3;
-    }
-    else if(val>15000&&val<=20000){
-        range=lv4;
-    }
-    else if(val>20000&&val<=25000){
-        range=lv5;
-    }
-    else if(val>25000&&val<=30000){
-        range=lv6;
-    }
-    else if(val>30000&&val<=40000){
-        range=lv7;
-    }
-    else if(val>40000&&val<=50000){
-        range=lv8;
-    }
-    else if(val>50000&&val<=60000){
-        range=lv9;
-    }
-    else if(val>60000){
-        range=lv10;
-    }
+    private void clear(){
+        txtId.setText("");
+        txtLoan.setText("");
+        txtSirname.setText("");
+        txtBalance.setText("");
+        loanType=null;
+         txtAccountNo.setText("");
+  txtAccountType.setText("");
+     txtBalance.setText("");
+   txtCounty.setText("");
+   //txtId;
+   // txtLoan;
+     txtOccupation.setText("");
+   txtOtherName.setText("");
+     txtPeriod.setText("");
+ txtPhone.setText("");
+     txtSirname.setText("");
+     txtTown.setText("");
+     jComboBox1.setSelectedIndex(0);
+     this.img.setIcon(null);
+     this.img.setText("");
+      int y=0;
+   filePath=null;
+     fileurlp = null;
+    balance ="0";
+     typeOfAccount=null;
+     ballevel="";
         
+        
+    }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if(loanType==null){
+            JOptionPane.showMessageDialog(null, "Select LoanType First");
         }
-    catch(Exception n){
-        
-    }
-    return range;
-}
-    private void getLoanTypeInfo(){
+        else{
+            String loan= txtLoan.getText();
+            String accBal=txtBalance.getText();
+            getLoanTypeInfo();
+            //JOptionPane.showMessageDialog(null, ballevel);
+            double requestedAmount=Double.valueOf(loan);
+            double accountBalance=Double.valueOf(accBal);
+            int balLevelRequired=Integer.valueOf(ballevel);
+            try{
+                if(requestedAmount>(accountBalance*balLevelRequired)){
+                    JOptionPane.showMessageDialog(null, "Loan Limit Exceded");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Proceed");
+                }
+//                else{
+//                    double appfeev=Double.valueOf(appfee);
+//                    String installmentsp =  checkRange(loan);
+//                    double installmentper=Double.valueOf(installmentsp);
+//                    double calrate=Double.valueOf(rate);
+//                    double appfeedone=(appfeev*requestedAmount);
+//                    double calIntrest=requestedAmount+(calrate*requestedAmount)+appfeedone;
+//                    double weeks=((calIntrest/installmentper));
+//
+//                    double tj=weeks%1;
+//                    if(tj!=0){
+//                        //JOptionPane.showMessageDialog(null, tj+ "  "+calIntrest);
+//                        int wek=(int)(weeks);
+//                        txtPeriod.setText(String.valueOf(wek+1));
+//                        //float a=(float) (calIntrest/wek);
+//                        // if a>
+//                        // installments.setText(String.valueOf(a));
+//                        if (installmentper>+calIntrest){
+//                            installments.setText(String.valueOf(calIntrest));
+//                        }
+//                        else{
+//                            installments.setText(String.valueOf(installmentper));
+//                        }
+//                        JOptionPane.showMessageDialog(null,"INTREST = (RATE*LOAN)===("+rate+"*"+requestedAmount+"=="+calrate*requestedAmount+") "
+//                            + "\n  APPLICATION FEE==(AppFee*LOAN)=={"+appfeev+"*"+requestedAmount+"=="+appfeev*requestedAmount+")"
+//                            +"\n Full Sum ==( Intrest +applicationFee+RequestedAmount)== ("+calIntrest+")"
+//                            +"\n Duration==(FULL SUM/INSTALLMENTS-SET)===("+calIntrest+"/"+installmentper+"") ;
+//
+//                    }
+//                    else{
+//                        int wek=(int)(weeks);
+//                        txtPeriod.setText(String.valueOf(wek));
+//                        if (installmentper>+calIntrest){
+//                            installments.setText(String.valueOf(calIntrest));
+//                        }
+//                        else{
+//                            installments.setText(String.valueOf(installmentper));
+//                        }
+//                        JOptionPane.showMessageDialog(null,"INTREST = (RATE*LOAN)===("+rate+"*"+requestedAmount+"=="+calrate*requestedAmount+") "
+//                            + "\n  APPLICATION FEE==(AppFee*LOAN)=={"+appfeev+"*"+requestedAmount+"=="+appfeev*requestedAmount+")"
+//                            +"\n Full Sum ==( Intrest +applicationFee+RequestedAmount)== ("+calIntrest+")"
+//                            +"\n Duration==(FULL SUM/INSTALLMENTS-SET)===("+calIntrest+"/"+installmentper+"") ;
+//                        // installments.setText(String.valueOf(installmentper));
+//                    }
+//
+//                }
+            }
+            catch(Exception a){
+
+            }
+
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtLoanKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoanKeyReleased
+
+    }//GEN-LAST:event_txtLoanKeyReleased
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        //  String accounts[] = {"Regular Acc", "Projects Acc", "Table Acc"};
+        if (evt.getItem() == "Loan Type"||evt.getItem() == "choose" && evt.getStateChange() == ItemEvent.SELECTED) {
+
+        } //else if (evt.getItem().toString().contains("Business") && evt.getStateChange() == ItemEvent.SELECTED) {
+
+            else {
+                loanType=evt.getItem().toString();
+            }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+//private String checkRange(String value){
+//    try{
+//        Double val=Double.valueOf(value);
+//    if(val<=5000){
+//        range=lv1;
+//      }
+//    else if(val>5000&&val<=10000){
+//        range=lv2;
+//    }
+//    else if(val>10000&&val<=15000){
+//        range=lv3;
+//    }
+//    else if(val>15000&&val<=20000){
+//        range=lv4;
+//    }
+//    else if(val>20000&&val<=25000){
+//        range=lv5;
+//    }
+//    else if(val>25000&&val<=30000){
+//        range=lv6;
+//    }
+//    else if(val>30000&&val<=40000){
+//        range=lv7;
+//    }
+//    else if(val>40000&&val<=50000){
+//        range=lv8;
+//    }
+//    else if(val>50000&&val<=60000){
+//        range=lv9;
+//    }
+//    else if(val>60000){
+//        range=lv10;
+//    }
+//        
+//        }
+//    catch(Exception n){
+//        
+//    }
+//    return range;
+//}
+    String ballevel;
+   private void getLoanTypeInfo(){
      try {
           Methods m = new Methods();
           Connection con = m.getConnection();
           Statement st = con.createStatement();
          
-          String searchQuery = "SELECT * FROM `accounttypes` WHERE `name` = '" +loanType+ "'";
+          String searchQuery = "SELECT balance FROM `accounttypes` WHERE `name` = '" +loanType+ "'";
           ResultSet rs = st.executeQuery(searchQuery);
           if(rs.next()){
-              rate=rs.getString("rate");
-              penalty=rs.getString("penalt");
-              appfee=rs.getString("appfee");
+            
               ballevel=rs.getString("balance");
-              lv1=rs.getString("lv1");
-              lv2=rs.getString("lv2");
-              lv3=rs.getString("lv3");
-              lv4=rs.getString("lv4");
-              lv5=rs.getString("lv5");
-              lv6=rs.getString("lv6");
-              lv7=rs.getString("lv7");
-              lv8=rs.getString("lv8");
-              lv9=rs.getString("lv9");
-              lv10=rs.getString("lv10");
+             
             
               
               }
@@ -905,22 +930,7 @@ private String checkRange(String value){
           Logger.getLogger(loanform.class.getName()).log(Level.SEVERE, null, ex);
       }
 }
-private String range;
-private String loanType;
-private String rate;
-private String appfee;
-private String penalty;
-private String ballevel;
-private String lv1;
-private String lv2;
-private String lv3;
-private String lv4;
-private String lv5;
-private String lv6;
-private String lv7;
-private String lv8;
-private String lv9;
-private String lv10;
+
 
 
 
@@ -962,7 +972,6 @@ private String lv10;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnConfirm;
-    private javax.swing.JLabel Weeks;
     private javax.swing.JLabel img;
     private javax.swing.JLabel installments;
     private javax.swing.JButton jButton1;
@@ -971,11 +980,8 @@ private String lv10;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel24;
@@ -989,7 +995,6 @@ private String lv10;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField txtAccountNo;
     private javax.swing.JTextField txtAccountType;
     private javax.swing.JTextField txtBalance;

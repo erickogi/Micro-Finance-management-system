@@ -18,19 +18,11 @@ public class loantypesholder {
     private String appfee;
     private String penalty;
     private String balance;
-    private String lv1;
-    private String lv2;
-    private String lv3;
-    private String lv4;
-    private String lv5;
-    private String lv6;
-    private String lv7;
-    private String lv8;
-    private String lv9;
-    private String lv10;
+    private String rateTime,ratePer,applicable;
+  
              
     
-     public loantypesholder(String Id, String Name,String Rate,String Appfee,String Penalty,String Balance,String tlv1,String tlv2,String tlv3,String tlv4,String tlv5,String tlv6,String tlv7,String tlv8,String tlv9,String tlv10)
+     public loantypesholder(String Id, String Name,String Rate,String Appfee,String Penalty,String Balance,String RateTime,String RatePer,String Applicable)
   {
     this.id = Id;
     this.name = Name;
@@ -38,16 +30,10 @@ public class loantypesholder {
     this.appfee = Appfee;
     this.penalty = Penalty;
     this.balance = Balance;
-    this.lv1 = tlv1;
-    this.lv2 = tlv2;
-    this.lv3 = tlv3;
-    this.lv4 = tlv4;
-    this.lv5 = tlv5;
-    this.lv6 = tlv6;
-    this.lv7= tlv7;
-    this.lv8 = tlv8;
-    this.lv9 = tlv9;
-    this.lv10 = tlv10;
+    this.rateTime=RateTime;
+    this.ratePer=RatePer;
+    this.applicable=Applicable;
+    
    
  
   }
@@ -77,47 +63,19 @@ public class loantypesholder {
   {
     return this.balance;
   }
-    public String getLv1()
+    public String getApplicable()
   {
-    return this.lv1;
+    return this.applicable;
   }
-     public String getLv2()
+     public String getRatePer()
   {
-    return this.lv2;
+    return this.ratePer;
   }
-     public String getLv3()
+      public String getRateTime()
   {
-    return this.lv3;
+    return this.rateTime;
   }
-      public String getLv4()
-  {
-    return this.lv4;
-  }
-       public String getLv5()
-  {
-    return this.lv5;
-  }
-        public String getLv6()
-  {
-    return this.lv6;
-  }
-         public String getLv7()
-  {
-    return this.lv7;
-  }
-          public String getLv8()
-  {
-    return this.lv8;
-  }
-           public String getLv9()
-  {
-    return this.lv9;
-  }
-            public String getLv10()
-  {
-    return this.lv10;
-  }
-          
+  
   
   
  

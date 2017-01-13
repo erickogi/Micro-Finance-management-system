@@ -7,7 +7,9 @@ package imua.development;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -18,6 +20,10 @@ import javax.swing.JOptionPane;
  */
 public class garanters extends javax.swing.JFrame {
 static String id=null;
+     String idd;
+     String name;
+     String phone; 
+//int step;
     /**
      * Creates new form NewJFrame
      */
@@ -363,17 +369,19 @@ static String id=null;
     }//GEN-LAST:event_txtGaranteeMobile4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      insert();
+    // String [] ids={txtGaranteeID.getText(),txtGaranteeID2.getText(),txtGaranteeID3.getText(), txtGaranteeID4.getText()};
+        
+        
+       insert() ;
+     //   checkIfExist(ids);
         //Main.a = 1;
         
        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
  private void formWindowClosed(java.awt.event.WindowEvent evt) {                                  
-       // Main.a = 1;
+       
     } 
-    String idd;
-     String name;
-     String phone; 
+//HashMap<String,String>guranter=new HashMap<String,String>();
  private void insert(){
  
      for(int a=0;a<=3;a++){
@@ -395,21 +403,188 @@ static String id=null;
           phone=txtGaranteeMobile3.getText();
          }
          else if(a==3){
-              idd=txtGaranteeID4.getText();
+          idd=txtGaranteeID4.getText();
           name=txtGaranteeName4.getText();
            phone=txtGaranteeMobile4.getText();
          }
          else{
              JOptionPane.showMessageDialog(null, "ERROR");
          }
+        
          
+            insertr(); 
          
-         insertr();
      }
      
     
      
      
+     
+ }
+ private void checkIfAgurantorAlready(String [] ids){
+     
+      String []notIn ={"ch"};
+     for(int a=0;a<ids.length;a++){
+         idd=ids[a];
+        try
+        {
+            //get database connection details
+           Methods n=new Methods();
+            String stru=idd;
+             //open connection
+          Connection con = n.getConnection();
+          String str="";
+            
+            str="select * from guranters where  id =?";
+            
+           PreparedStatement pst=con.prepareStatement(str);
+         
+           pst.setString(1, stru);
+          
+           ResultSet rs;
+          // ResultSet rs1;
+           rs=pst.executeQuery();
+          
+           if (rs.next())
+               
+          {
+              notIn[a]=idd;
+//              Object []options={"GO BACK","CONTINUE ANYWAY","CANCEL"};
+//           int btn= JOptionPane.showOptionDialog(null, idd+" IS ALREADY A GURANTER ","CONFIRM",
+//                    JOptionPane.DEFAULT_OPTION,
+//                    JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+//            if(btn==1){
+//               insert();
+//            }
+//            else if(btn==2){
+//         
+//            }
+//            else{
+//                //clear();
+//            }  
+               
+               
+//          JOptionPane.showMessageDialog(null,"A PRODUCT WITH SUCH NAME  ("+jTextField_name.getText()+")  ALREADY EXIST \n "
+//                  + " USE ANOTHER NAME OR UPDATE THE PRODUCTS IN QUESTION");
+               
+           }
+           else
+           {
+           
+            }
+           con.close();
+           rs.close();
+           pst.close();
+
+        }
+        catch (Exception b)
+        {
+            System.err.println(b);
+           // System.exit(1);
+        }    
+     }
+      if(notIn.length!=0){
+            Object []options={"GO BACK","CONTINUE ANYWAY","CANCEL"};
+           int btn= JOptionPane.showOptionDialog(null, idd+" IS ALREADY A GURANTER","CONFIRM",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+          switch (btn) {
+              case 1:
+                  insert();
+                  break;
+              case 2:
+                  clear();
+                  break;
+              default:
+                  break;  
+          }
+     }
+     else{
+         insert();
+     }
+ }
+ private void checkIfExist(String [] ids){
+     String []notIn={"ch"} ;
+     for(int a=0;a<ids.length;a++){
+         idd=ids[a];
+     try
+        {
+            //get database connection details
+           Methods n=new Methods();
+            String stru=idd;
+             //open connection
+          Connection con = n.getConnection();
+          String str="";
+            
+            str="select * from users where  id =?";
+            
+           PreparedStatement pst=con.prepareStatement(str);
+         
+           pst.setString(1, stru);
+          
+           ResultSet rs;
+          // ResultSet rs1;
+           rs=pst.executeQuery();
+          
+           if (rs.next())
+               
+           {
+       //notIn[a]=idd;
+//                 Object []options={"GO BACK","CONTINUE ANYWAY","CANCEL"};
+//           int btn= JOptionPane.showOptionDialog(null, idd+" IPERSON NOT FOUND ","CONFIRM",
+//                    JOptionPane.DEFAULT_OPTION,
+//                    JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+//            if(btn==1){
+//                checkIfAgurantorAlready();
+//            }
+//            else if(btn==2){
+//             clear();
+//            }
+//            else{
+//                //clear();
+//            }  
+////          JOptionPane.showMessageDialog(null,"A PRODUCT WITH SUCH NAME  ("+jTextField_name.getText()+")  ALREADY EXIST \n "
+////                  + " USE ANOTHER NAME OR UPDATE THE PRODUCTS IN QUESTION");
+               
+           }
+           else
+           {
+                notIn[a]=idd;
+            }
+           con.close();
+           rs.close();
+           pst.close();
+
+        }
+        catch (Exception b)
+        {
+            System.err.println(b);
+           // System.exit(1);
+        }  
+     
+     
+     
+     
+     }
+     if(notIn.length!=0){
+            Object []options={"GO BACK","CONTINUE ANYWAY","CANCEL"};
+           int btn= JOptionPane.showOptionDialog(null, idd+" IPERSON NOT FOUND ","CONFIRM",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+         switch (btn) {
+             case 1:
+                 checkIfAgurantorAlready(ids);
+                 break;
+             case 2:
+                 clear();
+                 break;
+             default:
+                 break;  
+         }
+     }
+     else{
+         checkIfAgurantorAlready(ids);
+     }
      
  }
  private  void insertr(){
@@ -420,19 +595,33 @@ static String id=null;
                 
                 try (PreparedStatement pst = connection.prepareStatement(query)) {
                     pst.executeUpdate(query);
+                    
+                    
                     pst.close();
                     connection.close();
                 }
             }
+            JOptionPane.showMessageDialog(null, "Succesfully filled ");
              loanform.y=1;
-             clear();
+             //clear();
         } catch (SQLException ex) {
               JOptionPane.showMessageDialog(null, "Error ");
             Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
         }
  } 
  public void clear(){
-     
+   txtGaranteeID.setText("");
+    txtGaranteeID2.setText("");
+  txtGaranteeID3.setText("");
+  txtGaranteeID4.setText("");
+  txtGaranteeMobile.setText("");
+  txtGaranteeMobile2.setText("");
+  txtGaranteeMobile3.setText("");
+  txtGaranteeMobile4.setText("");
+  txtGaranteeName.setText("");
+  txtGaranteeName2.setText("");
+   txtGaranteeName3.setText("");
+   txtGaranteeName4.setText("");
      
      
  }

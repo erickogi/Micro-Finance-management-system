@@ -13,8 +13,14 @@ import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
@@ -37,7 +43,8 @@ public class AccountRegistration extends javax.swing.JFrame {
     String toAccountsTypes[];
     private String group = null;
     private String accounttype = null;
-
+  String accounts[];
+  String groups[];
     /**
      * Creates new form AccountRegistration
      */
@@ -99,9 +106,9 @@ private void setTilteImage(){
     ArrayList<String> usersList =  m.ListUsersGroups();
    groups=new String[usersList.size()];
    usersList.toArray(groups);
+   //JOptionPane.showMessageDialog(null, groups[0]);
   }
-  String accounts[];
-  String groups[];
+
     private void accountsTypes() {
        // String accounts[] = {"Regular Acc", "Projects Acc", "Table Acc"};
         toAccountsTypes = accounts;
@@ -187,6 +194,8 @@ private void setTilteImage(){
         btnAttachPhoto = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        txtPeronId = new javax.swing.JTextField();
 
         jLabel3.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 18)); // NOI18N
         jLabel3.setText("Tenant Information");
@@ -372,8 +381,8 @@ private void setTilteImage(){
 
         jLabel11.setText("Account Type");
 
-        jComboBoxGroup.setEditable(true);
         jComboBoxGroup.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choose" }));
+        jComboBoxGroup.setEnabled(false);
         jComboBoxGroup.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxGroupItemStateChanged(evt);
@@ -398,6 +407,13 @@ private void setTilteImage(){
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("DELETE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -461,28 +477,38 @@ private void setTilteImage(){
                                                     .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(150, 150, 150)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSpouceID, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSirSpouceName, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17)
-                            .addComponent(txtSpouceName, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSpouceMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(150, 150, 150)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(63, 63, 63)
+                                        .addComponent(txtPeronId, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(ComboMarital, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(26, 26, 26)
-                                .addComponent(jComboBoxGroup, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtSpouceID, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtSirSpouceName, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel17)
+                                    .addComponent(txtSpouceName, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtSpouceMobile, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(ComboMarital, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(26, 26, 26)
+                                        .addComponent(jComboBoxGroup, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancel)
@@ -501,7 +527,8 @@ private void setTilteImage(){
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ComboSalutation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ComboSalutation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPeronId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
@@ -587,6 +614,8 @@ private void setTilteImage(){
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(btnClear)
                                 .addComponent(btnCancel)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
@@ -723,7 +752,8 @@ private void setTilteImage(){
 //            groupnames();
         } else {
            jComboBoxGroup.setEnabled(true);
-            group=null;
+           // group=null;
+           groupnames();
             accounttype = evt.getItem().toString();
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
@@ -823,11 +853,12 @@ public void enable(){
      int y=Integer.valueOf(txtPhoneNo.getText()) ;
      int u= Integer.valueOf(txtId.getText());
      
-        if(txtSirName.getText().isEmpty()||
+        if(
+                //txtSirName.getText().isEmpty()||
         txtOtherName.getText().isEmpty()||
         txtId.getText().isEmpty()||
         txtPhoneNo.getText().isEmpty()||
-        txtEmail.getText().isEmpty()||
+     //   txtEmail.getText().isEmpty()||
         txtAddress.getText().isEmpty()||
         txtCounty.getText().isEmpty()||
         txtTown.getText().isEmpty()||
@@ -839,19 +870,20 @@ public void enable(){
       //  img.getIcon()==null||
       //  filePath == null||
       //  fileurlp == null||
-        ComboSalutation.getSelectedIndex()==0||
+      //  ComboSalutation.getSelectedIndex()==0||
         ComboMarital.getSelectedIndex()==0||
         jComboBox1.getSelectedIndex()==0||
        jComboBoxGroup.getSelectedIndex()==0)
+            
         {
-            JOptionPane.showMessageDialog(null, "One or More Fields Missing");
+            JOptionPane.showMessageDialog(null, "101 One or More Fields Missing");
         }
         else{
             insertUserDetails();
-             JOptionPane.showMessageDialog(null, "CREATED ACCOUNT NO IS"+n);
+            // JOptionPane.showMessageDialog(null, "CREATED ACCOUNT NO IS"+n);
         }
     }catch(Exception n){
-         JOptionPane.showMessageDialog(null, "ERROR"+n);
+         JOptionPane.showMessageDialog(null, "ERROR 102");
     }
 }
     private void jComboBoxGroupItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxGroupItemStateChanged
@@ -868,6 +900,75 @@ public void enable(){
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         clear();
     }//GEN-LAST:event_btnClearActionPerformed
+ public void fetchUserDetails(String value, String where) {
+
+        try {
+            Methods m = new Methods();
+            Connection con = m.getConnection();
+            Statement st = con.createStatement();
+            String searchQuery = "SELECT * FROM `users` WHERE `" + where + "` = '" + value + "'";
+            ResultSet rs = st.executeQuery(searchQuery);
+            while (rs.next()) {
+                txtSirName.setText(rs.getString("fname"));
+                txtOtherName.setText(rs.getString("sname"));
+                txtPhoneNo.setText(rs.getString("phone"));
+                 txtAddress.setText(rs.getString("address"));
+                txtTown.setText(rs.getString("town"));
+               // txtOccupation.setText(rs.getString("acounttype"));
+                txtCounty.setText(rs.getString("county"));
+                txtOccupation.setText(rs.getString("occupation"));
+                txtSirSpouceName.setText(rs.getString("spaucefname"));
+        txtSpouceName.setText(rs.getString("spaucesname"));
+        txtSpouceID.setText(rs.getString("spauceid"));
+        txtSpouceMobile.setText(rs.getString("spaucephone"));
+        txtAccountNo.setText(rs.getString("accountno"));
+        
+        
+        
+ //txtSirName.setText(null);
+      //  txtOtherName.setText(null);
+      //  txtId.setText(null);
+//        txtPhoneNo.setText(null);
+//        txtEmail.setText(null);
+//        txtAddress.setText(null);
+//        txtCounty.setText(null);
+//        txtTown.setText(null);
+//        txtOccupation.setText(null);
+//        txtSirSpouceName.setText(null);
+//        txtSpouceName.setText(null);
+//        txtSpouceID.setText(null);
+//        txtSpouceMobile.setText(null);
+//        txtAccountNo.setText("Auto");
+//        img.setIcon(null);
+//        filePath = null;
+//        fileurlp = null;
+//        ComboSalutation.setSelectedIndex(0);
+//        ComboMarital.setSelectedIndex(0);
+//        jComboBox1.setSelectedIndex(0);
+//        jComboBoxGroup.setSelectedIndex(0);
+              
+            }
+            st.close();
+            rs.close();
+            con.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Deposit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        deleteUserDetails(txtPeronId.getText());
+    }//GEN-LAST:event_jButton1ActionPerformed
+   public void deleteUserDetails(String id){
+        Methods n=new Methods();
+        String query = "DELETE FROM `users`  WHERE `id` = '" +id+"'";
+                n.executeSQlQuery(query, "Deleted");
+              clear();
+       
+       
+   }
+    
     private void insertUserDetails(){
         
         Methods m= new Methods();
@@ -934,6 +1035,7 @@ public void enable(){
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel img;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBoxGroup;
     private javax.swing.JLabel jLabel1;
@@ -964,6 +1066,7 @@ public void enable(){
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtOccupation;
     private javax.swing.JTextField txtOtherName;
+    private javax.swing.JTextField txtPeronId;
     private javax.swing.JTextField txtPhoneNo;
     private javax.swing.JTextField txtSirName;
     private javax.swing.JTextField txtSirSpouceName;
@@ -1034,6 +1137,11 @@ private void txtFieldsCntrl() {
                 txtSpouceMobile.requestFocus();
             }
         });
+        this.txtPeronId.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent b) {
+              fetchUserDetails(txtPeronId.getText(), "id");
+            }
+        });
     }
 
     private void clear() {
@@ -1050,6 +1158,7 @@ private void txtFieldsCntrl() {
         txtSpouceName.setText(null);
         txtSpouceID.setText(null);
         txtSpouceMobile.setText(null);
+        txtAccountNo.setText("Auto");
         img.setIcon(null);
         filePath = null;
         fileurlp = null;
@@ -1057,5 +1166,6 @@ private void txtFieldsCntrl() {
         ComboMarital.setSelectedIndex(0);
         jComboBox1.setSelectedIndex(0);
         jComboBoxGroup.setSelectedIndex(0);
+        txtPeronId.setText("");
     }
 }

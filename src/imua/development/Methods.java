@@ -30,7 +30,8 @@ public class Methods {
     try
     {
     String path;
-   String db=":3306/inua";
+   // String db=":3306/inua";
+   String db=":3306/inua?autoReeconnect=true&useSSL=false";
    String jdbc="jdbc:mysql://";
    String user="root";
    String pass="123ERYcog.";
