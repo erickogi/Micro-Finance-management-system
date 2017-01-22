@@ -6,6 +6,9 @@
 package imua.development;
 
 //import static imua.development.loanform.y;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.sql.Connection;
@@ -13,6 +16,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +27,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner.DefaultEditor;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -48,19 +55,32 @@ public class ProcessLoan extends javax.swing.JFrame {
     public ProcessLoan() {
         initComponents();
         setTilteImage();
-        findUsers();
+        refresh();
+        getNewRenderedTable(table);
         lblnoOfWeeks.setVisible(false);
         jInternalFrame1.setVisible(false);
-        
+        //lblPersonId.setText("45");
+       // lblType.setText("Academic");
         ((DefaultEditor)jSpinnerFrequency.getEditor()).getTextField().setEditable(false);
        // lblPersonId.setText("12134564332");
     }
-    private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+   private void setTilteImage(){
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            jPanel1.setBackground(c);
+             Container cont=this.getContentPane();
+            cont.setBackground(c);
+            jPanel2.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
 public ArrayList<ApplicationData> ListUsers( String Id)
   {
@@ -105,7 +125,7 @@ public ArrayList<ApplicationData> ListUsers( String Id)
         
         findUsers();
   }
-  public void findUsers()
+  public void findUsers() 
   {
     ArrayList<ApplicationData> users = ListUsers(txtFilter.getText());
     DefaultTableModel model = new DefaultTableModel();
@@ -115,6 +135,7 @@ public ArrayList<ApplicationData> ListUsers( String Id)
     for (int i = 0; i < users.size(); i++)
     {
       row[0] = ((ApplicationData)users.get(i)).getDate();
+    
       row[1] = ((ApplicationData)users.get(i)).getID();
       
       row[2]= ((ApplicationData) users.get(i)).getName();
@@ -127,8 +148,32 @@ public ArrayList<ApplicationData> ListUsers( String Id)
       model.addRow(row);
     }
     this.table.setModel(model);
+  
   }
- 
+ public static long daysBetween(Calendar startDate, Calendar endDate) {  
+  Calendar date = (Calendar) startDate.clone();  
+  long daysBetween = 0;  
+  while (date.before(endDate)) {  
+    date.add(Calendar.DAY_OF_MONTH, 1);  
+    daysBetween++;  
+  }  
+  return daysBetween;  
+}  
+public void het(Date now,Date thn){
+    Calendar calendar1 = Calendar.getInstance();
+      Calendar calendar2 = Calendar.getInstance();
+      calendar1.setTime(thn);
+      calendar2.setTime(now);
+      long milsecs1= calendar1.getTimeInMillis();
+      long milsecs2 = calendar2.getTimeInMillis();
+      long diff = milsecs2 - milsecs1;
+      long dsecs = diff / 1000;
+      long dminutes = diff / (60 * 1000);
+      long dhours = diff / (60 * 60 * 1000);
+      long ddays = diff / (24 * 60 * 60 * 1000);
+
+      System.out.println("Your Day Difference="+ddays);
+}
 
   public void getLoanDetails(String a){
       try {
@@ -160,7 +205,25 @@ public ArrayList<ApplicationData> ListUsers( String Id)
       }
     }
       
-      
+      private static JTable getNewRenderedTable(final JTable table) {
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table,
+                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                String status = (String)table.getModel().getValueAt(row, 0);
+                if ("void".equals(status)) {
+                    setBackground(Color.BLACK);
+                    setForeground(Color.WHITE);
+                } else {
+                    setBackground(table.getBackground());
+                    setForeground(table.getForeground());
+                }       
+                return this;
+            }   
+        });
+        return table;
+    }
       
   
     /**
@@ -613,7 +676,7 @@ private void getPayableAmount(String loanAmount){
         Object []options={"FILL IT","CONTINUE ANYWAY","CANCEL"};
            int btn= JOptionPane.showOptionDialog(null, "GURANTERS FORM NOT FIELD","CONFIRM",
                     JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+                    JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
         switch (btn) {
             case 1:
                 lblPersonId.setText(model.getValueAt(i, 1).toString());
@@ -695,9 +758,38 @@ private void getPayableAmount(String loanAmount){
        }
        
     }//GEN-LAST:event_txtPreferedInstallmentsValueKeyReleased
-
+public int checkWetherLoanExist(String loanid){
+    int res=0;
+    try {
+          Methods n = new Methods();
+          
+          Connection con =n. getConnection();
+          
+          Statement st = con.createStatement();
+          String searchQuery = "SELECT * FROM `loans`WHERE loanid='" + loanid+ "' ";
+          ResultSet rs = st.executeQuery(searchQuery);
+          while (rs.next())
+          {
+            res=1;
+           
+          }
+          st.close();
+          rs.close();
+          con.close();
+      } catch (SQLException ex) {
+          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    
+    return res;
+}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     check()  ;
+    String lnId=lblPersonId.getText() +""+lblType.getText();
+        if(checkWetherLoanExist(lnId)==0){
+        check()  ;
+    }
+    else{
+        JOptionPane.showMessageDialog(null, "Customer has this type of loan not fully paid","Warning",JOptionPane.WARNING_MESSAGE,null);
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -723,7 +815,7 @@ private void clear(){
     txtName.setText("");
     txtPreferedInstallmentsValue.setText("");
     jComboBoxChooseMode.setSelectedIndex(0);
-    
+    refresh();
     
 }
 private void check(){
@@ -733,7 +825,7 @@ private void check(){
             lblnoOfWeeks.getText().equals("Weeks")
           //  jSpinnerFrequency.getValue()
             ){
-        JOptionPane.showMessageDialog(null, "Provide all details");
+        JOptionPane.showMessageDialog(null, "Provide all details","Warning",JOptionPane.WARNING_MESSAGE);
     }
     else{
          insert()   ;
@@ -745,7 +837,7 @@ deleteApplication(lblPersonId.getText());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFilterKeyReleased
-        findUsers();
+        refresh();
     }//GEN-LAST:event_txtFilterKeyReleased
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -835,16 +927,19 @@ deleteApplication(lblPersonId.getText());
      Methods n=new Methods();
      String appfe=String.valueOf(appfee*Double.valueOf(txtAmount.getText()));
      String i="null";
+     String z="0";
    //String loanamount=calculate();
      java.util.Date d=(a);
      String lnId=lblPersonId.getText() +""+lblType.getText();
+     String lnIdno="0";
      java.sql.Date DATE=new java.sql.Date(d.getTime());
      
-     
+     String nxp="np";
      
      String query = "INSERT INTO loans("
              + "`id`,"
              + "`loanid`,"
+             
              + "`loantype`,"
             +"`applicable`,"
              + " `installmentamount`"
@@ -858,11 +953,13 @@ deleteApplication(lblPersonId.getText());
              + ",`defaultacc`"
              + ",`applicationfee`"
              + ",`todaypay`"
+              + ",`nxp`"
              + ",`givenOn`"
              + ",`paidon`)"
              + " VALUES ("
              + "'" + this.lblPersonId.getText() + "'"
              + ",'" + lnId+ "'"
+            
              + ",'" + this.lblType.getText()+ "'"
               + ",'" + applicableStatus+ "'"
              + ",'" + this.lblInstallment.getText() + "'"
@@ -877,17 +974,25 @@ deleteApplication(lblPersonId.getText());
             
              + ",'"+i+"'"
              + ",'"+appfe+"'"
-             + ",'"+i+"'"
+             + ",'"+z+"'"
+              + ",'"+nxp+"'"
              + ",now()"
              + ",now())";
        String fee=   JOptionPane.showInputDialog("Enter application fee");
        Double bal=Double.valueOf(fee)-Double.valueOf(appfe);
+        n.addToOrgAccount(Double.valueOf(appfe),"Loan Application Fee" );
+        if(bal>0){
+             JOptionPane.showMessageDialog(null, "Balance is " +bal.toString());
+        }
+        else if(bal<0){
+             JOptionPane.showMessageDialog(null, "Balance is less by" +bal.toString());
+        }
+      
        
-       JOptionPane.showMessageDialog(null, "Balance is " +bal.toString());
-       
-       n.executeSQlQuery(query, "Processed");
+       if(n.executeSQlQuery(query, "Processed")==1){
+          n.RemoveFromOrgAccount(Double.valueOf(txtAmount.getText()),"LOAN GIVEN");
           deleteApplication(lblPersonId.getText());
-          
+       }
         }
         else{
              JOptionPane.showMessageDialog(null, "Fill  Guarantors form first");
@@ -925,7 +1030,7 @@ deleteApplication(lblPersonId.getText());
     }
     else{
     Double ltime=(fullLoanAmount/NOI);
-    JOptionPane.showMessageDialog(null, fullLoanAmount+" "+NOI+" "+ltime);
+   // JOptionPane.showMessageDialog(null, fullLoanAmount+" "+NOI+" "+ltime);
     lblInstallment.setText(String.valueOf(NOI));
     lblTime.setText(String.valueOf(ltime.toString()));
     }

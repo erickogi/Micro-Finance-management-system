@@ -5,6 +5,9 @@
  */
 package imua.development;
 
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,10 +32,28 @@ static String id=null;
      */
     public garanters() {
         initComponents();
+        setTilteImage();
        // String id=null;
         //getiD();
         
     }
+    private void setTilteImage(){
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+             Container cont=this.getContentPane();
+            cont.setBackground(c);
+          //  jPanel2.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}
   public   void getiD(){
      
       JOptionPane.showMessageDialog(null, id);

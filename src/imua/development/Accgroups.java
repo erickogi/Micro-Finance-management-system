@@ -5,6 +5,7 @@
  */
 package imua.development;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -34,12 +35,23 @@ public class Accgroups extends javax.swing.JFrame {
         findUsers1();
         setTilteImage();
     }
+    
+    
+    
     private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            jPanel1.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
   public ArrayList<UserAcc> ListUsers()
   {
@@ -54,7 +66,7 @@ public class Accgroups extends javax.swing.JFrame {
       ResultSet rs = st.executeQuery(searchQuery);
       while (rs.next())
       {
-        UserAcc user = new UserAcc(rs.getString("id"), rs.getString("accountname"));
+        UserAcc user = new UserAcc(rs.getString("id"), rs.getString("accountname"), rs.getString("appfee"));
         
         usersList.add(user);
       }
@@ -74,12 +86,13 @@ public class Accgroups extends javax.swing.JFrame {
     ArrayList<UserAcc> users = ListUsers();
     DefaultTableModel model = new DefaultTableModel();
     
-    model.setColumnIdentifiers(new Object[] { "ID", "Name" });
-    Object[] row = new Object[2];
+    model.setColumnIdentifiers(new Object[] { "ID", "Name","Fee" });
+    Object[] row = new Object[3];
     for (int i = 0; i < users.size(); i++)
     {
       row[0] = ((UserAcc)users.get(i)).getId();
       row[1] = ((UserAcc)users.get(i)).getAccName();
+      row[2] = ((UserAcc)users.get(i)).getAccFee();
      
       
       model.addRow(row);
@@ -99,7 +112,7 @@ public class Accgroups extends javax.swing.JFrame {
       ResultSet rs = st.executeQuery(searchQuery);
       while (rs.next())
       {
-        UserAcc user = new UserAcc(rs.getString("id"), rs.getString("groupname"));
+        UserAcc user = new UserAcc(rs.getString("id"), rs.getString("groupname"), rs.getString("groupname"));
         
         usersList.add(user);
       }
@@ -125,6 +138,7 @@ public class Accgroups extends javax.swing.JFrame {
     {
       row[0] = ((UserAcc)users.get(i)).getId();
       row[1] = ((UserAcc)users.get(i)).getAccName();
+      
      
       
       model.addRow(row);
@@ -161,6 +175,8 @@ public class Accgroups extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtFee = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -257,6 +273,8 @@ public class Accgroups extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("GROUPS REGISTERD");
 
+        jLabel7.setText("Fee");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -265,19 +283,21 @@ public class Accgroups extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(accName, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
-                            .addComponent(accId)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel7))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(accName, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                            .addComponent(accId)
+                            .addComponent(txtFee))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
@@ -298,7 +318,7 @@ public class Accgroups extends javax.swing.JFrame {
                         .addComponent(jButton6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(222, 222, 222)
                 .addComponent(jLabel5)
@@ -345,6 +365,10 @@ public class Accgroups extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
                             .addComponent(accId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton3)
@@ -357,9 +381,7 @@ public class Accgroups extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,7 +399,7 @@ public class Accgroups extends javax.swing.JFrame {
     check();
     }//GEN-LAST:event_jButton3ActionPerformed
 private void check(){
-    if(accId.getText().isEmpty()||accName.getText().isEmpty()){
+    if(accId.getText().isEmpty()||accName.getText().isEmpty()||txtFee.getText().isEmpty()){
         JOptionPane.showMessageDialog(null, "Empty Field Detected");
     }
     else{
@@ -400,6 +422,7 @@ private void check2(){
         this.accId.setText(model.getValueAt(i, 0).toString());
 
         this.accName.setText(model.getValueAt(i, 1).toString());
+         this.txtFee.setText(model.getValueAt(i, 2).toString());
 
        
     }//GEN-LAST:event_tableUseAccTypesMouseClicked
@@ -500,7 +523,7 @@ private void update(){
      // executeSQlQuery(query, "Updated");
             Methods m=new Methods();
             try (Connection connection = m.getConnection()) {
-                String query = "UPDATE `useracctypes` SET `accountname`='" + this.accName.getText() + "' WHERE `id` = '" + this.accId.getText() + "'";
+                String query = "UPDATE `useracctypes` SET `accountname`='" + this.accName.getText() + "',`appfee`='" + this.txtFee.getText() + "' WHERE `id` = '" + this.accId.getText() + "'";
                 
                 try (PreparedStatement pst = connection.prepareStatement(query)) {
                     pst.executeUpdate(query);
@@ -565,7 +588,7 @@ private void update1(){
         try {
             Methods m=new Methods();
             try (Connection connection = m.getConnection()) {
-                String query = "INSERT INTO `useracctypes`(`id`, `accountname`) VALUES ('" + this.accId.getText() + "','" + accName.getText() + "')";
+                String query = "INSERT INTO `useracctypes`(`id`, `accountname`, `appfee`) VALUES ('" + this.accId.getText() + "','" + accName.getText() + "','" + txtFee.getText() + "')";
                 
                 try (PreparedStatement pst = connection.prepareStatement(query)) {
                     pst.executeUpdate(query);
@@ -654,17 +677,22 @@ private void update1(){
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tableUseAccTypes;
     private javax.swing.JTable tableUserGroups;
+    private javax.swing.JTextField txtFee;
     // End of variables declaration//GEN-END:variables
 public void clear(){
     accId.setText("");
     accName.setText("");
     groupId.setText("");
     groupName.setText("");
+    txtFee.setText("");
+    refreshTable();
+   // refreshTable();
 }
 
 }

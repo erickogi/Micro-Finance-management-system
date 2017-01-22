@@ -17,13 +17,15 @@ public class UserAcc {
 
   private String id;
   private String accountname;
+  private String appfee;
 
  
   
-  public UserAcc(String Id, String Accountname)
+  public UserAcc(String Id, String Accountname,String Appfe)
   {
     this.id = Id;
     this.accountname = Accountname;
+    this.appfee=Appfe;
  
   }
   
@@ -36,6 +38,9 @@ public class UserAcc {
   {
     return this.accountname;
   }
-  
+  public String getAccFee()
+  {
+    return this.appfee;
+  }
  
 }

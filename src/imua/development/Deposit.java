@@ -5,6 +5,8 @@
  */
 package imua.development;
 
+import java.awt.Color;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -42,12 +44,21 @@ public class Deposit extends javax.swing.JFrame {
         initComponents();
         setTilteImage();
     }
-    private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+   private void setTilteImage(){
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            jPanel1.setBackground(c);
+           
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
 //set Title 
     public void setTitle(String tite,String t) {
@@ -248,11 +259,9 @@ JOptionPane.showMessageDialog(null,"rs ");
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         img = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        txtAccountNo = new javax.swing.JTextField();
         txtSirname = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -292,11 +301,13 @@ JOptionPane.showMessageDialog(null,"rs ");
             }
         });
 
-        jLabel1.setText("Account No.");
-
         jLabel3.setText("ID No.");
 
-        txtAccountNo.setEditable(false);
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
 
         txtSirname.setEditable(false);
 
@@ -424,25 +435,16 @@ JOptionPane.showMessageDialog(null,"rs ");
                         .addGap(112, 112, 112))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbltitle)
-                                .addGap(200, 200, 200))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(94, 94, 94))))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                        .addComponent(lbltitle)
+                        .addGap(200, 200, 200))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
+                        .addComponent(jLabel3)
                         .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -474,18 +476,16 @@ JOptionPane.showMessageDialog(null,"rs ");
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel12)
                                         .addComponent(txtSirname, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addComponent(jLabel7)
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtTown, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel9)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTown, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(16, 16, 16)
@@ -503,10 +503,12 @@ JOptionPane.showMessageDialog(null,"rs ");
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15)
                     .addComponent(txtModeId)
                     .addComponent(txtBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                    .addComponent(txtDeposit))
+                    .addComponent(txtDeposit)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton1)
+                        .addComponent(jLabel15)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -518,11 +520,7 @@ JOptionPane.showMessageDialog(null,"rs ");
                         .addComponent(lbltitle)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
+                                .addGap(55, 55, 55)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3)
@@ -568,7 +566,7 @@ JOptionPane.showMessageDialog(null,"rs ");
                             .addComponent(jLabel14))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 31, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
@@ -584,7 +582,6 @@ JOptionPane.showMessageDialog(null,"rs ");
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
@@ -599,17 +596,11 @@ JOptionPane.showMessageDialog(null,"rs ");
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -619,22 +610,12 @@ JOptionPane.showMessageDialog(null,"rs ");
       try
            
        {
-        if (txtAccountNo.getText().isEmpty() && txtId.getText().isEmpty())
+        if ( txtId.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(null, "FILL ONE OF THE FIELDS");
         } 
         
-        else if (txtAccountNo.getText() != "" && txtId.getText().isEmpty())
-        {
-            int v=Integer.valueOf(txtAccountNo.getText());
-            fetch(txtAccountNo.getText(), "accountno");
-        } 
-        
-        else if (txtAccountNo.getText().isEmpty() && txtId.getText() != "") 
-        {
-            int v=Integer.valueOf(txtId.getText());
-            fetch(txtId.getText(), "id");
-        } 
+       
         
         else
         {
@@ -643,7 +624,7 @@ JOptionPane.showMessageDialog(null,"rs ");
         }
         
        }
-       catch(Exception r)
+       catch(HeadlessException | NumberFormatException r)
        {
            JOptionPane.showMessageDialog(null, "Enter correct Value For ID or Acc No");
        }
@@ -653,15 +634,16 @@ JOptionPane.showMessageDialog(null,"rs ");
         private void insert() {
         int dialogButton=
         
-        JOptionPane.showConfirmDialog(null, "Confirm Your Want TO  "+typeoftransaction+"  "+txtBalance.getText()+"\n For  "+txtSirname.getText());
+        JOptionPane.showConfirmDialog(null, "Confirm Your Want TO  "+typeoftransaction+"  "+txtDeposit.getText()+"\n For  "+txtSirname.getText());
         if(dialogButton==JOptionPane.YES_OPTION){
         String a=null;
         String b=null;
+        int wod=0;
         if(typeoftransaction.equals("deposits"))
-        {
+        {    wod=1;
             a=txtDeposit.getText();
         }else if(typeoftransaction.equals("withdrawal"))
-        {
+        {    wod=2;
              b=txtDeposit.getText();
         }
         
@@ -674,6 +656,12 @@ JOptionPane.showMessageDialog(null,"rs ");
 
        int n= m.executeSQlQuery(query, "Inserted");
        if(n==1){
+           if(wod==1){
+              m.addToOrgAccount(Double.valueOf(a),"Customer Account Deposit" );
+           }
+           else {
+                m.RemoveFromOrgAccount(Double.valueOf(b),"Customer Account Withdrawal");
+           }
        clear(); 
        }
         }
@@ -760,12 +748,12 @@ JOptionPane.showMessageDialog(null,"rs ");
        if (balance != null) {
 
             try {
-                double d = Double.valueOf(txtDeposit.getText());
-                double b = Double.valueOf(balance);
+                Float d = Float.valueOf(txtDeposit.getText());
+                Float b = Float.valueOf(balance);
 
                 if (typeoftransaction.equals("withdrawal")) {
-                    double r = b - d;
-                    if (r > 1) {
+                    Float r = b - d;
+                    if (r > -1) {
                         p = 0;
                         txtBalance.setText(String.valueOf(r));
                     } else {
@@ -802,6 +790,30 @@ JOptionPane.showMessageDialog(null,"rs ");
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+         try
+           
+       {
+        if ( txtId.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "FILL ONE OF THE FIELDS");
+        } 
+        
+       
+        
+        else
+        {
+              int v=Integer.valueOf(txtId.getText());
+            fetch(txtId.getText(), "id");
+        }
+        
+       }
+       catch(HeadlessException | NumberFormatException r)
+       {
+           JOptionPane.showMessageDialog(null, "Enter correct Value For ID or Acc No");
+       }
+    }//GEN-LAST:event_txtIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -845,7 +857,6 @@ JOptionPane.showMessageDialog(null,"rs ");
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -863,7 +874,6 @@ JOptionPane.showMessageDialog(null,"rs ");
     private javax.swing.JLabel lbltitle;
     private javax.swing.JLabel lbltypeoftransaction;
     private javax.swing.JLabel modelbl;
-    private javax.swing.JTextField txtAccountNo;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtBalance;
     private javax.swing.JTextField txtCounty;
@@ -888,7 +898,7 @@ private void clear() {
         txtCounty.setText("");
         txtOccupation.setText("");
         txtId.setText("");
-        txtAccountNo.setText("");
+       // txtAccountNo.setText("");
         txtDeposit.setText("");
         txtBalance.setText("");
         txtModeId.setText("");

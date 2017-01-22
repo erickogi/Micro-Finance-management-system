@@ -5,12 +5,16 @@
  */
 package imua.development;
 
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -32,13 +36,23 @@ public class loantypes extends javax.swing.JFrame {
         btnGroup.add(jRadioButtonA);
         btnGroup.add(jRadioButtonN);
     }
-     private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
-}
+      private void setTilteImage(){
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            //jPanel1.setBackground(c);
+              Container cont=this.getContentPane();
+            cont.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
   public ArrayList<loantypesholder> ListUsers()
   {
     ArrayList<loantypesholder> usersList = new ArrayList();
@@ -182,6 +196,7 @@ public class loantypes extends javax.swing.JFrame {
 
             }
         ));
+        table.setRowHeight(40);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableMouseClicked(evt);

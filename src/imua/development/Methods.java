@@ -5,12 +5,17 @@
  */
 package imua.development;
 
+import java.awt.Color;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -59,11 +64,37 @@ public class Methods {
       if (st.executeUpdate(query) == 1)
       {
         a=1;
-        JOptionPane.showMessageDialog(null, "User" + message + " Succefully");
+        JOptionPane.showMessageDialog(null,  message + " Succefully");
       }
       else
       {
-        JOptionPane.showMessageDialog(null, "User " + message);
+        JOptionPane.showMessageDialog(null, message);
+      }
+      st.close();
+      con.close();  
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+    return a;
+  }
+       public int executeSQlQueryN(String query)
+  {
+      int a=0;
+ //  methods m=new methods();
+        Connection con = getConnection();
+    try
+    {
+      Statement st = con.createStatement();
+      if (st.executeUpdate(query) == 1)
+      {
+        a=1;
+       
+      }
+      else
+      {
+        a=0;
       }
       st.close();
       con.close();  
@@ -79,7 +110,44 @@ public class Methods {
        String image="invt.png";
        return image;
     }
-
+public void addToOrgAccount(Double amount,String Description){
+    String xro="0";
+     String query = "INSERT INTO orgaccount("
+             + "`cashin`,"
+             + "`cashout`,"
+             
+             + "`description`"
+             + ",`date`)"
+             + " VALUES ("
+             + "'" + amount + "'"
+             + ",'" + xro+ "'"
+             + ",'" + Description+ "'"
+            + ",now())";
+    
+    executeSQlQueryN(query);
+    
+    
+    
+}
+public void RemoveFromOrgAccount(Double amount,String Description){
+    String xro="0";
+     String query = "INSERT INTO orgaccount("
+             + "`cashin`,"
+             + "`cashout`,"
+             
+             + "`description`"
+             + ",`date`)"
+             + " VALUES ("
+             + "'" + xro + "'"
+             + ",'" + amount+ "'"
+             + ",'" + Description+ "'"
+            + ",now())";
+    
+    executeSQlQueryN(query);
+    
+    
+    
+}
     public String setTitle() {
         String title="Inua Development";
       
@@ -197,4 +265,74 @@ public class Methods {
 //   return accounts;
 //  }
   //public 
+      
+      
+      
+       public static Date addMonth(Date date,int hw){
+      Calendar  c= Calendar.getInstance();
+      c.setTime(date);
+      
+      c.add(Calendar.MONTH, hw);
+      
+      return c.getTime();
+  }
+   public static Date addWeek(Date date,int hw){
+      Calendar  c= Calendar.getInstance();
+      c.setTime(date);
+      
+      c.add(Calendar.DATE, hw*7);
+      
+      return c.getTime();
+  }
+    public static Date addDay(Date date,int hw){
+      Calendar  c= Calendar.getInstance();
+      c.setTime(date);
+      
+      c.add(Calendar.DAY_OF_WEEK_IN_MONTH, hw);
+      
+      return c.getTime();
+  }
+    public static Date addYear(Date date,int hw){
+      Calendar  c= Calendar.getInstance();
+      c.setTime(date);
+      
+      c.add(Calendar.YEAR, hw);
+      
+      return c.getTime();
+  }
+       
+        public String selectcolor()
+    throws Exception
+           
+  { String col="";
+      try{
+         File x=new File("file.txt"); 
+        // File x=new File("file.txt");
+           Scanner sc=new Scanner(x);
+           String fs="";
+           while(sc.hasNext()){
+              col=col+sc.next(); 
+              }
+           
+             try{
+                 
+            
+     
+       Color c=new Color(Integer.parseInt(col));
+       }
+           
+            
+       catch(Exception cc){
+          // c.printStackTrace();
+           col="-1";
+       }
+             
+
+      }
+        catch(Exception cc){
+         // cc.printStackTrace();
+           col="-1";
+       }
+    return col;
+  }
 }

@@ -6,6 +6,8 @@
 package imua.development;
 
 //import static imua.development.Deposit.typeoftransaction;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -69,11 +71,21 @@ static int y=0;
         }
     }
     private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            jPanel1.setBackground(c);
+              Container cont=this.getContentPane();
+            cont.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
     private String fetchBalance(String where, String value) {
         String balance = "0";
@@ -287,11 +299,9 @@ JOptionPane.showMessageDialog(null,"rs ");
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         img = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        txtAccountNo = new javax.swing.JTextField();
         txtSirname = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -331,13 +341,15 @@ JOptionPane.showMessageDialog(null,"rs ");
             }
         });
 
-        jLabel1.setText("Account No.");
-
         img.setText("Pic");
 
         jLabel3.setText("ID No.");
 
-        txtAccountNo.setEditable(false);
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Sir Name");
 
@@ -478,14 +490,10 @@ JOptionPane.showMessageDialog(null,"rs ");
                         .addComponent(img, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
                                 .addGap(27, 27, 27)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(36, 36, 36)
                                 .addComponent(jLabel25)))))
@@ -525,13 +533,7 @@ JOptionPane.showMessageDialog(null,"rs ");
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel18)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
+                        .addGap(58, 58, 58)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
@@ -636,22 +638,13 @@ JOptionPane.showMessageDialog(null,"rs ");
         try
 
         {
-            if (txtAccountNo.getText().isEmpty() && txtId.getText().isEmpty())
+            if (txtId.getText().isEmpty())
             {
                 JOptionPane.showMessageDialog(null, "FILL ONE OF THE FIELDS");
             }
 
-            else if (txtAccountNo.getText() != "" && txtId.getText().isEmpty())
-            {
-                int v=Integer.valueOf(txtAccountNo.getText());
-                fetchUserDetails(txtAccountNo.getText(), "accountno");
-            }
-
-            else if (txtAccountNo.getText().isEmpty() && txtId.getText() != "")
-            {
-                int v=Integer.valueOf(txtId.getText());
-                fetchUserDetails(txtId.getText(), "id");
-            }
+           
+           
 
             else
             {
@@ -753,7 +746,7 @@ String loanType;
         txtSirname.setText("");
         txtBalance.setText("");
         loanType=null;
-         txtAccountNo.setText("");
+        // txtAccountNo.setText("");
   txtAccountType.setText("");
      txtBalance.setText("");
    txtCounty.setText("");
@@ -790,9 +783,13 @@ String loanType;
             double accountBalance=Double.valueOf(accBal);
             int balLevelRequired=Integer.valueOf(ballevel);
             try{
+                
+                
                 if(requestedAmount>(accountBalance*balLevelRequired)){
                     JOptionPane.showMessageDialog(null, "Loan Limit Exceded");
                 }
+                
+                
                 else{
                     JOptionPane.showMessageDialog(null, "Proceed");
                 }
@@ -865,6 +862,28 @@ String loanType;
                 loanType=evt.getItem().toString();
             }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        try
+
+        {
+            if (txtId.getText().isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "FILL ONE OF THE FIELDS");
+            }
+
+            else
+            {
+                int v=Integer.valueOf(txtId.getText());
+                fetchUserDetails(txtId.getText(), "id");
+            }
+
+        }
+        catch(Exception r)
+        {
+            JOptionPane.showMessageDialog(null, "Enter correct Value For ID or Acc No");
+        }
+    }//GEN-LAST:event_txtIdActionPerformed
 //private String checkRange(String value){
 //    try{
 //        Double val=Double.valueOf(value);
@@ -978,7 +997,6 @@ String loanType;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -995,7 +1013,6 @@ String loanType;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtAccountNo;
     private javax.swing.JTextField txtAccountType;
     private javax.swing.JTextField txtBalance;
     private javax.swing.JTextField txtCounty;

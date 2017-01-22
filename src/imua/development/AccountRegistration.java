@@ -5,6 +5,7 @@
  */
 package imua.development;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -45,6 +46,7 @@ public class AccountRegistration extends javax.swing.JFrame {
     private String accounttype = null;
   String accounts[];
   String groups[];
+  Methods m= new Methods();
     /**
      * Creates new form AccountRegistration
      */
@@ -58,11 +60,19 @@ public class AccountRegistration extends javax.swing.JFrame {
   
     }
 private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            jPanel1.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
     private void attachImage() {
         try {
@@ -95,14 +105,14 @@ private void setTilteImage(){
     }
   public void findUsers()
   {
-      Methods m=new Methods();
+     
     ArrayList<String> usersList =  m.ListUsers();
    accounts=new String[usersList.size()];
    usersList.toArray(accounts);
   }
    public void findGroups()
   {
-      Methods m=new Methods();
+  
     ArrayList<String> usersList =  m.ListUsersGroups();
    groups=new String[usersList.size()];
    usersList.toArray(groups);
@@ -430,7 +440,7 @@ private void setTilteImage(){
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 441, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel20)
                                     .addComponent(jLabel21)
@@ -636,10 +646,7 @@ private void setTilteImage(){
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -705,7 +712,7 @@ private void setTilteImage(){
      Random rand =new Random();
     n= (rand.nextInt(5000)+1000);
      
-     txtAccountNo.setText(String.valueOf(n));
+    txtAccountNo.setText(String.valueOf(n));
     
         
         check();
@@ -876,7 +883,7 @@ public void enable(){
        jComboBoxGroup.getSelectedIndex()==0)
             
         {
-            JOptionPane.showMessageDialog(null, "101 One or More Fields Missing");
+            JOptionPane.showMessageDialog(null, " One or More Fields Missing");
         }
         else{
             insertUserDetails();
@@ -903,7 +910,7 @@ public void enable(){
  public void fetchUserDetails(String value, String where) {
 
         try {
-            Methods m = new Methods();
+           
             Connection con = m.getConnection();
             Statement st = con.createStatement();
             String searchQuery = "SELECT * FROM `users` WHERE `" + where + "` = '" + value + "'";
@@ -961,34 +968,52 @@ public void enable(){
         deleteUserDetails(txtPeronId.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
    public void deleteUserDetails(String id){
-        Methods n=new Methods();
+      
         String query = "DELETE FROM `users`  WHERE `id` = '" +id+"'";
-                n.executeSQlQuery(query, "Deleted");
+                m.executeSQlQuery(query, "Deleted");
               clear();
        
        
    }
     
     private void insertUserDetails(){
-        
-        Methods m= new Methods();
-        String SirName= this. txtSirName.getText();
-        String fullSirName=nametitle+" "+SirName;
-        String uniq=accounttype+group;
-             String query = "INSERT INTO `users`(`id`,`accountno`, `fname`, "
-                     + "`sname`,`Phone`,`uniq`,`email`,`address`,`county`,`town`,`occupation`,"
-                     + "`maritalstatus`,`spaucefname`,`spaucesname`,`spauceid`,`spaucephone`,`acounttype`,`group`,`updated_at`,`imgurl`) VALUES ("
-                     + "'" + this.txtId.getText() + "','" + this.txtAccountNo.getText() + "',"
-                     + "'" +fullSirName + "','" + this.txtOtherName.getText() + "','" + this.txtPhoneNo.getText() + "',"
-                     + "'" + uniq + "','" + this.txtEmail.getText() + "','" + this. txtAddress.getText() + "',"
-                     + "'" + this.txtCounty.getText() + "','" + this.txtTown.getText() + "',"
-                     + "'" + this.txtOccupation.getText() + "','" + this.maritalStatus + "','" + this.txtSirSpouceName.getText() + "',"
-                     + "'" + this.txtSpouceName.getText() + "','" + this.txtSpouceID.getText() + "','" + this.txtSpouceMobile.getText() + "',"
-                     + "'" + this.accounttype + "','" + this.group + "',now(),"
-                     + "'" + this.fileurlp + "')";
-
-            m.executeSQlQuery(query, "Inserted");
-            clear();
+        try {
+            String appfee=null;
+            String queryGetAppFee = "SELECT `appfee`FROM `useracctypes`  WHERE `accountname` = '" +accounttype+"'";
+            Connection con = m.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(queryGetAppFee);
+            if(rs.next()){
+                appfee=rs.getString("appfee");
+            }
+            
+            String SirName= this. txtSirName.getText();
+            String fullSirName=nametitle+" "+SirName;
+            String uniq=accounttype+group;
+            String query = "INSERT INTO `users`(`id`,`accountno`, `fname`, "
+                    + "`sname`,`Phone`,`uniq`,`email`,`address`,`county`,`town`,`occupation`,"
+                    + "`maritalstatus`,`spaucefname`,`spaucesname`,`spauceid`,`spaucephone`,`acounttype`,`group`,`updated_at`,`imgurl`) VALUES ("
+                    + "'" + this.txtId.getText() + "','" + this.txtAccountNo.getText() + "',"
+                    + "'" +fullSirName + "','" + this.txtOtherName.getText() + "','" + this.txtPhoneNo.getText() + "',"
+                    + "'" + uniq + "','" + this.txtEmail.getText() + "','" + this. txtAddress.getText() + "',"
+                    + "'" + this.txtCounty.getText() + "','" + this.txtTown.getText() + "',"
+                    + "'" + this.txtOccupation.getText() + "','" + this.maritalStatus + "','" + this.txtSirSpouceName.getText() + "',"
+                    + "'" + this.txtSpouceName.getText() + "','" + this.txtSpouceID.getText() + "','" + this.txtSpouceMobile.getText() + "',"
+                    + "'" + this.accounttype + "','" + this.group + "',now(),"
+                    + "'" + this.fileurlp + "')";
+            String fee=   JOptionPane.showInputDialog("Enter registration fee");
+            Double bal=Double.valueOf(fee)-Double.valueOf(appfee);
+            m.addToOrgAccount(Double.valueOf(appfee),"Registration Fee" );
+            if(bal>0){
+                JOptionPane.showMessageDialog(null, "Balance is " +bal.toString());
+            }
+            if(m.executeSQlQuery(query, "Inserted")==1){
+                
+                clear();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountRegistration.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
      * @param args the command line arguments

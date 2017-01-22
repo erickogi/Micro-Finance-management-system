@@ -5,12 +5,17 @@
  */
 package imua.development;
 
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -25,7 +30,12 @@ public class login1 extends javax.swing.JFrame {
      */
     public login1() {
         initComponents();
+       // ex();
          setTilteImage();
+         
+ 
+         
+         
         this.txtUserName.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent b) {
                 txtPassword.requestFocus();
@@ -37,13 +47,24 @@ public class login1 extends javax.swing.JFrame {
             }
         });
     }
-     private void setTilteImage(){
-     Methods n=new Methods();
-    String t= n.setTitle();
-    this.setTitle(t);
-    String i=n.setIconImage();
-    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
-}
+    
+         private void setTilteImage(){
+        try {
+            Methods n=new Methods();
+            String t= n.setTitle();
+            this.setTitle(t);
+            String i=n.setIconImage();
+            this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(i)));
+            
+            String col=n.selectcolor();
+            Color c=new Color(Integer.parseInt(col));
+            jPanel1.setBackground(c);
+              Container cont=this.getContentPane();
+            cont.setBackground(c);
+        } catch (Exception ex) {
+            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
     public void verify(){
         String stru="";
         stru=txtUserName.getText();
@@ -225,7 +246,8 @@ pst.close();
       
            // Main n=new Main();
           Main.a=1;
-          Main.checkTodays();
+          Main.ch=1;
+         // Main.checkTodays();
             this.dispose();
             
             // n.checkTodays();
