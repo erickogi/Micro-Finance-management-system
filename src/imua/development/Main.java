@@ -5,8 +5,35 @@
  */
 package imua.development;
 
+import imua.development.Accounts.Accgroups;
+import imua.development.Accounts.AccountRegistration;
+import imua.development.Accounts.AccountsReport;
+import imua.development.Accounts.GroupView;
+import imua.development.Accounts.Personalreport;
+import imua.development.Configurations.Settings;
+import imua.development.Configurations.about;
+import imua.development.Configurations.changepass;
+import imua.development.Reports.OrgReport;
+import imua.development.Reports.GroupSheet;
+import imua.development.Accounts.Users;
+import imua.development.BackupRestore.Restore;
+import imua.development.DepositandWithdrawal.Deposit;
+import imua.development.loans.Defaulters;
+import imua.development.loans.LoanHistory;
+import imua.development.loans.LoanWithSavings;
+import imua.development.loans.LoanWithoutSavings;
+import imua.development.loans.ProcessLoan;
+import imua.development.loans.TodaysLoans;
+import imua.development.loans.loanform;
+import imua.development.loans.loanpayment;
+import imua.development.loans.loantypes;
+import imua.development.loginClass.AddUsers;
+import imua.development.loginClass.login1;
+import imua.development.BackupRestore.backup;
+//import imua.development.loans.P;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -16,6 +43,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.net.URI;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,20 +56,24 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 
 /**
  *
  * @author Kamau
  */
 public class Main extends javax.swing.JFrame {
-static int on;
-  static  int a=0;
-  static int  ch=0;
+    public static String hash="";
+   public static int on;
+  public static  int a=0;
+  public static int  ch=0;
   Methods m = new Methods();
   String s = "Inua ";
   
@@ -52,24 +84,27 @@ static int on;
          
       
         initComponents();
+        jToolBar1.setVisible(false);
+      // jToolBar2.add(Box.createHorizontalGlue());
+    
        //  ex();
        setTilteImage();
      
        
   
-    pic();
+        pic();
     
      getTime();
        if(a==0){
          login();
-        
+         
        }
       
        
     // getTime();
         
     }
-    private Color setTilteImage(){
+    public Color setTilteImage(){
         Color c=null;
         try {
             Methods n=new Methods();
@@ -80,24 +115,26 @@ static int on;
             
             String col=n.selectcolor();
              c=new Color(Integer.parseInt(col));
-            jPanel1.setBackground(c);
+           // jPanel1.setBackground(c);
             Container cont=this.getContentPane();
             cont.setBackground(c);
             jPanel2.setBackground(c);
             jToolBar1.setBackground(c);
             this.setForeground(c);
         } catch (Exception ex) {
-            Logger.getLogger(Accgroups.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return c;
 }
     
-    public void check(){
+public void check(){
 Thread log=new Thread(){
 public void run(){
     
      try{
       sleep(10000);
+      //processGhash(hash);
+
       checkTodays();
      }
       catch(Exception b){
@@ -147,7 +184,7 @@ public void run(){
           checkLoanApplications();
           
       } catch (SQLException ex) {
-          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       }
       
       //c.add(Calendar.MONTH, hw);
@@ -195,7 +232,7 @@ public void run(){
           checkLoanRepayments();
           
       } catch (SQLException ex) {
-          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       }
       
     }
@@ -288,6 +325,7 @@ public void run(){
      try{
       sleep(1000);
       a();
+      
      }
       catch(Exception b){
          System.out.println("Error");
@@ -326,55 +364,54 @@ public void run(){
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txttymer = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
+        jToolBar2 = new javax.swing.JToolBar();
+        jAddCustomer = new javax.swing.JButton();
+        jDeposit = new javax.swing.JButton();
+        jApplication = new javax.swing.JButton();
+        jProcess = new javax.swing.JButton();
+        jPay = new javax.swing.JButton();
+        jWithDraw = new javax.swing.JButton();
+        jTransactions = new javax.swing.JButton();
+        jDefaulters = new javax.swing.JButton();
+        jLoans = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        jMo = new javax.swing.JMenu();
+        jMBackUp = new javax.swing.JMenuItem();
+        jMRestore = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
+        jMAddCustomers = new javax.swing.JMenuItem();
+        jMViewCustomers = new javax.swing.JMenuItem();
+        jMDeposit = new javax.swing.JMenuItem();
+        jMWithdraw = new javax.swing.JMenuItem();
+        jMViewTransactions = new javax.swing.JMenuItem();
+        jMCustomersAccountsGroups = new javax.swing.JMenuItem();
+        jMGroups = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
+        jMLoanRequest = new javax.swing.JMenuItem();
+        jMLoanProcessing = new javax.swing.JMenuItem();
+        jMLoanReport = new javax.swing.JMenuItem();
+        jMLoanDefaulters = new javax.swing.JMenuItem();
+        jMLoanPayment = new javax.swing.JMenuItem();
+        jMLoanPayableToday = new javax.swing.JMenuItem();
+        jMLoanSettings = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
-        jMenu12 = new javax.swing.JMenu();
-        jMenuItem14 = new javax.swing.JMenuItem();
-        jMenu14 = new javax.swing.JMenu();
-        jMenuItem16 = new javax.swing.JMenuItem();
-        jMenu9 = new javax.swing.JMenu();
-        jMenu10 = new javax.swing.JMenu();
-        jMenuItem15 = new javax.swing.JMenuItem();
+        jMPrintGroupCollection = new javax.swing.JMenuItem();
+        jMOrgAccount = new javax.swing.JMenuItem();
+        jMAddUsers = new javax.swing.JMenuItem();
         jMenu15 = new javax.swing.JMenu();
-        jMenu16 = new javax.swing.JMenu();
-        jMenuItem17 = new javax.swing.JMenuItem();
-        jMenuItem18 = new javax.swing.JMenuItem();
+        jMSystemUserPass = new javax.swing.JMenuItem();
+        jMPrefrences = new javax.swing.JMenuItem();
         jMenu11 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
+        jMAbout = new javax.swing.JMenuItem();
+        jMSystemHelp = new javax.swing.JMenuItem();
+        jMenu9 = new javax.swing.JMenu();
+        jMAddStaff = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -395,260 +432,261 @@ public void run(){
             }
         });
 
-        jButton1.setText("Account Deposit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Account Withdraw");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Loans Repay");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Open Accout");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton5.setText("Reports");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Quick Links");
-
-        jButton6.setText("Loans Request");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
-
-        jButton7.setText("Loan Processing");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
-        jButton8.setText("Loan History");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
-        jButton9.setText("Customers");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-
-        jButton10.setText("Defaulters");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
-
-        jButton11.setText("Todays Repayments");
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
-            }
-        });
-
-        jButton12.setText("Org's Account");
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
-            }
-        });
-
-        jButton13.setText("Setings");
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton13)
-                .addContainerGap(246, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1424, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
         );
-
-        txttymer.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txttymer.setText("Time");
 
         jToolBar1.setFloatable(false);
 
-        jMenu2.setText("File");
-        jMenu2.setMaximumSize(new java.awt.Dimension(47, 32767));
+        jToolBar2.setRollover(true);
 
-        jMenuItem1.setText("Backup");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jAddCustomer.setBackground(setTilteImage());
+        jAddCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/add-user-64.png"))); // NOI18N
+        jAddCustomer.setText("CUSTOMER");
+        jAddCustomer.setFocusable(false);
+        jAddCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jAddCustomer.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jAddCustomer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jAddCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jAddCustomerActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jToolBar2.add(jAddCustomer);
 
-        jMenuItem2.setText("Restore");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jDeposit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/f4cd7501.png"))); // NOI18N
+        jDeposit.setText("DEPOSIT");
+        jDeposit.setBorderPainted(false);
+        jDeposit.setFocusable(false);
+        jDeposit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jDeposit.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jDeposit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jDeposit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jDepositActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jToolBar2.add(jDeposit);
 
-        jMenuItem5.setText("User Accounts");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        jApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/Apply-Now-icon.png"))); // NOI18N
+        jApplication.setText("APPLICATION");
+        jApplication.setFocusable(false);
+        jApplication.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jApplication.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jApplication.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jApplication.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                jApplicationActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem5);
+        jToolBar2.add(jApplication);
 
+        jProcess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/Offer-Icon-Offshore-Loan.png"))); // NOI18N
+        jProcess.setText("PROCESS");
+        jProcess.setFocusable(false);
+        jProcess.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jProcess.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jProcess.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jProcessActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jProcess);
+
+        jPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/valuable-sell-mort-icon6-1.png"))); // NOI18N
+        jPay.setText("PAY");
+        jPay.setFocusable(false);
+        jPay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPay.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jPay.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jPay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPayActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jPay);
+
+        jWithDraw.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/44881817-atm-flat-icon-with-long-shadow.jpg"))); // NOI18N
+        jWithDraw.setText("WITHDRAW");
+        jWithDraw.setFocusable(false);
+        jWithDraw.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jWithDraw.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jWithDraw.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jWithDraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jWithDrawActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jWithDraw);
+
+        jTransactions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/finance_money_transaction_incoming_outgoing_coin-512.png"))); // NOI18N
+        jTransactions.setText("TRANSACTIONS");
+        jTransactions.setFocusable(false);
+        jTransactions.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jTransactions.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jTransactions.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jTransactions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTransactionsActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jTransactions);
+
+        jDefaulters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/icon41.png"))); // NOI18N
+        jDefaulters.setText("DEFAULTERS");
+        jDefaulters.setFocusable(false);
+        jDefaulters.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jDefaulters.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jDefaulters.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jDefaulters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDefaultersActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jDefaulters);
+
+        jLoans.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/PL-Icon.png"))); // NOI18N
+        jLoans.setText("LOANS");
+        jLoans.setFocusable(false);
+        jLoans.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLoans.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jLoans.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jLoans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLoansActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jLoans);
+
+        jLabel3.setText("jLabel3");
+
+        jMo.setText("File");
+        jMo.setMaximumSize(new java.awt.Dimension(47, 32767));
+
+        jMBackUp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        jMBackUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/Backup 2.png"))); // NOI18N
+        jMBackUp.setText("Backup");
+        jMBackUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMBackUpActionPerformed(evt);
+            }
+        });
+        jMo.add(jMBackUp);
+
+        jMRestore.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        jMRestore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/download.jpg"))); // NOI18N
+        jMRestore.setText("Restore");
+        jMRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMRestoreActionPerformed(evt);
+            }
+        });
+        jMo.add(jMRestore);
+
+        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/Apps-Dialog-Logout-icon.png"))); // NOI18N
         jMenuItem9.setText("Log Out");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem9ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem9);
+        jMo.add(jMenuItem9);
 
-        jMenuItem10.setText("System Users");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem10);
-
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/Actions-application-exit-icon.png"))); // NOI18N
         jMenuItem3.setText("System Exit");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMo.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMo);
 
         jMenu3.setText(" Accounts");
         jMenu3.setMaximumSize(new java.awt.Dimension(70, 32767));
 
-        jMenuItem4.setText("New Account");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        jMAddCustomers.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMAddCustomers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/add.png"))); // NOI18N
+        jMAddCustomers.setText("Add  Customer");
+        jMAddCustomers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                jMAddCustomersActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem4);
+        jMenu3.add(jMAddCustomers);
 
-        jMenuItem12.setText("Deposit");
-        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+        jMViewCustomers.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
+        jMViewCustomers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/customers-icon-53440.png"))); // NOI18N
+        jMViewCustomers.setText("View Customers");
+        jMViewCustomers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem12ActionPerformed(evt);
+                jMViewCustomersActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem12);
+        jMenu3.add(jMViewCustomers);
 
-        jMenuItem13.setText("Withdraw");
-        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+        jMDeposit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        jMDeposit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/deposit_icon.jpg"))); // NOI18N
+        jMDeposit.setText("Deposit");
+        jMDeposit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem13ActionPerformed(evt);
+                jMDepositActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem13);
+        jMenu3.add(jMDeposit);
+
+        jMWithdraw.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        jMWithdraw.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/P-1-51-128.png"))); // NOI18N
+        jMWithdraw.setText("Withdraw");
+        jMWithdraw.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMWithdrawActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMWithdraw);
+
+        jMViewTransactions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        jMViewTransactions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/dollar_money_bag-512.png"))); // NOI18N
+        jMViewTransactions.setText("View Transactions");
+        jMViewTransactions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMViewTransactionsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMViewTransactions);
+
+        jMCustomersAccountsGroups.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMCustomersAccountsGroups.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/engineer-icon.png"))); // NOI18N
+        jMCustomersAccountsGroups.setText("Customers Accounts /Groups");
+        jMCustomersAccountsGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMCustomersAccountsGroupsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMCustomersAccountsGroups);
+
+        jMGroups.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        jMGroups.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/32441.png"))); // NOI18N
+        jMGroups.setText("Groups");
+        jMGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMGroupsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMGroups);
 
         jMenuBar1.add(jMenu3);
 
@@ -660,105 +698,171 @@ public void run(){
             }
         });
 
-        jMenuItem8.setText("Loan Request");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+        jMLoanRequest.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanRequest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/12.23.2014-Pic-Safe-Online-Application-1024x980.jpg"))); // NOI18N
+        jMLoanRequest.setText("Loan Request");
+        jMLoanRequest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
+                jMLoanRequestActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem8);
+        jMenu6.add(jMLoanRequest);
 
-        jMenuItem11.setText("Pay Loan");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+        jMLoanProcessing.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanProcessing.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/loans-icon.png"))); // NOI18N
+        jMLoanProcessing.setText("Loan Processing");
+        jMLoanProcessing.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
+                jMLoanProcessingActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem11);
+        jMenu6.add(jMLoanProcessing);
+
+        jMLoanReport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/140-512.png"))); // NOI18N
+        jMLoanReport.setText("Loan Report");
+        jMLoanReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMLoanReportActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMLoanReport);
+
+        jMLoanDefaulters.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanDefaulters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/images (1).png"))); // NOI18N
+        jMLoanDefaulters.setText("Loan Defaulters");
+        jMLoanDefaulters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMLoanDefaultersActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMLoanDefaulters);
+
+        jMLoanPayment.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanPayment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/buy-gain-income-money-pay-payment-icon--19.png"))); // NOI18N
+        jMLoanPayment.setText("Loan Payment");
+        jMLoanPayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMLoanPaymentActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMLoanPayment);
+
+        jMLoanPayableToday.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanPayableToday.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/korganizer.png"))); // NOI18N
+        jMLoanPayableToday.setText("Loans Payable Today");
+        jMLoanPayableToday.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMLoanPayableTodayActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMLoanPayableToday);
+
+        jMLoanSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMLoanSettings.setIcon(new javax.swing.ImageIcon("C:\\Users\\kimani kogi\\Pictures\\icons\\settings.png")); // NOI18N
+        jMLoanSettings.setText("Loan Settings");
+        jMLoanSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMLoanSettingsActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMLoanSettings);
 
         jMenuBar1.add(jMenu6);
 
-        jMenu8.setText("Reports");
+        jMenu8.setText("Admin");
         jMenu8.setMaximumSize(new java.awt.Dimension(60, 32767));
 
-        jMenu12.setText("Accounts");
-
-        jMenuItem14.setText("Personal Report");
-        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+        jMPrintGroupCollection.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
+        jMPrintGroupCollection.setIcon(new javax.swing.ImageIcon("C:\\Users\\kimani kogi\\Pictures\\icons\\gnome_dev_printer.png")); // NOI18N
+        jMPrintGroupCollection.setText("Print Group Collection");
+        jMPrintGroupCollection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem14ActionPerformed(evt);
+                jMPrintGroupCollectionActionPerformed(evt);
             }
         });
-        jMenu12.add(jMenuItem14);
+        jMenu8.add(jMPrintGroupCollection);
 
-        jMenu8.add(jMenu12);
-
-        jMenu14.setText("Loans");
-
-        jMenuItem16.setText("Personal Report");
-        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+        jMOrgAccount.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
+        jMOrgAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/icon_lrg_performance.png"))); // NOI18N
+        jMOrgAccount.setText("Org's Account");
+        jMOrgAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem16ActionPerformed(evt);
+                jMOrgAccountActionPerformed(evt);
             }
         });
-        jMenu14.add(jMenuItem16);
+        jMenu8.add(jMOrgAccount);
 
-        jMenu8.add(jMenu14);
+        jMAddUsers.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
+        jMAddUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/add.png"))); // NOI18N
+        jMAddUsers.setText("Add Users");
+        jMAddUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMAddUsersActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMAddUsers);
 
         jMenuBar1.add(jMenu8);
-
-        jMenu9.setText("Staff");
-        jMenu9.setMaximumSize(new java.awt.Dimension(60, 32767));
-        jMenuBar1.add(jMenu9);
-
-        jMenu10.setText("Quick Tools");
-        jMenu10.setMaximumSize(new java.awt.Dimension(81, 32767));
-
-        jMenuItem15.setText("Print Group Collection");
-        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem15ActionPerformed(evt);
-            }
-        });
-        jMenu10.add(jMenuItem15);
-
-        jMenuBar1.add(jMenu10);
 
         jMenu15.setText("Settings");
         jMenu15.setMaximumSize(new java.awt.Dimension(60, 32767));
 
-        jMenu16.setText("Loans Settings");
-
-        jMenuItem17.setText("Client With Saving");
-        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+        jMSystemUserPass.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.SHIFT_MASK));
+        jMSystemUserPass.setIcon(new javax.swing.ImageIcon("C:\\Users\\kimani kogi\\Pictures\\icons\\edit.png")); // NOI18N
+        jMSystemUserPass.setText("System Users Pass");
+        jMSystemUserPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem17ActionPerformed(evt);
+                jMSystemUserPassActionPerformed(evt);
             }
         });
-        jMenu16.add(jMenuItem17);
+        jMenu15.add(jMSystemUserPass);
 
-        jMenuItem18.setText("Client Without Saving");
-        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+        jMPrefrences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
+        jMPrefrences.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/rt.png"))); // NOI18N
+        jMPrefrences.setText("Prefrences");
+        jMPrefrences.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem18ActionPerformed(evt);
+                jMPrefrencesActionPerformed(evt);
             }
         });
-        jMenu16.add(jMenuItem18);
-
-        jMenu15.add(jMenu16);
+        jMenu15.add(jMPrefrences);
 
         jMenuBar1.add(jMenu15);
 
         jMenu11.setText("Help");
         jMenu11.setMaximumSize(new java.awt.Dimension(60, 32767));
 
-        jMenuItem6.setText("About");
-        jMenu11.add(jMenuItem6);
+        jMAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/1474675499_about.png"))); // NOI18N
+        jMAbout.setText("About");
+        jMAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMAboutActionPerformed(evt);
+            }
+        });
+        jMenu11.add(jMAbout);
 
-        jMenuItem7.setText("System Help");
-        jMenu11.add(jMenuItem7);
+        jMSystemHelp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMSystemHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/Help.png"))); // NOI18N
+        jMSystemHelp.setText("System Help");
+        jMSystemHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMSystemHelpActionPerformed(evt);
+            }
+        });
+        jMenu11.add(jMSystemHelp);
 
         jMenuBar1.add(jMenu11);
+
+        jMenu9.setText("Staff");
+        jMenu9.setMaximumSize(new java.awt.Dimension(60, 32767));
+
+        jMAddStaff.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/add.png"))); // NOI18N
+        jMAddStaff.setText("Add");
+        jMenu9.add(jMAddStaff);
+
+        jMenuBar1.add(jMenu9);
 
         setJMenuBar(jMenuBar1);
 
@@ -767,32 +871,28 @@ public void run(){
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 769, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txttymer)
-                .addGap(226, 226, 226))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txttymer)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
+
+        jToolBar2.add(Box.createHorizontalGlue());
+        jToolBar2.add(Box.createHorizontalStrut(20));
+        jToolBar2.add(txttymer);
+        JLabel txttymerb=   new JLabel("                        ");
+        jToolBar2.add(txttymerb);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1047,6 +1147,11 @@ Calendar cal=new GregorianCalendar();
        }
         int hour=cal.get(Calendar.HOUR);
         checkLoanApplications1();
+        txttymer.setFont(new java.awt.Font("Tahoma", 1, 16));
+       
+        Border pb=BorderFactory.createEmptyBorder(0, 10, 30, 10);
+         txttymer.setBorder(BorderFactory.createCompoundBorder(pb, pb));
+         
         txttymer.setText("DATE:   "+day+" "+z+" "+year+"   TIME:  "+hour+":"+min+":"+second+":"+x);
         if(a>0){
             setEnabled();
@@ -1054,6 +1159,8 @@ Calendar cal=new GregorianCalendar();
         }
          if(ch==1){
           checkTodays();
+          processGhash(hash);
+
           ch=0;
        }
 try{
@@ -1070,8 +1177,16 @@ clock.start();
 
 
 }
+//jLabel2 = new javax.swing.JLabel();
+
+//jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+ JLabel txttymer=   new JLabel();
+      //  this.txttymer.setFont(new java.awt.Font("Tahoma", 1, 11));
+ //txttymer.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+ 
  MarqueePanel mp= new MarqueePanel(s, 100);
 public void b(String h){
+    
     mp= new MarqueePanel(h, 100);
     
      
@@ -1082,7 +1197,7 @@ public void b(String h){
 }
  private  void checkLoanApplications1(){
       String  s="i";
-     String mesoLoan= checkLoanRepayments1();
+     String mesoLoan= "";//checkLoanRepayments1();
              //  Calendar  c= Calendar.getInstance();
          HashMap<String,String>todays=new HashMap<String,String>();
 //      Date today=c.getTime();
@@ -1109,7 +1224,7 @@ public void b(String h){
           
           if(todays.size()>0){
               jToolBar1.setVisible(true);
-             s=" "+todays.size()+ "  LOANS APPLICATIONS AVAILABLE FOR PROCESSING";
+             s=""+todays.size()+ " LOANS APPLICATIONS AVAILABLE FOR PROCESSING";
             
         } 
           else{
@@ -1136,8 +1251,14 @@ public void b(String h){
       } catch (SQLException ex) {
           Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
       }
+      if("".equals(mesoLoan)){
+           String mesoYote=s;
+      b(mesoYote);
+      }
+      else{
       String mesoYote=mesoLoan+""+s;
-      b(mesoYote); 
+      b(mesoYote);
+      }
     }
      public  String checkLoanRepayments1(){
        String meso="";
@@ -1265,45 +1386,27 @@ public void b(String h){
     
     
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-          openDeposit();
-      
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jMBackUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMBackUpActionPerformed
+backup b=new backup() ;
+b.setVisible(true);
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         openWithdrawForm();
-       
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jMBackUpActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-         openNewAccount();      
-        
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jMRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMRestoreActionPerformed
+      Restore r=new Restore() ;
+     r.setVisible(true);
+    }//GEN-LAST:event_jMRestoreActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       OrgReport r=new OrgReport();
-       r.setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-      
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void jMAddCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMAddCustomersActionPerformed
         // TODO add your handling code here:
         openNewAccount();
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_jMAddCustomersActionPerformed
 
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+    private void jMLoanRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanRequestActionPerformed
      openLoanForm();
               
          
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
+    }//GEN-LAST:event_jMLoanRequestActionPerformed
 
     private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
      
@@ -1312,46 +1415,20 @@ public void b(String h){
         
     }//GEN-LAST:event_jMenu6ActionPerformed
 
-    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+    private void jMLoanPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanPaymentActionPerformed
         loanpayment a=new loanpayment();
         a.setVisible(true);
        
-    }//GEN-LAST:event_jMenuItem11ActionPerformed
+    }//GEN-LAST:event_jMLoanPaymentActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-         loanpayment a=new loanpayment();
-        a.setVisible(true);
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+    private void jMDepositActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMDepositActionPerformed
        
       openDeposit();
-    }//GEN-LAST:event_jMenuItem12ActionPerformed
+    }//GEN-LAST:event_jMDepositActionPerformed
 
-    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+    private void jMWithdrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMWithdrawActionPerformed
      openWithdrawForm();
-    }//GEN-LAST:event_jMenuItem13ActionPerformed
-
-    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-     openPersonalReport();
-       
-    }//GEN-LAST:event_jMenuItem14ActionPerformed
-
-    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
-    //  this.setEnabled(false);
-        loantypes n= new loantypes();
-    
-      n.setVisible(true);
-    }//GEN-LAST:event_jMenuItem17ActionPerformed
-
-    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
-         openLoanWithoutSavings();
-    }//GEN-LAST:event_jMenuItem18ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-       openLoanForm();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_jMWithdrawActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
        System.exit(1);
@@ -1367,64 +1444,133 @@ public void b(String h){
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void jMCustomersAccountsGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMCustomersAccountsGroupsActionPerformed
       //  this.setEnabled(false);
         Accgroups m = new Accgroups();
         m.setVisible(true);
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_jMCustomersAccountsGroupsActionPerformed
 
-    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-       // this.setEnabled(false);
+    private void jMSystemUserPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMSystemUserPassActionPerformed
+       // this.set Enabled(false);
         changepass n =new changepass();
         
         n.setVisible(true);
-    }//GEN-LAST:event_jMenuItem10ActionPerformed
+    }//GEN-LAST:event_jMSystemUserPassActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-openLoanProcessing();       
-    }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-      LoanHistory h=new LoanHistory();
-      h.setVisible(true);
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-       Users u=new Users();
-       u.setVisible(true);
-    }//GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        Defaulters d=new Defaulters();
-        d.setVisible(true);
-    }//GEN-LAST:event_jButton10ActionPerformed
-
-    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        LoanHistory h=new LoanHistory();
-      h.setVisible(true);
-    }//GEN-LAST:event_jMenuItem16ActionPerformed
-
-    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+    private void jMPrintGroupCollectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMPrintGroupCollectionActionPerformed
         GroupSheet gs=new GroupSheet();
         gs.setVisible(true);
-    }//GEN-LAST:event_jMenuItem15ActionPerformed
+    }//GEN-LAST:event_jMPrintGroupCollectionActionPerformed
 
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-         TodaysLoans tl=new TodaysLoans();
+    private void jAddCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddCustomerActionPerformed
+         openNewAccount(); 
+    }//GEN-LAST:event_jAddCustomerActionPerformed
+
+    private void jDepositActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDepositActionPerformed
+        openDeposit();
+    }//GEN-LAST:event_jDepositActionPerformed
+
+    private void jApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jApplicationActionPerformed
+        openLoanForm();
+    }//GEN-LAST:event_jApplicationActionPerformed
+
+    private void jProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jProcessActionPerformed
+        openLoanProcessing();    
+    }//GEN-LAST:event_jProcessActionPerformed
+
+    private void jPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPayActionPerformed
+            loanpayment a=new loanpayment();
+        a.setVisible(true);
+    }//GEN-LAST:event_jPayActionPerformed
+
+    private void jWithDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jWithDrawActionPerformed
+        openWithdrawForm();
+    }//GEN-LAST:event_jWithDrawActionPerformed
+
+    private void jTransactionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTransactionsActionPerformed
+         openPersonalReport();
+    }//GEN-LAST:event_jTransactionsActionPerformed
+
+    private void jDefaultersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDefaultersActionPerformed
+          Defaulters d=new Defaulters();
+        d.setVisible(true);
+    }//GEN-LAST:event_jDefaultersActionPerformed
+
+    private void jLoansActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLoansActionPerformed
+      LoanHistory h=new LoanHistory();
+      h.setVisible(true);
+    }//GEN-LAST:event_jLoansActionPerformed
+
+    private void jMViewCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMViewCustomersActionPerformed
+         Users u=new Users();
+       u.setVisible(true);
+    }//GEN-LAST:event_jMViewCustomersActionPerformed
+
+    private void jMViewTransactionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMViewTransactionsActionPerformed
+         openPersonalReport();
+    }//GEN-LAST:event_jMViewTransactionsActionPerformed
+
+    private void jMLoanPayableTodayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanPayableTodayActionPerformed
+        TodaysLoans tl=new TodaysLoans();
        tl.setVisible(true);
-    }//GEN-LAST:event_jButton11ActionPerformed
+    }//GEN-LAST:event_jMLoanPayableTodayActionPerformed
 
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-       OrgReport or=new OrgReport();
+    private void jMOrgAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMOrgAccountActionPerformed
+          OrgReport or=new OrgReport();
        or.setVisible(true);
-    }//GEN-LAST:event_jButton12ActionPerformed
+    }//GEN-LAST:event_jMOrgAccountActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-       Settings st=new Settings();
-       st.setVisible(true);
-           
-       
-    }//GEN-LAST:event_jButton13ActionPerformed
+    private void jMPrefrencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMPrefrencesActionPerformed
+       Settings s=new Settings();
+       s.setVisible(true);
+    }//GEN-LAST:event_jMPrefrencesActionPerformed
+
+    private void jMAddUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMAddUsersActionPerformed
+      AddUsers au=new AddUsers();
+      au.setVisible(true);
+      
+    }//GEN-LAST:event_jMAddUsersActionPerformed
+
+    private void jMAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMAboutActionPerformed
+        about au=new about();
+      au.setVisible(true);
+    }//GEN-LAST:event_jMAboutActionPerformed
+
+    private void jMSystemHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMSystemHelpActionPerformed
+         try
+    {
+      String url = "help.html";
+      Desktop.getDesktop().browse(URI.create(url));
+    }
+    catch (IOException e1)
+    {
+       JOptionPane.showMessageDialog(null, "NOT AVAILABLE");
+    }
+    }//GEN-LAST:event_jMSystemHelpActionPerformed
+
+    private void jMLoanSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanSettingsActionPerformed
+        loantypes lt=new loantypes();
+        lt.setVisible(true);
+    }//GEN-LAST:event_jMLoanSettingsActionPerformed
+
+    private void jMGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMGroupsActionPerformed
+       GroupView m = new  GroupView();
+        m.setVisible(true);
+    }//GEN-LAST:event_jMGroupsActionPerformed
+
+    private void jMLoanProcessingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanProcessingActionPerformed
+        openLoanProcessing();  
+    }//GEN-LAST:event_jMLoanProcessingActionPerformed
+
+    private void jMLoanReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanReportActionPerformed
+ LoanHistory h=new LoanHistory();
+      h.setVisible(true);     
+    }//GEN-LAST:event_jMLoanReportActionPerformed
+
+    private void jMLoanDefaultersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanDefaultersActionPerformed
+ Defaulters d=new Defaulters();
+        d.setVisible(true);        
+    }//GEN-LAST:event_jMLoanDefaultersActionPerformed
 public static void ex(){
         Calendar today = Calendar.getInstance();
 Calendar expires = Calendar.getInstance();
@@ -1480,30 +1626,41 @@ if(today.after(expires)) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton jAddCustomer;
+    private javax.swing.JButton jApplication;
+    private javax.swing.JButton jDefaulters;
+    private javax.swing.JButton jDeposit;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton jLoans;
+    private javax.swing.JMenuItem jMAbout;
+    private javax.swing.JMenuItem jMAddCustomers;
+    private javax.swing.JMenuItem jMAddStaff;
+    private javax.swing.JMenuItem jMAddUsers;
+    private javax.swing.JMenuItem jMBackUp;
+    private javax.swing.JMenuItem jMCustomersAccountsGroups;
+    private javax.swing.JMenuItem jMDeposit;
+    private javax.swing.JMenuItem jMGroups;
+    private javax.swing.JMenuItem jMLoanDefaulters;
+    private javax.swing.JMenuItem jMLoanPayableToday;
+    private javax.swing.JMenuItem jMLoanPayment;
+    private javax.swing.JMenuItem jMLoanProcessing;
+    private javax.swing.JMenuItem jMLoanReport;
+    private javax.swing.JMenuItem jMLoanRequest;
+    private javax.swing.JMenuItem jMLoanSettings;
+    private javax.swing.JMenuItem jMOrgAccount;
+    private javax.swing.JMenuItem jMPrefrences;
+    private javax.swing.JMenuItem jMPrintGroupCollection;
+    private javax.swing.JMenuItem jMRestore;
+    private javax.swing.JMenuItem jMSystemHelp;
+    private javax.swing.JMenuItem jMSystemUserPass;
+    private javax.swing.JMenuItem jMViewCustomers;
+    private javax.swing.JMenuItem jMViewTransactions;
+    private javax.swing.JMenuItem jMWithdraw;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
-    private javax.swing.JMenu jMenu12;
     private javax.swing.JMenu jMenu13;
-    private javax.swing.JMenu jMenu14;
     private javax.swing.JMenu jMenu15;
-    private javax.swing.JMenu jMenu16;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
@@ -1512,29 +1669,150 @@ if(today.after(expires)) {
     private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
-    private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem16;
-    private javax.swing.JMenuItem jMenuItem17;
-    private javax.swing.JMenuItem jMenuItem18;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenu jMo;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton jPay;
+    private javax.swing.JButton jProcess;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JLabel txttymer;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JButton jTransactions;
+    private javax.swing.JButton jWithDraw;
     // End of variables declaration//GEN-END:variables
+
+    public  void processGhash(String Ghash){
+   
+        if(Ghash.length()==22){
+       // sellectAll();
+    }
+    else{
+       deactivateButtons();
+        for(int a=0;a<Ghash.length();a++){
+            if(Ghash.charAt(a)=='A'){
+                //JOptionPane.showMessageDialog(null, Ghash.charAt(a));
+             jMBackUp.setEnabled(true);
+           
+              
+            }
+            else if(Ghash.charAt(a)=='B'){
+                jMRestore.setEnabled(true);
+               
+            }
+            else if(Ghash.charAt(a)=='C'){
+                
+            }
+            else if(Ghash.charAt(a)=='D'){
+                
+            }
+            else if(Ghash.charAt(a)=='E'){
+               jMAddCustomers.setEnabled(true);
+               jAddCustomer.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='F'){
+                jMViewCustomers.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='G'){
+               jMDeposit.setEnabled(true);
+                jDeposit.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='H'){
+                jMWithdraw.setEnabled(true);
+                jWithDraw.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='I'){
+                jMViewTransactions.setEnabled(true);
+                jTransactions.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='J'){
+               jMCustomersAccountsGroups.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='K'){
+                 jMGroups.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='L'){
+                jMLoanRequest.setEnabled(true);
+                jApplication.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='M'){
+              jMLoanProcessing.setEnabled(true);
+                jProcess.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='N'){
+               jMLoanReport.setEnabled(true);
+               jLoans.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='O'){
+               jMLoanDefaulters.setEnabled(true);
+               jDefaulters.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='P'){
+               jMLoanPayment.setEnabled(true);
+               jPay.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='Q'){
+              jMLoanPayableToday.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='R'){
+             jMLoanSettings.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='S'){
+             jMAddStaff.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='T'){
+             jMPrintGroupCollection.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='U'){
+             jMOrgAccount.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='V'){
+             jMAddUsers.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='W'){
+              jMSystemUserPass.setEnabled(true);
+            }
+            else if(Ghash.charAt(a)=='X'){
+             jMPrefrences.setEnabled(true);
+                
+            }
+        }
+    }
+    
+    
+}
+    public void deactivateButtons(){
+                 jMBackUp.setEnabled(false);
+         jMRestore.setEnabled(false);
+         jMAddCustomers.setEnabled(false);
+         jAddCustomer.setEnabled(false);
+         jMViewCustomers.setEnabled(false);
+         jMDeposit.setEnabled(false);
+        jDeposit.setEnabled(false);
+         jMWithdraw.setEnabled(false);
+         jWithDraw.setEnabled(false);
+          jMViewTransactions.setEnabled(false);
+          jTransactions.setEnabled(false);
+           jMCustomersAccountsGroups.setEnabled(false);
+            jMGroups.setEnabled(false);
+            jMLoanRequest.setEnabled(false);
+            jApplication.setEnabled(false);
+            jMLoanProcessing.setEnabled(false);
+                jProcess.setEnabled(false);
+                  jMLoanReport.setEnabled(false);
+               jLoans.setEnabled(false);
+                jMLoanDefaulters.setEnabled(false);
+               jDefaulters.setEnabled(false);
+               jMLoanPayment.setEnabled(false);
+               jPay.setEnabled(false);
+                jMLoanPayableToday.setEnabled(false);
+                jMLoanSettings.setEnabled(false);
+                 jMAddStaff.setEnabled(false);
+                  jMPrintGroupCollection.setEnabled(false);
+                  jMOrgAccount.setEnabled(false);
+                   jMAddUsers.setEnabled(false);
+                     jMSystemUserPass.setEnabled(false);
+                      jMPrefrences.setEnabled(false);
+    }
 }
 class MarqueePanel extends JPanel implements ActionListener {
 ///////////////////////////////////////////////////////////////
@@ -1579,5 +1857,7 @@ class MarqueePanel extends JPanel implements ActionListener {
         label.setText(s.substring(index, index + n));
     }
     ///////////////////////////////////////////////////////////////////////
+    
+
 }
 ///  1464 LINES

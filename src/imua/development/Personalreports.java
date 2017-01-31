@@ -21,6 +21,7 @@ public class Personalreports {
   private String deposit;
   private String withdrwal;
    private String balance;
+     private String autoid;
  // private String status;
   
   static TableModel resultSetToTableModel(ResultSet result)
@@ -28,15 +29,19 @@ public class Personalreports {
     throw new UnsupportedOperationException("Not supported yet.");
   }
   
-  public Personalreports(String Date, String Type, String Deposit, String Withdrawal,String Balance)
+  public Personalreports(String Date, String Type, String Deposit, String Withdrawal,String Balance,String Id)
   {
     this.date = Date;
     this.type = Type;
     this.deposit = Deposit;
     this.withdrwal = Withdrawal;
      this.balance = Balance;
+     this.autoid = Id;
   }
-  
+   public String getID()
+  {
+    return this.autoid;
+  }
   public String getDate()
   {
     return this.date;

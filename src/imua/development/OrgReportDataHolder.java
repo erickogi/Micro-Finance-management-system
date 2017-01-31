@@ -18,18 +18,20 @@ public class OrgReportDataHolder {
     String id;
     String description;
     String date;
+    String mode;
  static TableModel resultSetToTableModel(ResultSet result)
   {
     throw new UnsupportedOperationException("Not supported yet.");
   }
   
-  public OrgReportDataHolder(String ID, String In, String Out, String Description, String Date)
+  public OrgReportDataHolder(String ID, String In, String Out, String Description, String Date,String Mode)
   {
       this.id = ID;
      this.in = In;
      this.out = Out;
      this.description=Description;
      this.date=Date;
+     this.mode=Mode;
     
     
   }
@@ -52,5 +54,9 @@ public class OrgReportDataHolder {
        public String getDate()
   {
     return this.date;
+  }
+        public String getMode()
+  {
+    return this.mode;
   }
 }

@@ -110,18 +110,20 @@ public class Methods {
        String image="invt.png";
        return image;
     }
-public void addToOrgAccount(Double amount,String Description){
+public void addToOrgAccount(Double amount,String Description,String mode){
     String xro="0";
      String query = "INSERT INTO orgaccount("
              + "`cashin`,"
              + "`cashout`,"
              
              + "`description`"
+             + ",`mode`"
              + ",`date`)"
              + " VALUES ("
              + "'" + amount + "'"
              + ",'" + xro+ "'"
              + ",'" + Description+ "'"
+             + ",'" + mode+ "'"
             + ",now())";
     
     executeSQlQueryN(query);
@@ -129,18 +131,20 @@ public void addToOrgAccount(Double amount,String Description){
     
     
 }
-public void RemoveFromOrgAccount(Double amount,String Description){
+public void RemoveFromOrgAccount(Double amount,String Description,String mode){
     String xro="0";
      String query = "INSERT INTO orgaccount("
              + "`cashin`,"
-             + "`cashout`,"
-             
+                  + "`cashout`,"
+        
              + "`description`"
+              + "`mode`"
              + ",`date`)"
              + " VALUES ("
              + "'" + xro + "'"
              + ",'" + amount+ "'"
              + ",'" + Description+ "'"
+                + ",'" + mode+ "'"
             + ",now())";
     
     executeSQlQueryN(query);
@@ -195,6 +199,34 @@ public void RemoveFromOrgAccount(Double amount,String Description){
    
    return accounts;
   }
+      
+      public ArrayList<String>ListUsersNames(){
+        ArrayList<String> usersList = new ArrayList<String>();
+    try
+    {
+      
+        Connection con = getConnection();
+     // Connection con = getConnection();
+      Statement st = con.createStatement();
+      String searchQuery = "SELECT * FROM `system_user` ";
+      ResultSet rs = st.executeQuery(searchQuery);
+      while (rs.next())
+      {
+          
+        usersList.add(rs.getString("user_name"));
+        
+        //usersList.add(user);
+      }
+      st.close();
+      rs.close();
+      con.close();
+    }
+    catch (Exception ex)
+    {
+      System.out.println(ex.getMessage());
+    }
+    return usersList;  
+      }
      public ArrayList<String> ListUsersGroups()
   {
     ArrayList<String> usersList = new ArrayList<String>();
@@ -288,7 +320,7 @@ public void RemoveFromOrgAccount(Double amount,String Description){
       Calendar  c= Calendar.getInstance();
       c.setTime(date);
       
-      c.add(Calendar.DAY_OF_WEEK_IN_MONTH, hw);
+      c.add(Calendar.DAY_OF_WEEK, hw);
       
       return c.getTime();
   }
@@ -304,26 +336,26 @@ public void RemoveFromOrgAccount(Double amount,String Description){
         public String selectcolor()
     throws Exception
            
-  { String col="";
+  {  String col = null;
       try{
          File x=new File("file.txt"); 
         // File x=new File("file.txt");
            Scanner sc=new Scanner(x);
            String fs="";
            while(sc.hasNext()){
-              col=col+sc.next(); 
+              col=sc.next(); 
               }
            
              try{
                  
             
      
-       Color c=new Color(Integer.parseInt(col));
+     //  Color c=new Color(Integer.parseInt(col));
        }
            
             
        catch(Exception cc){
-          // c.printStackTrace();
+           cc.printStackTrace();
            col="-1";
        }
              
@@ -335,4 +367,61 @@ public void RemoveFromOrgAccount(Double amount,String Description){
        }
     return col;
   }
+   public String[] getNameImage(){
+   String contactx=null;
+   String imgurlx=null;
+    try {
+       // Methods m=new Methods();
+        Connection con = getConnection();
+        Statement st2 = con.createStatement();
+        
+        ResultSet res7 = st2.executeQuery("SELECT imgurl,name,address,email,website,phone FROM prefrences  WHERE id=1");
+        if (res7.next()) {
+         imgurlx = res7.getString("imgurl");
+        contactx = res7.getString("name")+"\n"+res7.getString("address")+"\n"+res7.getString("website")+
+        "\n"+res7.getString("email")+"\n"+res7.getString("phone");
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "error loading image \n  make sure image is in images folder ");
+        }
+        st2.close();
+        res7.close();   
+        con.close();
+    } catch (SQLException ex) {
+        Logger.getLogger(Methods.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  return new String[] {imgurlx,contactx};
+}
+    public String [] getNameImage(String id){
+       String  name="null";
+       String  imgurl="null";
+       try {
+            Methods m=new Methods();
+            Connection con = m.getConnection();
+            // Connection con = getConnection();
+            Statement st = con.createStatement();
+            // String searchQuery = "SELECT * FROM `accounttypes`";
+            String searchQuery = "SELECT fname,imgurl FROM `users` WHERE `id`="+id+" ";
+            ResultSet rs = st.executeQuery(searchQuery);
+            if(rs.next()){
+           name=rs.getString("fname");
+           imgurl=rs.getString("imgurl");
+            }
+            st.close();
+            rs.close();
+            con.close();
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Methods.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return new String []{name,imgurl};
+    
+    
+}
+   
+     
+        
+        
+        
 }
