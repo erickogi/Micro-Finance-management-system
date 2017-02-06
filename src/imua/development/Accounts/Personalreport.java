@@ -415,7 +415,7 @@ String imgurl;
                 
                 
                 pdfp.add(header);
-              double[] res=  fetchBalance("id",txtID.getText());
+              String [] res=  fetchBalance("id",txtID.getText());
      Date fr= jDateChooserFrom.getDate();
     Date to= jDateChooserTo.getDate();
     java.util.Date frm=(fr);
@@ -424,8 +424,8 @@ String imgurl;
      java.sql.Date TDATE=new java.sql.Date(too.getTime());
                 PdfPTable group=new PdfPTable(1);
                 group.addCell(creatTextCellHeader("Name        :"+name));
-                group.addCell(creatTextCellHeader("Deposits    :"+String.valueOf(res[0])));
-                group.addCell(creatTextCellHeader("Withdraws   :"+String.valueOf(res[1])));
+                group.addCell(creatTextCellHeader("Deposits    :"+res[0]));
+                group.addCell(creatTextCellHeader("Withdraws   :"+res[1]));
                 group.addCell(creatTextCellHeader("For Period  :"+FDATE+ "  To  "+TDATE));
                 group.addCell(creatTextCellHeader("Current Balance :"+fetchBalance(txtID.getText())));
                 
@@ -635,10 +635,10 @@ String imgurl;
     private javax.swing.JTable table;
     private javax.swing.JTextField txtID;
     // End of variables declaration//GEN-END:variables
-    private double[] fetchBalance(String where, String value) {
+    private String [] fetchBalance(String where, String value) {
         String balance = "0";
-        double a=0;
-        double b=0;
+        String a="0.0";
+        String b="0.0";
         
         try {
              Date fr= jDateChooserFrom.getDate();
@@ -670,8 +670,8 @@ String imgurl;
             if (rs.next()&& rs1.next())
             {
  
-                 a = 0;
-                 b = 0;
+                 a = "0";
+                 b = "0";
 
                 try 
                 {
@@ -680,8 +680,8 @@ String imgurl;
                         //  JOptionPane.showMessageDialog(null, "Has no deposit");
                     }
                     else{
-                    a = Double.valueOf(rs1.getString(1));
-                    b = Double.valueOf(rs.getString(1));
+                    a =rs1.getString(1);
+                    b = rs.getString(1);
                     //balance = String.valueOf(b - a);
                     }
 
@@ -716,7 +716,7 @@ String imgurl;
             Logger.getLogger(Personalreport.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return new double[]{b,a};
+        return new String[]{b,a};
     }
 
     private String fetchBalance( String value) {

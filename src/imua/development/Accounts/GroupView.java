@@ -291,8 +291,8 @@ String date=new Date().toString();
 String contact="www.inuadevelopment.co.ke\n inua@inuadevelopment.co.ke\n 0714406984\n"+date;
 
 public String[] getNameImage(){
-   String contactx=null;
-   String imgurlx=null;
+   String contactx="Details";
+   String imgurlx="image";
     try {
         Methods m=new Methods();
         Connection con = m.getConnection();

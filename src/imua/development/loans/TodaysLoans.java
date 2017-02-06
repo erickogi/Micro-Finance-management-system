@@ -111,12 +111,13 @@ public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
     ArrayList<LoanDataHolder> users = ListUsers("");
     DefaultTableModel model = new DefaultTableModel();
     
-    model.setColumnIdentifiers(new Object[] { "ID", "AutoId","LOAN","BALANCE","TYPE","INSTALLMENTS","NO" });
+    model.setColumnIdentifiers(new Object[] { "ID", "NAME","LOAN","BALANCE","TYPE","INSTALLMENTS","NO" });
     Object[] row = new Object[8];
     for (int i = 0; i < users.size(); i++)
     {
       row[0] = ((LoanDataHolder)users.get(i)).getId();
-      row[1] = ((LoanDataHolder)users.get(i)).getAutoId();
+        String []res=   m.getNameImage(((LoanDataHolder)users.get(i)).getId());
+      row[1] = res[0];
       row[2] = ((LoanDataHolder)users.get(i)).getLoanAmount();
       row[3] = ((LoanDataHolder)users.get(i)).getLoanBalance();
       row[4] = ((LoanDataHolder)users.get(i)).getLoanType();
@@ -161,6 +162,11 @@ public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
         jScrollPane1.setViewportView(table);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODAY", "TOMORROW", "THIS WEEK", "NEXT WEEK" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
 
         jLabel1.setText("FIND BY ID");
 
@@ -212,6 +218,10 @@ public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     /**
      * @param args the command line arguments

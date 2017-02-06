@@ -261,10 +261,10 @@ public class Settings extends javax.swing.JFrame {
      JOptionPane.showMessageDialog(null, "SYSTEM WILL EXIT TO EFFECT CHANGES","SETTINGS",JOptionPane.WARNING_MESSAGE);
         Color c=jColorChooser1.getColor();
  String newcol=Integer.toString(c.getRGB());
- String oldcol=readTxt();
+//String oldcol=readTxt();
  
- writeCol(newcol);
- 
+
+  writeCol(newcol);
  
   String query = "UPDATE `prefrences` SET `name`='" + this.jTextField1.getText() + "',`address`='" + this.txtAddress.getText() + "',"
           + "`email`='" + this.txtEmail.getText() + "',"

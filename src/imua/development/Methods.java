@@ -32,16 +32,17 @@ public class Methods {
       //then comment line 103=path="localhost";
     //getPath();
     Connection con = null;
+    String path="";
     try
     {
-    String path;
+   // String path;
    // String db=":3306/inua";
    String db=":3306/inua?autoReeconnect=true&useSSL=false";
    String jdbc="jdbc:mysql://";
    String user="root";
    String pass="123ERYcog.";
    //for client server instance comment next line path =localhost
-   path="localhost";
+   path=pathselector();
    String dbp=(jdbc+path+db);
         
       con = DriverManager.getConnection(dbp,user,pass);
@@ -49,6 +50,7 @@ public class Methods {
     }
     catch (Exception ex)
     {
+        JOptionPane.showMessageDialog(null, "localhost\n"+path+ex);
       System.out.println(ex.getMessage());
     }
     return con;
@@ -135,16 +137,16 @@ public void RemoveFromOrgAccount(Double amount,String Description,String mode){
     String xro="0";
      String query = "INSERT INTO orgaccount("
              + "`cashin`,"
-                  + "`cashout`,"
-        
+             + "`cashout`,"
+             
              + "`description`"
-              + "`mode`"
+             + ",`mode`"
              + ",`date`)"
              + " VALUES ("
              + "'" + xro + "'"
              + ",'" + amount+ "'"
              + ",'" + Description+ "'"
-                + ",'" + mode+ "'"
+             + ",'" + mode+ "'"
             + ",now())";
     
     executeSQlQueryN(query);
@@ -368,8 +370,8 @@ public void RemoveFromOrgAccount(Double amount,String Description,String mode){
     return col;
   }
    public String[] getNameImage(){
-   String contactx=null;
-   String imgurlx=null;
+   String contactx="Details";
+   String imgurlx="image";
     try {
        // Methods m=new Methods();
         Connection con = getConnection();
@@ -393,8 +395,8 @@ public void RemoveFromOrgAccount(Double amount,String Description,String mode){
   return new String[] {imgurlx,contactx};
 }
     public String [] getNameImage(String id){
-       String  name="null";
-       String  imgurl="null";
+       String  name="name";
+       String  imgurl="image";
        try {
             Methods m=new Methods();
             Connection con = m.getConnection();
@@ -419,6 +421,41 @@ public void RemoveFromOrgAccount(Double amount,String Description,String mode){
     
     
 }
+     public String pathselector()
+    throws Exception
+           
+  {  String col = "localhost";
+      try{
+         File x=new File("dbConfig.txt"); 
+        // File x=new File("file.txt");
+           col=new Scanner(new File("dbConfig.txt"),"UTF-8").next();
+          // String fs="";
+          // while(sc.hasNext()){
+           //   col=sc.next(); 
+           //   }
+           
+             try{
+                 
+            
+     
+     //  Color c=new Color(Integer.parseInt(col));
+       }
+           
+            
+       catch(Exception cc){
+           System.out.println("path not found");
+           cc.printStackTrace();
+           col="localhost";
+       }
+             
+
+      }
+        catch(Exception cc){
+         System.out.println("path not found");
+           col="localhost";
+       }
+    return col;
+  }
    
      
         

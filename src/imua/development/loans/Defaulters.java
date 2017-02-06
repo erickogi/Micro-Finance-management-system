@@ -50,26 +50,28 @@ public class Defaulters extends javax.swing.JFrame {
         setTilteImage();
         getNewRenderedTable(table);
         table.getTableHeader().setEnabled(false);
-        radiog.add(jRadioButton1);
-        radiog.add(jRadioButton2);
-        jRadioButton2.setSelected(true);
+        radiog.add(jRadioButtonWaive);
+        radiog.add(jRadioButtonEffect);
+        jRadioButtonEffect.setSelected(true);
         // TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
         //table.setRowSorter(sorter);
        // sorter.setSortable(0, false);
        
        
        
-        jRadioButton1.addActionListener(new ActionListener() {
+        jRadioButtonWaive.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
         action=1;
+        process();
         
         }
     });
-         jRadioButton2.addActionListener(new ActionListener() {
+         jRadioButtonEffect.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
         action=0;
+        process();
 
         }
     });
@@ -292,8 +294,8 @@ public class Defaulters extends javax.swing.JFrame {
         jTextField7 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButtonWaive = new javax.swing.JRadioButton();
+        jRadioButtonEffect = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -427,19 +429,19 @@ public class Defaulters extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Process"));
 
-        jRadioButton1.setText("WAIVE ");
-        jRadioButton1.addItemListener(new java.awt.event.ItemListener() {
+        jRadioButtonWaive.setText("WAIVE ");
+        jRadioButtonWaive.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButton1ItemStateChanged(evt);
+                jRadioButtonWaiveItemStateChanged(evt);
             }
         });
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        jRadioButtonWaive.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                jRadioButtonWaiveActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("EFFECT");
+        jRadioButtonEffect.setText("EFFECT");
 
         jLabel8.setText("FINE");
 
@@ -479,12 +481,12 @@ public class Defaulters extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                            .addComponent(jRadioButtonWaive, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
-                                .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jRadioButtonEffect, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(46, 46, 46))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(46, 46, 46)
@@ -508,7 +510,7 @@ public class Defaulters extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jRadioButton1)
+                        .addComponent(jRadioButtonWaive)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
@@ -521,7 +523,7 @@ public class Defaulters extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jRadioButton2))
+                    .addComponent(jRadioButtonEffect))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -564,7 +566,7 @@ public void process(){
       txtFined.setText(String.valueOf(fine));
       txtInstallmentValue.setText(txtInstallment.getText());
       txtTotal.setText(String.valueOf(fine+Double.valueOf(txtInstallment.getText())));
-      JOptionPane.showMessageDialog(null, fine+" "+rate);
+     // JOptionPane.showMessageDialog(null, fine+" "+rate);
       
       
     }
@@ -621,13 +623,13 @@ String insno;
         
     }//GEN-LAST:event_tableMouseClicked
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void jRadioButtonWaiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonWaiveActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_jRadioButtonWaiveActionPerformed
 
-    private void jRadioButton1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButton1ItemStateChanged
+    private void jRadioButtonWaiveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonWaiveItemStateChanged
         
-    }//GEN-LAST:event_jRadioButton1ItemStateChanged
+    }//GEN-LAST:event_jRadioButtonWaiveItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       if(jComboBox1.getSelectedItem().toString().equals("Mode")){
@@ -751,8 +753,8 @@ public void updateLoanNp(String todaypay,String penalty,String auto){
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButtonEffect;
+    private javax.swing.JRadioButton jRadioButtonWaive;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTable table;

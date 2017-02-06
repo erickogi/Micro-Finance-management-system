@@ -277,8 +277,8 @@ String date=new Date().toString();
 String contact="www.inuadevelopment.co.ke\n inua@inuadevelopment.co.ke\n 0714406984\n"+date;
 
 public String[] getNameImage(){
-   String contactx=null;
-   String imgurlx=null;
+   String contactx="details";
+   String imgurlx="image";
     try {
         Methods m=new Methods();
         Connection con = m.getConnection();
@@ -292,6 +292,7 @@ public String[] getNameImage(){
             
         } else {
             JOptionPane.showMessageDialog(null, "error loading image \n  make sure image is in images folder ");
+       
         }
         st2.close();
         res7.close();   
@@ -338,7 +339,7 @@ public String[] getNameImage(){
      // Connection con = getConnection();
       Statement st = con.createStatement();
      // String searchQuery = "SELECT * FROM `accounttypes`";
-      String searchQuery = "SELECT * FROM `users` WHERE `group`="+id+" ";
+      String searchQuery = "SELECT * FROM `users` WHERE `group`='"+id+"' ";
       ResultSet rs = st.executeQuery(searchQuery);
       while (rs.next())
       {
@@ -429,7 +430,7 @@ public void print (String groupName,String imgurl){
                 header.setLockedWidth(true);
                 
                 header.setWidths(new int[]{1,4});
-                if(imgurl.equals("image")){
+                if(imgurl.isEmpty()||imgurl.equals("")||imgurl.equals("image")){
                     header.addCell("no image ");
                     
                     String img=imgurl;

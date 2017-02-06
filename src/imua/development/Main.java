@@ -158,7 +158,8 @@ public void run(){
           Connection con =n. getConnection();
           
           Statement st = con.createStatement();
-          String searchQuery = "SELECT * FROM `loans`WHERE targetdate='" + DATE + "' ";
+          String nxps="np";
+          String searchQuery = "SELECT * FROM `loans`WHERE targetdate='" + DATE + "'AND nxp='" + nxps+ "'";
           ResultSet rs = st.executeQuery(searchQuery);
           while (rs.next())
           {
@@ -1479,7 +1480,8 @@ b.setVisible(true);
     }//GEN-LAST:event_jProcessActionPerformed
 
     private void jPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPayActionPerformed
-            loanpayment a=new loanpayment();
+System.out.println("jj");
+        loanpayment a=new loanpayment();
         a.setVisible(true);
     }//GEN-LAST:event_jPayActionPerformed
 

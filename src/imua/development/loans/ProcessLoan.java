@@ -442,7 +442,7 @@ public void het(Date now,Date thn){
             }
         });
 
-        jLabel8.setText("1st Installment");
+        jLabel8.setText("Start Count As From");
 
         jLabel10.setText("Mode");
 

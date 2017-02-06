@@ -312,17 +312,17 @@ String toLoan[];
                 PdfPTable group=new PdfPTable(2);
                 // headings.s
                  ArrayList<LoanDataHolder> Loan = ListUsers(txtId.getText()+jComboBoxLoanType.getSelectedItem().toString());
-                 for(int f=0;f<Loan.size();f++){
-                 
+                // for(int f=0;f<Loan.size();f++){
+                int ap=Integer.valueOf(((LoanDataHolder)Loan.get(0)).getInstallmentNo())+1;
                 group.addCell(creatTextCellHeader("Name        :"+name));
                 group.addCell(creatTextCellHeader("ID          :"+txtId.getText()));
-                group.addCell(creatTextCellHeader("Amount     :"+((LoanDataHolder)Loan.get(f)).getLoanAmount()));
+                group.addCell(creatTextCellHeader("Amount     :"+((LoanDataHolder)Loan.get(0)).getLoanAmount()));
                 group.addCell(creatTextCellHeader("Type       :"+jComboBoxLoanType.getSelectedItem().toString()));
-                group.addCell(creatTextCellHeader("Installment:"+((LoanDataHolder)Loan.get(f)).getInstallmentNo()));
-                group.addCell(creatTextCellHeader("Value      :"+((LoanDataHolder)Loan.get(f)).getInstallmentAmount()));
-                group.addCell(creatTextCellHeader("Given On   :"+((LoanDataHolder)Loan.get(f)).getGivenOn() ));
+                group.addCell(creatTextCellHeader("Installment:"+String.valueOf(ap)));
+                group.addCell(creatTextCellHeader("Value      :"+((LoanDataHolder)Loan.get(0)).getInstallmentAmount()));
+                group.addCell(creatTextCellHeader("Given On   :"+((LoanDataHolder)Loan.get(0)).getGivenOn() ));
                 group.addCell(creatTextCellHeader(""));
-                 }
+              //   }
                 
                 
                 PdfPTable headings=new PdfPTable(3);

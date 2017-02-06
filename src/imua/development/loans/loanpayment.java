@@ -37,6 +37,8 @@ public class loanpayment extends javax.swing.JFrame {
      */
     public loanpayment() {
         initComponents();
+        System.out.println("jj");
+                
         setTilteImage();
         findLoans();
         accountsTypes();

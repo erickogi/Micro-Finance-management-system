@@ -6,11 +6,13 @@
 package imua.development.loginClass;
 
 import imua.development.*;
+import imua.development.Configurations.DbConfig;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,6 +36,11 @@ public class login1 extends javax.swing.JFrame {
     public login1() {
         initComponents();
        // ex();
+       btnDb.setMnemonic(KeyEvent.VK_R);
+      btnDb.setOpaque(false);
+      btnDb.setContentAreaFilled(false);
+      btnDb.setBorderPainted(false);
+       
          setTilteImage();
          
  
@@ -218,6 +225,7 @@ pst.close();
         txtPassword = new javax.swing.JPasswordField();
         btnEnter = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
+        btnDb = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocation(new java.awt.Point(500, 250));
@@ -247,6 +255,12 @@ pst.close();
 
         jCheckBox1.setText("First Time");
 
+        btnDb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDbActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -254,7 +268,10 @@ pst.close();
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnEnter)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnDb)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEnter))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -283,7 +300,8 @@ pst.close();
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEnter)
-                    .addComponent(jCheckBox1))
+                    .addComponent(jCheckBox1)
+                    .addComponent(btnDb))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -353,6 +371,11 @@ pst.close();
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
 
+    private void btnDbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDbActionPerformed
+       DbConfig db=new DbConfig();
+       db.setVisible(true);
+    }//GEN-LAST:event_btnDbActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -392,6 +415,7 @@ pst.close();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDb;
     private javax.swing.JButton btnEnter;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
