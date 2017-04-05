@@ -37,7 +37,8 @@ static TableModel resultSetToTableModel(ResultSet result)
     throw new UnsupportedOperationException("Not supported yet.");
   }
   
-  public defaultersHolder(String LID,String ID, Date ate, String Installmentamount, String LoanAmount,String autoid,String instno,String Acctype)
+  public defaultersHolder(String LID,String ID, Date ate, String Installmentamount,
+  String LoanAmount,String autoid,String instno,String Acctype,String defaultAmount,String nxp)
   {
       loanid=LID;
       this.perid = ID;

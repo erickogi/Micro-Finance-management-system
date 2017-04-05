@@ -5,6 +5,7 @@
  */
 package imua.development;
 
+import IDataHolders.ILoanDataHolder;
 import imua.development.Accounts.Accgroups;
 import imua.development.Accounts.AccountRegistration;
 import imua.development.Accounts.AccountsReport;
@@ -30,6 +31,10 @@ import imua.development.loans.loantypes;
 import imua.development.loginClass.AddUsers;
 import imua.development.loginClass.login1;
 import imua.development.BackupRestore.backup;
+import imua.development.Reports.MainOrgAccount;
+import imua.development.loans.IDefaulters;
+import imua.development.loans.IProcessLoan;
+import imua.development.loans.Iloanpayment;
 //import imua.development.loans.P;
 import java.awt.Color;
 import java.awt.Container;
@@ -42,6 +47,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 import java.net.URI;
 import java.sql.Connection;
@@ -49,6 +55,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -67,7 +74,7 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author Kamau
+ * @author Kimani
  */
 public class Main extends javax.swing.JFrame {
     public static String hash="";
@@ -75,6 +82,7 @@ public class Main extends javax.swing.JFrame {
   public static  int a=0;
   public static int  ch=0;
   Methods m = new Methods();
+  Methods methods = new Methods();
   String s = "Inua ";
   
     /**
@@ -94,16 +102,20 @@ public class Main extends javax.swing.JFrame {
   
         pic();
     
-     getTime();
+       getTime();
        if(a==0){
          login();
          
        }
+    //   else{
+    //       timerForLoanApplication();
+    //   }
       
        
     // getTime();
         
     }
+    //okay------sets color.icon,frame name/title
     public Color setTilteImage(){
         Color c=null;
         try {
@@ -117,7 +129,9 @@ public class Main extends javax.swing.JFrame {
              c=new Color(Integer.parseInt(col));
            // jPanel1.setBackground(c);
             Container cont=this.getContentPane();
+            cont.getWidth();
             cont.setBackground(c);
+            
             jPanel2.setBackground(c);
             jToolBar1.setBackground(c);
             this.setForeground(c);
@@ -127,23 +141,7 @@ public class Main extends javax.swing.JFrame {
         return c;
 }
     
-public void check(){
-Thread log=new Thread(){
-public void run(){
-    
-     try{
-      sleep(10000);
-      //processGhash(hash);
-
-      checkTodays();
-     }
-      catch(Exception b){
-         System.out.println("Error");
-      }
-} 
-      }   ;  
-      log.start();
-  }  
+ 
     ////////////////// i teary ////////////////
     public  void checkTodays(){
        Calendar  c= Calendar.getInstance();
@@ -159,7 +157,7 @@ public void run(){
           
           Statement st = con.createStatement();
           String nxps="np";
-          String searchQuery = "SELECT * FROM `loans`WHERE targetdate='" + DATE + "'AND nxp='" + nxps+ "'";
+          String searchQuery = "SELECT * FROM `iloans`WHERE datesupposed='" + DATE + "'AND paymentstatus='" + nxps+ "'  ";
           ResultSet rs = st.executeQuery(searchQuery);
           while (rs.next())
           {
@@ -209,7 +207,7 @@ public void run(){
           while (rs.next())
           {
               
-           todays.put(rs.getString("id"), rs.getString("amount"));
+          todays.put(rs.getString("id"), rs.getString("amount"));
             
           }
           st.close();
@@ -221,8 +219,8 @@ public void run(){
         
         JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS APPLICATIONS AVAILABLE \n Select YES to check them out ");
         if(dialogButton==JOptionPane.YES_OPTION){
-                   // Main.setEnabled(false);
-        ProcessLoan a=new ProcessLoan();
+        // Main.setEnabled(false);
+        IProcessLoan a=new IProcessLoan();
          //a.typeoftransaction="withdrawal";
         a.setVisible(true);
         } 
@@ -230,83 +228,730 @@ public void run(){
               
          // JOptionPane.showMessageDialog(null, todays.size()+ "LOANS APPLICATIONS AVAILABLE");
           }
-          checkLoanRepayments();
+          //checkLoanRepayments();
+          checkiLoansDefaulters();
           
       } catch (SQLException ex) {
           Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       }
       
     }
-    public  void checkIfThereIsNext(String autoid,String id,String inNo,String ltype){
-        //Main ma=new Main();
-    try {
-        Methods n = new Methods();
-        Connection con =n. getConnection();
-        int inno=Integer.valueOf(inNo)-1;
-        Statement st = con.createStatement();
-        String searchQuery = "SELECT * FROM `loans`WHERE autoid>'" + autoid + "'AND id='"+id+"'"
-                + " AND installmentsno='"+inno+"'AND loantype='"+ltype+"'  ";
-        ResultSet rs = st.executeQuery(searchQuery);
-        if (rs.next())
-        {   
-            
-        }
-        else{
-           setNewTarget("autoid",autoid); 
-            }
-    } catch (SQLException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    }
-    public  void checkLoanRepayments(){
-       
-         HashMap<String,String>todays=new HashMap<String,String>();
-           Calendar  c= Calendar.getInstance();
-         Date today=addOne(c.getTime(),-1);
-         
-         java.util.Date d=(today);
-  //Days d=Days.daysBeetween();
-         java.sql.Date DATE=new java.sql.Date(d.getTime());
-      try {
+//    public  int checkIfThereIsNext(String autoid,String id,String inNo,String ltype,String loanId,String instAmount,Double loanBalance){
+//        //Main ma=new Main();
+//        double mLoanBalance=0.0;//what to minus from loan balance
+//        int pd=0;
+//           out.println(checkCarriedForward(inNo,loanId));
+//    try {
+//        Methods n = new Methods();
+//        Connection con =n. getConnection();
+//        int inno=Integer.valueOf(inNo)-1;
+//        Statement st = con.createStatement();
+//        String searchQuery = "SELECT * FROM `loans`WHERE autoid>'" + autoid + "'AND id='"+id+"'"
+//                + " AND installmentsno='"+inno+"'AND loantype='"+ltype+"'  ";
+//        ResultSet rs = st.executeQuery(searchQuery);
+//        if (rs.next())
+//        {   
+//            pd=0;
+//            //i think i have been thru this step atleast once so no need of doing it again 
+//            // i mean we already created a next target.right now we just have to notify the admin that this guy is a defaulter thus dp=0
+//            if(checkCarriedForward(inNo,loanId)>0){
+//                if(checkCarriedForward(inNo,loanId)==Double.valueOf(instAmount)){
+//                    //dont now what to do
+//                }
+//                if(checkCarriedForward(inNo,loanId)>Double.valueOf(instAmount)){
+//                    //dont now what to do
+//                }
+//                if(checkCarriedForward(inNo,loanId)<Double.valueOf(instAmount)){
+//                    //dont know what to do
+//                }
+//            }
+//        }
+//        else{
+//            //so we need to set another target day as this guy didnt pay the last one so its a default
+//            if(checkCarriedForward(inNo,loanId)>0){
+//             //if credit carried forward is there then we need to clear or reduce the penalty as below
+//              if(checkCarriedForward(inNo,loanId)==Double.valueOf(instAmount)){
+////if credit brought forwad is equal to the instalment required then clear the guy by setting tp  to paid and nxp of previous entry to paid 
+//                  String defaultamount="null";
+//                  Double defaultValue=0.0;
+//                  pd=1;//notify admin that this guy has been cleared
+//                  String nxp="paid";
+//                  updateTonxp(inNo,loanId,nxp) ;
+//                  ///loan balance will be 0.0 - - mloanbalance
+//                  mLoanBalance=loanBalance;
+//                  setNewTarget("autoid",autoid,defaultamount,defaultValue,nxp,mLoanBalance); 
+//              }
+//               if(checkCarriedForward(inNo,loanId)>Double.valueOf(instAmount)){
+////if credit brought forwad is more than the instalment required then clear the guy by setting tp  to pm and nxp of previous entry to pm 
+//                   String defaultamount=String.valueOf(checkCarriedForward(inNo,loanId)-Double.valueOf(instAmount));
+// //carry forward the remainder to next target
+//                   String nxp="pm";
+//                   pd=1;//notify the admin that this guy has been cleared
+//                   Double defaultValue=checkCarriedForward(inNo,loanId)-Double.valueOf(instAmount);
+//                   
+//                   updateTonxp(inNo,loanId,nxp) ;
+//                   ///loan balance will be 0.0 - -mloanbalance
+//                    mLoanBalance=loanBalance;
+//                  setNewTarget("autoid",autoid,defaultamount,defaultValue,nxp,mLoanBalance); 
+//              }
+//                if(checkCarriedForward(inNo,loanId)<Double.valueOf(instAmount)){
+////if credit brought forwad is less than the instalment required then the guy is still doomed .he is still a defaulter by the diffrence                  
+//                    pd=2;//notify admin that he is a defaulter
+//                   String nxp="nfp";
+//                    String defaultamount=String.valueOf(Double.valueOf(instAmount)-checkCarriedForward(inNo,loanId));
+//                  //   String defaultamount=String.valueOf(checkCarriedForward(inNo,loanId)-Double.valueOf(instAmount));
+//                 updateTonxp(inNo,loanId,nxp) ;
+//                 Double defaultValue=Double.valueOf(instAmount)-checkCarriedForward(inNo,loanId);
+//                 ///loan balance will be 0.0 - - mloanbalance-
+//                 mLoanBalance=loanBalance-(defaultValue);
+//                 
+//                  setNewTarget("autoid",autoid,defaultamount,defaultValue,nxp,mLoanBalance); 
+//              }
+//             //setNewTarget("autoid",autoid); 
+//             
+//                }
+//            else{
+//                pd=2;//this guy is still a defaulter as he/she had no previous credit brought forward
+//               String nxp="np";
+//               Double defaultValue=0.0;
+//               String defaultamount="null";
+//               mLoanBalance=loanBalance-Double.valueOf(instAmount);
+//               setNewTarget("autoid",autoid,defaultamount,defaultValue,nxp,mLoanBalance); 
+//            }
+//            
+//          
+//            }
+//        st.close();
+//        rs.close();
+//        con.close();
+//    } catch (SQLException ex) {
+//        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+//    }
+//    return pd;
+//    }
+//    public double checkCarriedForward(String instNo,String loanId){
+//        double cf=0.0;
+//        int a=1;
+//        try {
+//            
+//            Methods n = new Methods();
+//            Connection con =n. getConnection();
+//            Statement st = con.createStatement();
+//            Statement st1 = con.createStatement();
+//            int preInst=Integer.valueOf(instNo)+1;
+//            int Inst=Integer.valueOf(instNo);
+//            String searchQuery = "SELECT defaultacc FROM `loans`WHERE loanid='" + loanId + "' AND installmentsno='"+Inst+"' ";
+//            String searchQuery1 = "SELECT nxp FROM `loans`WHERE loanid='" + loanId + "' AND installmentsno='"+preInst+"' ";
+//            ResultSet rs = st.executeQuery(searchQuery);
+//            ResultSet rs1 = st1.executeQuery(searchQuery1);
+//            if (rs.next()&&rs1.next())   
+//            {
+//                // out.println("found rs.next"+rs.getString(1)+" "+a);
+//                // a++;
+//                if(rs1.getString("nxp").equals("pm")){
+//                   // out.println("found nxp-pm");
+//                    try{
+//                    cf=Double.valueOf(rs.getString("defaultacc"));
+//                    }
+//                    catch(NumberFormatException m){
+//                    //    out.println("null");
+//                    }
+//                }
+//            }
+//            
+//            
+//            st.close();
+//            st1.close();
+//            rs.close();
+//            rs1.close();
+//            con.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return cf;
+//    }
+//    public void updateTonxp(String instNo,String loanId,String nxp){
+//         String query = "UPDATE `loans` SET `nxp`='" + nxp + "'WHERE loanid= '" + loanId+ "' AND installmentsno='" + instNo + "'";
+//      
+//      m.executeSQlQueryN(query);
+//    }
+//    public int maxid(String where,String value){
+//    int id=0;
+//    Connection con = m.getConnection();
+//    try{
+//        String getMaxId="SELECT MAX(autoid) FROM `loans` WHERE `" + where + "` = '" + value + "'";
+//         Statement st = con.createStatement();
+//           ResultSet rs = st.executeQuery(getMaxId);
+//           if(rs.next()){
+//               id=rs.getInt(1);
+//           }
+//       st.close();
+//      rs.close();
+//      con.close();
+//    }
+//    catch(Exception nw){
+//        nw.printStackTrace();
+//    }
+//    return id;
+//}
+//    public double checkBalance(String where,String max){
+//        double bal=0.0;
+// Connection con = m.getConnection();
+//    try{
+//        String getMaxId="SELECT loanbalance FROM `loans` WHERE `" + where + "` = '" + max + "'";
+//         Statement st = con.createStatement();
+//           ResultSet rs = st.executeQuery(getMaxId);
+//           if(rs.next()){
+//             
+//                   
+//               bal=rs.getDouble("loanbalance");
+//           }
+//      st.close();
+//      rs.close();
+//      con.close();
+//    }
+//    catch(Exception nw){
+//        nw.printStackTrace();
+//    }
+//    return bal;
+//}
+//    
+    
+//    public  void checkLoanRepayments(){
+//       
+//         HashMap<String,String>todays=new HashMap<String,String>();
+//           Calendar  c= Calendar.getInstance();
+//          Date today=addOne(c.getTime(),-1);
+//         
+//         java.util.Date d=(today);
+//  //Days d=Days.daysBeetween();
+//         java.sql.Date DATE=new java.sql.Date(d.getTime());
+//      try {
+//          Methods n = new Methods();
+//          String nl="np";
+//          String lp="nfp";
+//          Connection con =n. getConnection();
+//          
+//          Statement st = con.createStatement();
+//          String searchQuery = "SELECT * FROM `loans`WHERE (targetdate<'" + DATE + "'AND nxp='"+nl+"') OR (targetdate<'" + DATE + "'AND nxp='"+lp+"')";
+//          ResultSet rs = st.executeQuery(searchQuery);
+//          while (rs.next())
+//          {  String maxid=rs.getString("autoid");
+//             String inNo=rs.getString("installmentsno");
+//             String id= rs.getString("id");
+//             String loanId= rs.getString("loanid");
+//             String loanType= rs.getString("loantype");
+//             String instAmount= rs.getString("installmentamount");
+//             
+//             String maxv=String.valueOf(maxid("loanid",loanId));
+//             double bal=checkBalance("autoid",maxv);
+//             
+//             int pd= checkIfThereIsNext(maxid,id,inNo,loanType,loanId,instAmount,bal);
+//              if(pd==0||pd==2){
+//              todays.put(rs.getString("id"), rs.getString("installmentamount"));
+//              }
+//            
+//          }
+//          st.close();
+//          rs.close();
+//          con.close();
+//          
+//          if(todays.size()>0){
+//        int dialogButton=
+//        
+//        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
+//        if(dialogButton==JOptionPane.YES_OPTION){
+//            
+//                    Defaulters kd=new Defaulters();
+//                    
+//        //a.typeoftransaction="withdrawal";
+//                     kd.setVisible(true);
+//        }
+//        
+//          //JOptionPane.showMessageDialog(null, todays.size()+ "  LOANS DEFAULTED ");
+//          }
+//          
+//          //checkLoanRepayments();
+//          
+//      } catch (SQLException ex) {
+//          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+//      }
+//    }
+//    
+    
+    
+    
+    
+    /*
+    To switch back to previous version uncoment all methods from line 235 ...
+    Also uncomment the method call on line 228
+    
+    Note>>>>>>to maintain order,any new code should go below this comments
+    
+    
+    New version====
+    
+    
+    check loan with date greater than today...\
+    if there is, 
+    
+    if not updated{
+    update the  default status to id--in default
+    
+    copy n push the whole loan with its properties to iloansdefaulters db-table
+    
+    
+    add an entry with null data but ,,,,to track dates
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    */
+    
+    public void checkiLoansDefaulters(){
+          Calendar  c= Calendar.getInstance();
+          Date today=addOne(c.getTime(),-1);
+          java.util.Date d=(today);
+          java.sql.Date DATE=new java.sql.Date(d.getTime());
+          
+           ArrayList<ILoanDataHolder>    defaultersDataList = new ArrayList();
+           ArrayList<ILoanDataHolder>notPushedToDefaulters=new ArrayList();
+           ArrayList<ILoanDataHolder>setNewLoanEntry=new ArrayList();
+           
           Methods n = new Methods();
+          
+           try 
+           {
+          
           String nl="np";
+          String lp="nfp";
           Connection con =n. getConnection();
           
           Statement st = con.createStatement();
-          String searchQuery = "SELECT * FROM `loans`WHERE targetdate<'" + DATE + "'AND nxp='"+nl+"' ";
+          String searchQuery = "SELECT * FROM `iloans` WHERE (datesupposed<'" + DATE + "'AND paymentstatus='"+nl+"') OR (datesupposed<'" + DATE + "'AND paymentstatus='"+lp+"')";
           ResultSet rs = st.executeQuery(searchQuery);
           while (rs.next())
-          {   String maxid=rs.getString("autoid");
-              String inNo=rs.getString("installmentsno");
-             String id= rs.getString("id");
-             String loanType= rs.getString("loantype");
+          { 
+              Double todayPay=Double.valueOf(rs.getString("todaypay"));
+              Double balancebf=Double.valueOf(rs.getString("balancebf"));
+              Double installmentAmount=Double.valueOf(rs.getString("installmentamount"));
+              
+              
+              
+          ILoanDataHolder data = new ILoanDataHolder(rs.getString("autoid"),rs.getString("customerid"),
+                rs.getString("loanid")
+                ,rs.getString("loantype")
+                ,rs.getString("applicablestatus")
+                ,rs.getString("applicationfee")
+                ,rs.getString("periodtype")
+                ,rs.getString("frequencyperperiod")
+                ,rs.getDate("datesupposed")
+                ,rs.getString("installmentamount")
+                ,rs.getString("installmentsno")
+                ,rs.getString("loanAmount")
+                ,rs.getString("loanRequested")
+                ,rs.getString("loanbalance")
+                ,rs.getString("moreorlesspaid")
+                ,rs.getString("todaypay")
+                ,rs.getString("paymentstatus")
+                ,rs.getString("defaultstatus")
+                ,rs.getString("balancebf")
+                ,rs.getString("extra")
+                ,rs.getString("loangivenOn")
+                ,rs.getString("paidon")
+          
+          );
+          
+           if((balancebf+todayPay)>=installmentAmount){
+                  
+                  setNewLoanEntry.add(data);
+              }
+           
+           
+           else{
+          
+          
+          if(rs.getString("defaultstatus").equals("nd")){
              
-              checkIfThereIsNext(maxid,id,inNo,loanType);
-              todays.put(rs.getString("id"), rs.getString("installmentamount"));
-            
+             
+             
+                  
+                  notPushedToDefaulters.add(data);
+              
+          }
+          
+         
+          
+         
+          
+                 defaultersDataList.add(data);
+          
+          
+          
+          
+           }
+          
+          
           }
           st.close();
           rs.close();
           con.close();
           
-          if(todays.size()>0){
+          if(!notPushedToDefaulters.isEmpty()){
+           pushToDefaulters(notPushedToDefaulters);
+          }
+          if(!defaultersDataList.isEmpty()){
+           setNextSupposedToPayDate(defaultersDataList);
+          }
+          if(!setNewLoanEntry.isEmpty()){
+           setNewLoanEntry(setNewLoanEntry);
+          }
+          
+          
+          
+          
+          
+        if(defaultersDataList.size()>0){
         int dialogButton=
         
-        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
+        JOptionPane.showConfirmDialog(null,defaultersDataList.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
         if(dialogButton==JOptionPane.YES_OPTION){
             
-                    Defaulters kd=new Defaulters();
-         //a.typeoftransaction="withdrawal";
+                    IDefaulters kd=new IDefaulters();
+                    
+        
                      kd.setVisible(true);
         }
-          //JOptionPane.showMessageDialog(null, todays.size()+ "  LOANS DEFAULTED ");
-          }
-          //checkLoanRepayments();
+        
           
-      } catch (SQLException ex) {
+          }
+        
+        
+        
+       
+          
+          
+          
+          
+          
+          } catch (SQLException ex) {
           Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
       }
+           
+           
+           
+           
+           
+           
+           
+           
     }
+    
+    
+    
+    public boolean pushToDefaulters(ArrayList<ILoanDataHolder>notPushedToDefaulters){
+        boolean success=false;
+         int s=0;
+        
+        for(int count=0;count<notPushedToDefaulters.size();count++){
+        
+         String query = "INSERT INTO iloansdefaulters("
+                 
+             + "`iloanautoid`,"    
+             + "`customerid`,"
+             + "`loanid`,"
+             
+             + "`loantype`,"
+             +"`applicablestatus`,"
+             + "`applicationfee`"
+             
+             + ",`periodtype`"
+             + ",`frequencyperperiod`"
+             + ",`datesupposed`"
+             
+             
+             
+             
+             
+             
+             + " ,`installmentamount`"
+             + ",`installmentsno`"
+             
+             
+             
+             + ",`loanAmount`"
+             + ",`loanRequested`"
+             + ",`loanbalance`"
+             + ",`moreorlesspaid`"
+             
+             
+             + ",`todaypay`"
+             
+             + ",`paymentstatus`"
+             
+             + ",`defaultstatus`"
+             
+             + ",`balancebf`"
+             
+             + ",`extra`"
+             
+             + ",`loangivenOn`"
+             
+             + ",`paidon`)"
+             
+             + " VALUES ("
+             + "'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getAutoid() + "'"    
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getCustomerid() + "'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getLoanid()+ "'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getLoantype()+ "'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getApplicablestatus()+ "'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getApplicationfee() + "'"
+             + ",'" +((ILoanDataHolder)notPushedToDefaulters.get(count)).getPeriodtype()+"'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getFrequencyperperiod()+ "'"
+            
+                   
+            + ",'" +((ILoanDataHolder)notPushedToDefaulters.get(count)).getDatesupposed() + "'"
+             + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getInstallmentamount()+"'"
+             + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getInstallmentsno()+"'"
+                
+             + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getLoanAmount()+"'"
+             + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getLoanRequested()+"'"
+             + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getLoanbalance()+"'"
+         
+         
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getMoreorlesspaid() + "'"
+             + ",'" +((ILoanDataHolder)notPushedToDefaulters.get(count)).getTodaypay()+ "'"
+         
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getPaymentstatus() + "'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getDefaultstatus()+ "'"
+             + ",'" + ((ILoanDataHolder)notPushedToDefaulters.get(count)).getBalancebf() + "'"
+           
+             + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getExtra()+"'"
+              + ",'"+((ILoanDataHolder)notPushedToDefaulters.get(count)).getLoangivenOn()+"'"
+            + ",now())";
+         
+         
+         
+        // s=s+
+        if(methods.executeSQlQueryN(query)==1){
+         Date columnValue=null;
+         updateiLoan("defaultstatus",columnValue,"autoid",((ILoanDataHolder)notPushedToDefaulters.get(count)).getAutoid(),"dl",0);
+        }
+        }
+        if(s==notPushedToDefaulters.size()){
+             success=true;
+         }
+         else{
+             success=false;
+         }
+        
+        
+        
+        
+        
+        
+        return success;
+    }
+    
+    
+    public boolean setNextSupposedToPayDate(ArrayList<ILoanDataHolder>defaultersDataList){
+        boolean success=false;
+          for(int count=0;count<defaultersDataList.size();count++){
+            Date columnValue  =  addPeriod(((ILoanDataHolder)defaultersDataList.get(count)).getDatesupposed(),((ILoanDataHolder)defaultersDataList.get(count)).getPeriodtype()
+                 ,((ILoanDataHolder)defaultersDataList.get(count)).getFrequencyperperiod());
+            
+            
+            
+           updateiLoan("paidon",columnValue,"autoid",((ILoanDataHolder)defaultersDataList.get(count)).getAutoid(),"dl",1);
+          }
+        
+        
+        return success;
+        
+    }
+    
+    public boolean setNewLoanEntry(ArrayList<ILoanDataHolder>setNewLoanEntry){
+        boolean success=false;
+        String todayPay="0.0";
+        String paymentStatus="np";
+        String defaultStatus="nd";
+        String i="0.0";
+        
+        
+        for(int count=0;count<setNewLoanEntry.size();count++){
+            
+        Date date  =  addPeriod(((ILoanDataHolder)setNewLoanEntry.get(count)).getDatesupposed(),((ILoanDataHolder)setNewLoanEntry.get(count)).getPeriodtype()
+                 ,((ILoanDataHolder)setNewLoanEntry.get(count)).getFrequencyperperiod());
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+            String   newdate = DATE_FORMAT.format( date);
+        Double balancebf=Double.valueOf(((ILoanDataHolder)setNewLoanEntry.get(count)).getBalancebf());
+        Double installmentValue=Double.valueOf(((ILoanDataHolder)setNewLoanEntry.get(count)).getInstallmentamount());
+        String bbf=String.valueOf(balancebf-installmentValue);
+        
+        String query = "INSERT INTO iloans("
+             + "`customerid`,"
+             + "`loanid`,"
+             
+             + "`loantype`,"
+             +"`applicablestatus`,"
+             + "`applicationfee`"
+             
+             + ",`periodtype`"
+             + ",`frequencyperperiod`"
+             + ",`datesupposed`"
+             
+             + " ,`installmentamount`"
+             + ",`installmentsno`"
+           
+             + ",`loanAmount`"
+             + ",`loanRequested`"
+             + ",`loanbalance`"
+             + ",`moreorlesspaid`"
+             
+             
+             + ",`todaypay`"
+             
+             + ",`paymentstatus`"
+             
+             + ",`defaultstatus`"
+             
+             + ",`balancebf`"
+             
+             + ",`extra`"
+             
+             + ",`loangivenOn`"
+             
+             + ",`paidon`)"
+             
+             + " VALUES ("
+             + "'" + ((ILoanDataHolder)setNewLoanEntry.get(count)).getCustomerid()+ "'"
+             + ",'" +((ILoanDataHolder)setNewLoanEntry.get(count)).getLoanid()+ "'"
+             + ",'" + ((ILoanDataHolder)setNewLoanEntry.get(count)).getLoantype()+ "'"
+             + ",'" + ((ILoanDataHolder)setNewLoanEntry.get(count)).getApplicablestatus()+ "'"
+             + ",'" + ((ILoanDataHolder)setNewLoanEntry.get(count)).getApplicationfee() + "'"
+             + ",'" +((ILoanDataHolder)setNewLoanEntry.get(count)).getPeriodtype()+"'"
+             + ",'" + ((ILoanDataHolder)setNewLoanEntry.get(count)).getFrequencyperperiod()+ "'"
+            
+                   
+            + ",'" + newdate + "'"
+             + ",'"+((ILoanDataHolder)setNewLoanEntry.get(count)).getInstallmentamount()+"'"
+             + ",'"+(Integer.valueOf(((ILoanDataHolder)setNewLoanEntry.get(count)).getInstallmentsno())-1)+"'"
+                
+             + ",'"+((ILoanDataHolder)setNewLoanEntry.get(count)).getLoanAmount()+"'"
+             + ",'"+((ILoanDataHolder)setNewLoanEntry.get(count)).getLoanRequested()+"'"
+             + ",'"+((ILoanDataHolder)setNewLoanEntry.get(count)).getLoanbalance()+"'"
+         
+         
+             + ",'" + todayPay + "'"
+             + ",'" + todayPay + "'"
+         
+             + ",'" + paymentStatus + "'"
+             + ",'" + defaultStatus + "'"
+             + ",'" + bbf+ "'"
+           
+             + ",'"+i+"'"
+             + ",'"+((ILoanDataHolder)setNewLoanEntry.get(count)).getLoangivenOn()+"'"
+             + ",now())";
+       if( methods.executeSQlQueryN(query)==1){
+           Date dateValueToBeUpdated=null;
+           
+                Calendar  c= Calendar.getInstance();
+          Date today=c.getTime();
+                dateValueToBeUpdated=today;  
+          java.util.Date d=(today);
+          java.sql.Date DATE=new java.sql.Date(d.getTime());
+           updateiLoan("paymentstatus",DATE,"autoid",((ILoanDataHolder)setNewLoanEntry.get(count)).getAutoid(),"paid",2);
+       }
+        
+        
+    }
+        return success;
+    }
+    
+    
+    public void updateiLoan(String columnNameToBeUpdated,Date dateValueToBeUpdated,String keyColumn,String keyValue,String other,int othervalue){
+       String query="";
+       
+      //update default status to ld
+        if(othervalue==0){
+         query = "UPDATE `iloans` SET `defaultstatus` ='" + other + "'"
+               
+              + "WHERE autoid= '" + keyValue+ "' ";
+        }
+        
+        //update loan paid on to next target date to keep track of installment days
+        else if(othervalue==1){
+            
+            
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+            String   date = DATE_FORMAT.format( dateValueToBeUpdated);
+            query = "UPDATE `iloans` SET `paidon`='" + date + "'"
+                
+              + "WHERE autoid= '" + keyValue+ "' ";
+        }
+        
+        else if(othervalue==2){
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+            String   date = DATE_FORMAT.format( dateValueToBeUpdated);
+            
+            
+            query = "UPDATE `iloans` SET `paymentstatus`='" + other+ "',"
+                + "`paidon`= '" + dateValueToBeUpdated+ "'"
+              + "WHERE autoid= '" + keyValue+ "' ";
+            
+            
+            
+        }
+      
+              methods.executeSQlQueryN(query);
+        
+        
+        
+    }
+    public Date addPeriod(Date from,String period,String frequency){
+         Date tar=null;
+        if(period.equals("Monthly")){
+            
+            tar=Methods.addMonth(from,Integer.valueOf(frequency));
+        }
+        else if (period.equals("Weekly")){
+            tar=Methods.addWeek(from,Integer.valueOf(frequency));
+        }
+        else if (period.equals("Daily")){
+            tar=Methods.addDay(from,Integer.valueOf(frequency));
+        }
+        else if (period.equals("Yearly")){
+            tar=Methods.addYear(from,Integer.valueOf(frequency));
+        }
+        return tar;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 //is ths even normal its 6am and i still havent had sleep
      public  Date addOne(Date date,int hw){
       Calendar  c= Calendar.getInstance();
@@ -316,10 +961,7 @@ public void run(){
       
       return c.getTime();
   }
-    
-    
-    
-  public void login(){
+ public void login(){
 Thread log=new Thread(){
 public void run(){
     
@@ -345,10 +987,7 @@ public void run(){
       
     }
     
-    
-    
-    
-    public void seten(){
+   public void seten(){
         this.setEnabled(true);
     }
     /**
@@ -404,6 +1043,7 @@ public void run(){
         jMenu8 = new javax.swing.JMenu();
         jMPrintGroupCollection = new javax.swing.JMenuItem();
         jMOrgAccount = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMAddUsers = new javax.swing.JMenuItem();
         jMenu15 = new javax.swing.JMenu();
         jMSystemUserPass = new javax.swing.JMenuItem();
@@ -413,6 +1053,8 @@ public void run(){
         jMSystemHelp = new javax.swing.JMenuItem();
         jMenu9 = new javax.swing.JMenu();
         jMAddStaff = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -439,7 +1081,7 @@ public void run(){
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1424, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 10, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -786,13 +1428,22 @@ public void run(){
 
         jMOrgAccount.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
         jMOrgAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/icon_lrg_performance.png"))); // NOI18N
-        jMOrgAccount.setText("Org's Account");
+        jMOrgAccount.setText("Business Account Transaction Records");
         jMOrgAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMOrgAccountActionPerformed(evt);
             }
         });
         jMenu8.add(jMOrgAccount);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Bussines Account");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem1);
 
         jMAddUsers.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
         jMAddUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imua/development/icons/add.png"))); // NOI18N
@@ -865,17 +1516,28 @@ public void run(){
 
         jMenuBar1.add(jMenu9);
 
+        jMenu2.setText("Tools");
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Calculator");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -904,6 +1566,8 @@ public void run(){
      public void pic(){
          BufferedImage d;
     try {
+         Container cont=this.getContentPane();
+            //;
         d = ImageIO.read(Main.class.getResource("/imua/development/Wall.jpg"));
           Image f=d.getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(),Image.SCALE_SMOOTH);
          // 
@@ -973,6 +1637,9 @@ paidon=rs.getString("paidon");
 //                defaultacc, applicationfee, todaypay,
 //                givenOn, paidon
             }
+      st.close();
+      rs.close();
+      con.close();
     }
     catch(Exception m){
         m.printStackTrace();
@@ -984,7 +1651,12 @@ paidon=rs.getString("paidon");
     
     
 }
-    public void setNewTarget(String where,String val){
+    public void setNewTarget(String where,String val,String defaultAmount,Double defaultValue,String tp,Double mLoanBalance){
+     
+        
+      
+       
+        
         if(getAllFromLoan( where, Integer.valueOf(val))==1){
                 Date tar=null;
         if(periodtype.equals("Monthly")){
@@ -1000,6 +1672,11 @@ paidon=rs.getString("paidon");
         else if (periodtype.equals("Yearly")){
             tar=Methods.addYear(targetdate,Integer.valueOf(frequencyperperiod));
         }
+        double dv=Double.valueOf(installmentamount);
+        if(defaultValue>1){
+           dv=defaultValue;
+           
+       }
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
         String   date = DATE_FORMAT.format(tar);
         String nulll="null";
@@ -1022,6 +1699,7 @@ paidon=rs.getString("paidon");
              + ",`applicationfee`"
              + ",`todaypay`"
              + ",`nxp`"
+             + ",`tp`"
              + ",`givenOn`"
              + ",`paidon`)"
              + " VALUES ("
@@ -1038,11 +1716,12 @@ paidon=rs.getString("paidon");
              + ",'"+loanAmount+"'"
              + ",'"+loanRequested+"'"
                
-             + ",'"+String.valueOf(Double.valueOf(loanbalance)-Double.valueOf(installmentamount)) +"'"
-             + ",'"+nulll+"'"
+             + ",'"+String.valueOf(mLoanBalance)+"'"
+             + ",'"+defaultAmount+"'"
              + ",'"+this.applicationfee+"'"
-             + ",'" + nulll+ "'"
-                           + ",'" + nxp+ "'"
+             + ",'" +String.valueOf( dv)+ "'"
+             + ",'" + nxp+ "'"
+             + ",'" + tp+ "'"
              + ",'" + this.givenOn + "'"
            
              + ",now())";
@@ -1062,9 +1741,13 @@ paidon=rs.getString("paidon");
     
     
     
-    
-    
-    
+//    if(Double.valueOf(loanbalance)-(mLoanBalance) <=1 &&(tp.equals("paid")||tp.equals("pm"))){
+//        loanpayment lp=new loanpayment()  ;
+//        lp.checkWhetherHasOutStandingFines("",this.loanid);
+//        } 
+//     else{
+//    out.println("has defaults");
+//        }
     
     
     }
@@ -1079,53 +1762,75 @@ paidon=rs.getString("paidon");
     
     
     
-    
+    public void timerForLoanApplication(){
+        Thread checkLoan=new Thread(){
+            public void run(){
+    String x;
+    String z;
+for(;;){
+//do my checking in here    
+ checkLoanApplications1();
+try{
+sleep(5000);
+}
+catch(InterruptedException ex){
+
+}
+}
+}  
+            
+        };
+        checkLoan.start();
+    }
     
 public  void getTime(){
-    
+
 Thread clock=new Thread(){
 public void run(){
+    
     String x;
     String z;
 for(;;){
 Calendar cal=new GregorianCalendar();
-        int month=cal.get(Calendar.MONTH);
-        if (month+1==1){
-            z="Jan";
+        int month=cal.get(Calendar.MONTH)+1;
+        switch (month) {
+            case 1:
+                z="Jan";
+                break;
+            case 2:
+                z="Feb";
+                break;
+            case 3:
+                z="Mar";
+                break;
+            case 4:
+                z="Apr";
+                break;
+            case 5:
+                z="May";
+                break;
+            case 6:
+                z="June";
+                break;
+            case 7:
+                z="July";
+                break;
+            case 8:
+                z="Aug";
+                break;
+            case 9:
+                z="Sept";
+                break;
+            case 10:
+                z="Oct";
+                break;
+            case 11:
+                z="Nov";
+                break;
+            default:
+                z="Dec";
+                break;
         }
-        else if(month+1==2){
-        z="Feb";
-}
-        else if(month+1==3){
-        z="Mar";
-}
-        else if(month+1==4){
-        z="Apr";
-}
-        else if(month+1==5){
-        z="May";
-}
-        else if(month+1==6){
-        z="June";
-}
-        else if(month+1==7){
-        z="July";
-}
-        else if(month+1==8){
-        z="Aug";
-}
-        else if(month+1==9){
-        z="Sept";
-}
-        else if(month+1==10){
-        z="Oct";
-}
-        else if(month+1==11){
-        z="Nov";
-}
-        else {
-        z="Dec";
-}
         
         int year=cal.get(Calendar.YEAR);
         int day=cal.get(Calendar.DAY_OF_MONTH);
@@ -1147,7 +1852,7 @@ Calendar cal=new GregorianCalendar();
            // x="AM";
        }
         int hour=cal.get(Calendar.HOUR);
-        checkLoanApplications1();
+     //   checkLoanApplications1();//i did this in another thread to change the time interval 
         txttymer.setFont(new java.awt.Font("Tahoma", 1, 16));
        
         Border pb=BorderFactory.createEmptyBorder(0, 10, 30, 10);
@@ -1159,9 +1864,11 @@ Calendar cal=new GregorianCalendar();
             a=0;
         }
          if(ch==1){
+             
           checkTodays();
+          timerForLoanApplication();
           processGhash(hash);
-
+           
           ch=0;
        }
 try{
@@ -1185,18 +1892,19 @@ clock.start();
       //  this.txttymer.setFont(new java.awt.Font("Tahoma", 1, 11));
  //txttymer.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
  
- MarqueePanel mp= new MarqueePanel(s, 100);
+ MarqueePanel mp= new MarqueePanel(s, 200);
 public void b(String h){
     
-    mp= new MarqueePanel(h, 100);
+    mp= new MarqueePanel(h, 250);
     
      
       // MarqueePanel mp = new MarqueePanel(s, 100);
-      jToolBar1. remove(mp);
-     jToolBar1. add(mp);
+        jToolBar1. remove(mp);
+        jToolBar1. add(mp);
         mp.start();
 }
  private  void checkLoanApplications1(){
+     //out.println("checking");
       String  s="i";
      String mesoLoan= "";//checkLoanRepayments1();
              //  Calendar  c= Calendar.getInstance();
@@ -1261,60 +1969,61 @@ public void b(String h){
       b(mesoYote);
       }
     }
-     public  String checkLoanRepayments1(){
-       String meso="";
-         HashMap<String,String>todays=new HashMap<String,String>();
-           Calendar  c= Calendar.getInstance();
-         Date today=addOne(c.getTime(),-1);
-         
-         java.util.Date d=(today);
-  //Days d=Days.daysBeetween();
-         java.sql.Date DATE=new java.sql.Date(d.getTime());
-      try {
-          Methods n = new Methods();
-          String nl="np";
-          Connection con =n. getConnection();
-          
-          Statement st = con.createStatement();
-          String searchQuery = "SELECT * FROM `loans`WHERE targetdate<'" + DATE + "'AND nxp='"+nl+"' ";
-          ResultSet rs = st.executeQuery(searchQuery);
-          while (rs.next())
-          {   String maxid=rs.getString("autoid");
-              String inNo=rs.getString("installmentsno");
-             String id= rs.getString("id");
-             String loanType= rs.getString("loantype");
-             
-              checkIfThereIsNext(maxid,id,inNo,loanType);
-              todays.put(rs.getString("id"), rs.getString("installmentamount"));
-            
-          }
-          st.close();
-          rs.close();
-          con.close();
-          
-          if(todays.size()>0){
-              
-              meso=""+todays.size()+ "  LOANS DEFAULTED";
-              
-              
-//        int dialogButton=
-//        
-//        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
-//        if(dialogButton==JOptionPane.YES_OPTION){
+//     public  String checkLoanRepayments1(){
+//       String meso="";
+//         HashMap<String,String>todays=new HashMap<String,String>();
+//           Calendar  c= Calendar.getInstance();
+//         Date today=addOne(c.getTime(),-1);
+//         
+//         java.util.Date d=(today);
+//  //Days d=Days.daysBeetween();
+//         java.sql.Date DATE=new java.sql.Date(d.getTime());
+//      try {
+//          Methods n = new Methods();
+//          String nl="np";
+//          Connection con =n. getConnection();
+//          
+//          Statement st = con.createStatement();
+//          String searchQuery = "SELECT * FROM `loans`WHERE targetdate<'" + DATE + "'AND nxp='"+nl+"' ";
+//          ResultSet rs = st.executeQuery(searchQuery);
+//          while (rs.next())
+//          {   String maxid=rs.getString("autoid");
+//              String inNo=rs.getString("installmentsno");
+//             String id= rs.getString("id");
+//             String loanType= rs.getString("loantype");
+//             String loanId= rs.getString("loanid");
+//             
+//              checkIfThereIsNext(maxid,id,inNo,loanType,loanId);
+//              todays.put(rs.getString("id"), rs.getString("installmentamount"));
 //            
-//                    Defaulters kd=new Defaulters();
-//         //a.typeoftransaction="withdrawal";
-//                     kd.setVisible(true);
-//        }
-          //JOptionPane.showMessageDialog(null, todays.size()+ "  LOANS DEFAULTED ");
-          }
-          //checkLoanRepayments();
-          
-      } catch (SQLException ex) {
-          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      return meso;
-    }
+//          }
+//          st.close();
+//          rs.close();
+//          con.close();
+//          
+//          if(todays.size()>0){
+//              
+//              meso=""+todays.size()+ "  LOANS DEFAULTED";
+//              
+//              
+////        int dialogButton=
+////        
+////        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
+////        if(dialogButton==JOptionPane.YES_OPTION){
+////            
+////                    Defaulters kd=new Defaulters();
+////         //a.typeoftransaction="withdrawal";
+////                     kd.setVisible(true);
+////        }
+//          //JOptionPane.showMessageDialog(null, todays.size()+ "  LOANS DEFAULTED ");
+//          }
+//          //checkLoanRepayments();
+//          
+//      } catch (SQLException ex) {
+//          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+//      }
+//      return meso;
+//    }
 //set the windows enabled ,called in the method getTime at 1 sec interval if int a <1;
   public void setEnabled(){
       this.setEnabled(true);
@@ -1353,7 +2062,7 @@ public void b(String h){
     }
      public void openLoanProcessing(){
         this.setEnabled(false);
-        ProcessLoan a=new ProcessLoan();
+        IProcessLoan a=new IProcessLoan();
          //a.typeoftransaction="withdrawal";
         a.setVisible(true);
     }
@@ -1411,13 +2120,13 @@ b.setVisible(true);
 
     private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
      
-        loanpayment a=new loanpayment();
+        Iloanpayment a=new Iloanpayment();
         a.setVisible(true);
         
     }//GEN-LAST:event_jMenu6ActionPerformed
 
     private void jMLoanPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanPaymentActionPerformed
-        loanpayment a=new loanpayment();
+        Iloanpayment a=new Iloanpayment();
         a.setVisible(true);
        
     }//GEN-LAST:event_jMLoanPaymentActionPerformed
@@ -1481,7 +2190,7 @@ b.setVisible(true);
 
     private void jPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPayActionPerformed
 System.out.println("jj");
-        loanpayment a=new loanpayment();
+        Iloanpayment a=new Iloanpayment();
         a.setVisible(true);
     }//GEN-LAST:event_jPayActionPerformed
 
@@ -1494,7 +2203,7 @@ System.out.println("jj");
     }//GEN-LAST:event_jTransactionsActionPerformed
 
     private void jDefaultersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDefaultersActionPerformed
-          Defaulters d=new Defaulters();
+          IDefaulters d=new IDefaulters();
         d.setVisible(true);
     }//GEN-LAST:event_jDefaultersActionPerformed
 
@@ -1518,7 +2227,7 @@ System.out.println("jj");
     }//GEN-LAST:event_jMLoanPayableTodayActionPerformed
 
     private void jMOrgAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMOrgAccountActionPerformed
-          OrgReport or=new OrgReport();
+        OrgReport or=new OrgReport();
        or.setVisible(true);
     }//GEN-LAST:event_jMOrgAccountActionPerformed
 
@@ -1570,9 +2279,20 @@ System.out.println("jj");
     }//GEN-LAST:event_jMLoanReportActionPerformed
 
     private void jMLoanDefaultersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLoanDefaultersActionPerformed
- Defaulters d=new Defaulters();
+ IDefaulters d=new IDefaulters();
         d.setVisible(true);        
     }//GEN-LAST:event_jMLoanDefaultersActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+       MainOrgAccount ma=new MainOrgAccount();
+       ma.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        Calc n=new Calc();
+       
+       
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 public static void ex(){
         Calendar today = Calendar.getInstance();
 Calendar expires = Calendar.getInstance();
@@ -1663,6 +2383,7 @@ if(today.after(expires)) {
     private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu13;
     private javax.swing.JMenu jMenu15;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
@@ -1671,6 +2392,8 @@ if(today.after(expires)) {
     private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JMenu jMo;
@@ -1766,6 +2489,7 @@ if(today.after(expires)) {
             }
             else if(Ghash.charAt(a)=='U'){
              jMOrgAccount.setEnabled(true);
+             jMenuItem1.setEnabled(true);
             }
             else if(Ghash.charAt(a)=='V'){
              jMAddUsers.setEnabled(true);
@@ -1814,6 +2538,7 @@ if(today.after(expires)) {
                    jMAddUsers.setEnabled(false);
                      jMSystemUserPass.setEnabled(false);
                       jMPrefrences.setEnabled(false);
+                      jMenuItem1.setEnabled(false);
     }
 }
 class MarqueePanel extends JPanel implements ActionListener {

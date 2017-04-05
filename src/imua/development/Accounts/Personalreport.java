@@ -45,6 +45,7 @@ import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -359,7 +360,7 @@ String imgurl;
     String orcontact;
     public void printD(){
         Calendar  c= Calendar.getInstance();
-       Date today=c.getTime();
+        Date today=c.getTime();
          
          java.util.Date d=(today);
   //Days d=Days.daysBeetween();
@@ -489,19 +490,22 @@ String imgurl;
         Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
         PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
         PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
-         
+        //  String []list={ "Cash", "Mpesa", "Cheque"};
+            JComboBox jcb=new JComboBox(services);
+            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
+           int mode=jcb.getSelectedIndex();
         // this step is necessary because I have several printers configured
         PrintService myPrinter = null;
         for (int i = 0; i < services.length; i++){
           //  System.out.println("service found: "+svcName);
             String svcName = services[i].toString();           
-            if (svcName.contains("printer closest to me")){
+            if (svcName.contains("HP")){
                 myPrinter = services[i];
                 System.out.println("my printer found: "+svcName);
                 break;
             }
         }
-         
+         myPrinter=services[mode];
         if (myPrinter != null) {            
             DocPrintJob job = myPrinter.createPrintJob();
             try {

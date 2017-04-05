@@ -9,6 +9,7 @@ import imua.development.*;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Toolkit;
+import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Kamau
+ * @author Kogi
  */
 public class loanpayment extends javax.swing.JFrame {
   private String typeOfAccount=null;
@@ -131,7 +132,7 @@ public class loanpayment extends javax.swing.JFrame {
             } 
             else if (rs.next()) 
             {
-               JOptionPane.showMessageDialog(null,"rs ");
+              // JOptionPane.showMessageDialog(null,"rs ");
                 balance = rs.getString(1);
             } 
             else 
@@ -224,9 +225,17 @@ public class loanpayment extends javax.swing.JFrame {
         txtinstallment = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jComboBoxMode = new javax.swing.JComboBox<>();
+        txtBBF = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(200, 70));
+
+        jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jPanel1KeyReleased(evt);
+            }
+        });
 
         jLabel3.setText("ID No.");
 
@@ -297,6 +306,10 @@ public class loanpayment extends javax.swing.JFrame {
 
         jComboBoxMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mode", "Cash", "Mpesa", "Cheque" }));
 
+        txtBBF.setEditable(false);
+
+        jLabel1.setText("BBF");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -328,26 +341,27 @@ public class loanpayment extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtSirname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
                             .addComponent(txtOtherName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtBBF)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jComboBoxMode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtinstallment)
-                        .addComponent(txtLoanBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                        .addComponent(txtInstallmentsRemaining, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                        .addComponent(txtPaying, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                        .addComponent(txtloan, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                        .addComponent(txtBalance)))
-                .addContainerGap(122, Short.MAX_VALUE))
+                    .addComponent(jComboBoxMode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtinstallment)
+                    .addComponent(txtLoanBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addComponent(txtInstallmentsRemaining, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addComponent(txtPaying, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addComponent(txtloan, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addComponent(txtBalance))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -400,26 +414,25 @@ public class loanpayment extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtMobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(txtPaying, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtTown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addComponent(txtBBF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtinstallment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(txtPaying, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCounty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel13))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtInstallmentsRemaining, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
@@ -462,14 +475,16 @@ public class loanpayment extends javax.swing.JFrame {
     int isThere=   maxid("loanid",txtID.getText()+loantypeselected);
     if(isThere!=0){
        fetchUserDetails(txtID.getText(), "id");
-      getAllFromLoan("autoid",isThere);
+       getAllFromLoan("autoid",isThere);
     }
     else{
         JOptionPane.showMessageDialog(null, txtID.getText()+"   has no loan");
     }
        
     } 
-       
+    // if(checkLoanRepayments()==1){
+    //     clear();
+    // } 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
@@ -489,10 +504,10 @@ public class loanpayment extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDActionPerformed
 
     private void txtPayingKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPayingKeyReleased
-        Double loanBalance=(Double.valueOf(loanbalance)-Double.valueOf(txtPaying.getText()));
+        Double loanBalance=(Double.valueOf(loanbalance)-(Double.valueOf(txtPaying.getText())));
                         txtLoanBalance.setText(loanBalance.toString());
         Double installmentsRemaining= (Double.valueOf(txtLoanBalance.getText())/Double.valueOf(installmentamount));
-               txtInstallmentsRemaining.setText(String.valueOf(installmentsRemaining));
+                        txtInstallmentsRemaining.setText(String.valueOf(installmentsRemaining));
     }//GEN-LAST:event_txtPayingKeyReleased
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -510,6 +525,10 @@ String loantypeselected;
             loantypeselected=        jComboBox1.getSelectedItem().toString();
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jPanel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel1KeyReleased
 String loantype;
 String applicable;
 String installmentamount;
@@ -525,7 +544,28 @@ String applicationfee;
 String todaypay;
 String givenOn;
 String paidon;
- 
+String nextP;
+double alreadyPayed=0.0;
+ public String nxp(String loanid,String inst){
+    String id=null;
+    Methods m = new Methods();Connection con = m.getConnection();
+    try{
+        String getMaxId="SELECT nxp FROM `loans` WHERE installmentsno = '" + inst + "' AND loanid='"+loanid+"' ";
+         Statement st = con.createStatement();
+           ResultSet rs = st.executeQuery(getMaxId);
+           if(rs.next()){
+               id=rs.getString("nxp");
+              // JOptionPane.showMessageDialog(this,id );
+           }
+      st.close();
+      rs.close();
+      con.close();
+    }
+    catch(Exception nw){
+        nw.printStackTrace();
+    }
+    return id;
+}
 public int maxid(String where,String value){
     int id=0;
     Methods m = new Methods();Connection con = m.getConnection();
@@ -536,18 +576,27 @@ public int maxid(String where,String value){
            if(rs.next()){
                id=rs.getInt(1);
            }
+      st.close();
+      rs.close();
+      con.close();
     }
+ 
     catch(Exception nw){
         nw.printStackTrace();
     }
     return id;
 }
 String no;
-public void update(){
+public void update(String hw,Double value){
     Methods m = new Methods();
-    String paid="paid";
+   // if(){
+        
+   // }
+    //String notFullyPaid="nfp";
+   // String paidMore="pm";
+   // String paid="paid";
     
-    String query = "UPDATE `loans` SET `nxp`='" + paid + "'WHERE loanid= '" + txtID.getText()+loantypeselected+ "' AND installmentsno='" + no + "'";
+    String query = "UPDATE `loans` SET `nxp`='" + hw + "'WHERE loanid= '" + txtID.getText()+loantypeselected+ "' AND installmentsno='" + no + "'";
       
       m.executeSQlQueryN(query);
 }
@@ -575,12 +624,30 @@ defaultacc=rs.getString("defaultacc");
 todaypay=rs.getString("todaypay");
  givenOn=rs.getString("givenOn");
 paidon=rs.getString("paidon");
+nextP=rs.getString("nxp");
                 no=installmentsno;
                txtloan.setText(loanAmount);
                txtBalance.setText(loanbalance);
-               txtinstallment.setText(installmentamount);
-              
                
+               txtinstallment.setText(installmentamount);
+                txtBBF.setText(String.valueOf(alreadyPayed));
+           int v=( Integer.valueOf(installmentsno))+1;
+          // JOptionPane.showMessageDialog(this,v +" \n"+txtID.getText()+loantypeselected);
+            nextP =  nxp(txtID.getText()+loantypeselected,String.valueOf(v));
+               if(nextP.equals("pm")){
+                   try{
+                       
+                     alreadyPayed=Double.valueOf(defaultacc);
+                     txtBBF.setText(String.valueOf(alreadyPayed));
+                     
+                   }
+                   catch(Exception nn){
+                       
+                     System.out.println(nn);
+                     
+                   }
+                       
+               }
                 
 //                autoid, 
 //                id, loantype, installmentamount,
@@ -588,7 +655,11 @@ paidon=rs.getString("paidon");
 //                targetdate, loanAmount, loanbalance, 
 //                defaultacc, applicationfee, todaypay,
 //                givenOn, paidon
+
             }
+      st.close();
+      rs.close();
+      con.close();
     }
     catch(Exception m){
         m.printStackTrace();
@@ -677,14 +748,26 @@ paidon=rs.getString("paidon");
            
         }
         String   date = DATE_FORMAT.format(tar);
-      
+        String  paidstatus="paid";
         
         if(a==1){
-            if(Double.valueOf(txtPaying.getText())<Double.valueOf(installmentamount)){
-              defaultamount=String.valueOf(Double.valueOf(txtPaying.getText())-Double.valueOf(installmentamount));
+            if((Double.valueOf(txtPaying.getText()) + alreadyPayed)< Double.valueOf(installmentamount)){
+                paidstatus="nfp";
+               defaultamount=String.valueOf(Double.valueOf(installmentamount)-((Double.valueOf(txtPaying.getText()))+alreadyPayed));
+                //defaultamount=String.valueOf(((Double.valueOf(txtPaying.getText()))+alreadyPayed)-Double.valueOf(installmentamount));
+             
+            }
+            if((Double.valueOf(txtPaying.getText()) + alreadyPayed)> Double.valueOf(installmentamount)){
+                defaultamount=String.valueOf(((Double.valueOf(txtPaying.getText()))+alreadyPayed)-Double.valueOf(installmentamount));
+                paidstatus="pm";
+            }
+             if((Double.valueOf(txtPaying.getText()) + alreadyPayed)== Double.valueOf(installmentamount)){
+                defaultamount=String.valueOf(((Double.valueOf(txtPaying.getText()))+alreadyPayed)-Double.valueOf(installmentamount));
+                paidstatus="paid";
             }
             if(txtLoanBalance.getText().equals("0.0")){
-                // date="LOAN INSTALLAMENTS PAID IN-FULL";
+                
+               // date="LOAN INSTALLAMENTS PAID IN-FULL";
             }
            String query = "INSERT INTO loans("
              + "`id`,"
@@ -703,6 +786,7 @@ paidon=rs.getString("paidon");
              + ",`defaultacc`"
              + ",`applicationfee`"
              + ",`todaypay`"
+             + ",`tp`"
              + ",`givenOn`"
              + ",`paidon`)"
              + " VALUES ("
@@ -723,6 +807,7 @@ paidon=rs.getString("paidon");
              + ",'"+defaultamount+"'"
              + ",'"+this.applicationfee+"'"
              + ",'" + this.txtPaying.getText() + "'"
+             + ",'" + paidstatus + "'"
              + ",'" + this.givenOn + "'"
            
              + ",now())";
@@ -731,11 +816,30 @@ paidon=rs.getString("paidon");
        
       // JOptionPane.showMessageDialog(null, "Balance is " +bal.toString());
        
-    if(  m.executeSQlQuery(query, "Processed\n NEXT TARGET DAY IS ON \n "+date +"  \n")==1) {// if its weekend issue +mess
-        update();
+    if(m.executeSQlQuery(query, "Processed\n NEXT TARGET DAY IS ON \n "+date +"  \n")==1) {
+// if its weekend issue +mess
+        
+          if((Double.valueOf(txtPaying.getText())+ alreadyPayed)<Double.valueOf(installmentamount)){//if paying less than installment
+            double less=Double.valueOf(installmentamount)-(Double.valueOf(txtPaying.getText())+alreadyPayed);
+            
+            update("nfp",less);
+            
+           // JOptionPane.showMessageDialog(this,(Double.valueOf(txtPaying.getText())+ alreadyPayed) );
+          }
+          else if((Double.valueOf(txtPaying.getText())+ alreadyPayed)>Double.valueOf(installmentamount)){//if paying more han installment
+              
+              double more=Double.valueOf(txtPaying.getText()+alreadyPayed)-Double.valueOf(installmentamount);
+              update("pm",more);
+          }
+          else{
+            // JOptionPane.showMessageDialog(this,(Double.valueOf(txtPaying.getText())+ alreadyPayed) );
+              Double equal=0.0;
+              update("paid",equal);
+          }
+      
         m.addToOrgAccount(Double.valueOf(txtPaying.getText()),"Loan Installments",jComboBoxMode.getSelectedItem().toString() );
         
-        if(txtLoanBalance.getText().equals("0.0")){
+        if(txtLoanBalance.getText().equals("0.0")||Double.valueOf(txtLoanBalance.getText())<0.0){
             checkWhetherHasOutStandingFines(txtID.getText(),(txtID.getText()+loantypeselected));
         }
         clear();
@@ -747,6 +851,7 @@ paidon=rs.getString("paidon");
         }
         
     }
+    //checks wh
     public int checkWhetherHasOutStandingFines(String id,String loanid){
          HashMap<String,String>defaults=new HashMap<String,String>();
       try {
@@ -759,11 +864,15 @@ paidon=rs.getString("paidon");
           
           Methods n = new Methods();
           String nl="null";
+          String paid="nfp";
           Connection con =n. getConnection();
           
           Statement st = con.createStatement();
-            String searchQuery = "SELECT * FROM `loans`WHERE loanid='" + loanid + "'AND todaypay='"+nl+"' ";
+          
+          String searchQuery = "SELECT * FROM `loans` WHERE (loanid='" + loanid + "'AND todaypay='"+nl+"') OR (loanid='" + loanid + "' AND nxp ='"+paid+"') ";
+            
         //  String searchQuery = "SELECT * FROM `loans`WHERE targetdate='" + DATE + "' ";
+        
           ResultSet rs = st.executeQuery(searchQuery);
           while (rs.next())
           {
@@ -774,10 +883,16 @@ paidon=rs.getString("paidon");
           st.close();
           rs.close();
           con.close();
-          if(defaults.isEmpty()){
+          //JOptionPane.showMessageDialog(this, defaults.size());
+          Logger.getLogger(loanpayment.class.getName()).log(Level.SEVERE, null, defaults.size());
+          if(defaults.size()<=1||defaults.isEmpty()){
               getToArchives("loanid",loanid);
           }
+          else{
+              JOptionPane.showMessageDialog(null, "Has a defaulted payment");
+          }
       } catch (SQLException ex) {
+          ex.printStackTrace();
           Logger.getLogger(loanpayment.class.getName()).log(Level.SEVERE, null, ex);
       }
         
@@ -789,6 +904,7 @@ paidon=rs.getString("paidon");
     }
     String id;
     String loanid;
+    String lnxp;
     public void getToArchives(String where,String value){
          int results=0; 
         try {
@@ -816,6 +932,7 @@ applicationfee=rs.getString("applicationfee");
 todaypay=rs.getString("todaypay");
  givenOn=rs.getString("givenOn");
 paidon=rs.getString("paidon");
+lnxp=rs.getString("nxp");
                  
         results=results+moveToArchives();
               
@@ -834,10 +951,51 @@ paidon=rs.getString("paidon");
           con.close();
           
           if(results>0){
-               String query = "DELETE FROM `loans`  WHERE `loanid` = '" +value+"'";
+           DefaultersPrePaid dp=new DefaultersPrePaid();   
+           if(dp.print(id,value,loantype)==1){
+               
+              
+                String query = "DELETE FROM `loans`  WHERE `loanid` = '" +value+"'";
                 m.executeSQlQueryN(query);
                 deleteGuranters();
-             JOptionPane.showMessageDialog(null, "Succesfully moved to archive"); 
+           }
+           else{
+               JOptionPane.showMessageDialog(null, value+" Loan error moving to archive"); 
+           }
+              
+//               Object []options={"PRINT REPORT","CONTINUE ANYWAY","CANCEL"};
+//           int btn= JOptionPane.showOptionDialog(null, "LOAN REPORT","CONFIRM",
+//                    JOptionPane.DEFAULT_OPTION,
+//                    JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+//        switch (btn) {
+//            case 1:
+//           DefaultersPrePaid dp=new DefaultersPrePaid();   
+//           if(dp.print(id,value,loantype)==1){
+//               
+//               
+//               String query = "DELETE FROM `loans`  WHERE `loanid` = '" +value+"'";
+//                m.executeSQlQueryN(query);
+//                deleteGuranters();
+//            
+//           }
+//           else{
+//                JOptionPane.showMessageDialog(null, value+" Loan error moving to archive"); 
+//           }
+//            
+//                break;
+//                
+//            case 2:
+//                String query = "DELETE FROM `loans`  WHERE `loanid` = '" +value+"'";
+//                m.executeSQlQueryN(query);
+//                deleteGuranters();
+//                break;
+//                
+//            case 3:
+//                String queryq = "DELETE FROM `loans`  WHERE `loanid` = '" +value+"'";
+//                m.executeSQlQueryN(queryq);
+//                deleteGuranters();
+//        }
+            
              
           }
           else{
@@ -864,11 +1022,12 @@ paidon=rs.getString("paidon");
              + ",`frequencyperperiod`"
              + ",`targetdate`"
              + ",`loanAmount`"
-              + ",`loanRequested`"
+             + ",`loanRequested`"
              + ",`loanbalance`"
              + ",`defaultacc`"
              + ",`applicationfee`"
              + ",`todaypay`"
+             + ",`nxp`"
              + ",`givenOn`"
              + ",`paidon`)"
              + " VALUES ("
@@ -881,7 +1040,7 @@ paidon=rs.getString("paidon");
              + ",'" + this.periodtype + "'"
              + ",'" + frequencyperperiod+ "'"
                    
-            + ",'" + targetdate + "'"
+             + ",'" + targetdate + "'"
              + ",'"+loanAmount+"'"
              + ",'"+loanRequested+"'"
                 
@@ -889,6 +1048,7 @@ paidon=rs.getString("paidon");
              + ",'"+defaultacc+"'"
              + ",'"+this.applicationfee+"'"
              + ",'" + this.todaypay + "'"
+                 + ",'" + this.lnxp + "'"
              + ",'" + this.givenOn + "'"
            
              + ",'" + this.paidon + "')";
@@ -942,6 +1102,7 @@ paidon=rs.getString("paidon");
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBoxMode;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -957,6 +1118,7 @@ paidon=rs.getString("paidon");
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtBBF;
     private javax.swing.JTextField txtBalance;
     private javax.swing.JTextField txtCounty;
     private javax.swing.JTextField txtID;
@@ -985,6 +1147,7 @@ txtBalance.setText("");
                txtOtherName.setText("");
                txtSirname.setText("");
                txtTown.setText("");
+               txtBBF.setText("");
                jComboBox1.setSelectedIndex(0);
 }
 public void deleteGuranters(){
@@ -996,5 +1159,103 @@ public void deleteGuranters(){
     
     
 }
+
+
+
+
+
+ public  int checkLoanRepayments(){
+       int lr=0;
+         HashMap<String,String>todays=new HashMap<String,String>();
+           Calendar  c= Calendar.getInstance();
+         Date today=addOne(c.getTime(),-1);
+         
+         java.util.Date d=(today);
+  //Days d=Days.daysBeetween();
+         java.sql.Date DATE=new java.sql.Date(d.getTime());
+      try {
+          Methods n = new Methods();
+          String nl="np";
+          String lp="nfp";
+          Connection con =n. getConnection();
+          
+          Statement st = con.createStatement();
+          String searchQuery = "SELECT * FROM `loans`WHERE (targetdate<'" + DATE + "'AND nxp='"+nl+"') OR (targetdate<'" + DATE + "'AND nxp='"+lp+"')";
+          ResultSet rs = st.executeQuery(searchQuery);
+          while (rs.next())
+          {  // String maxid=rs.getString("autoid");
+             // String inNo=rs.getString("installmentsno");
+             //String id= rs.getString("id");
+             //String loanId= rs.getString("loanid");
+             //String loanType= rs.getString("loantype");
+            // String instAmount= rs.getString("installmentamount");
+             
+             //int pd= checkIfThereIsNext(maxid,id,inNo,loanType,loanId,instAmount);
+             // if(pd==0||pd==2){
+              todays.put(rs.getString("id"), rs.getString("installmentamount"));
+             // }
+            
+          }
+          st.close();
+          rs.close();
+          con.close();
+          
+          if(todays.size()>0){
+        int dialogButton=
+        
+        JOptionPane.showConfirmDialog(null,todays.size()+ "  LOANS DEFAULTED \n Select YES to check them out ");
+        //JOptionPane
+              switch (dialogButton) {
+                  case JOptionPane.YES_OPTION:
+                      lr=0;
+                      Defaulters kd=new Defaulters();
+                      //a.typeoftransaction="withdrawal";
+                      kd.setVisible(true);
+                      this.dispose();
+                      break;
+              //JOptionPane.showMessageDialog(null, todays.size()+ "  LOANS DEFAULTED ");
+              //out.println("no");
+                  case JOptionPane.NO_OPTION:
+                      lr=1;
+                      break;
+              //  out.println("cancel");
+                  case JOptionPane.CANCEL_OPTION:
+                      lr=1;
+                      break;
+              //  out.println("close");
+                  case JOptionPane.CLOSED_OPTION:
+                      lr=1;
+                      break;
+                  default:
+                      break;
+              }
+          }
+          
+          //checkLoanRepayments();
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return lr;
+    }
+     public  Date addOne(Date date,int hw){
+      Calendar  c= Calendar.getInstance();
+      c.setTime(date);
+      c.add(Calendar.DATE, hw);
+   //   c.add(Calendar.WEEK_OF_MONTH, hw);
+      
+      return c.getTime();
+  }
+
+
+
+
+
+
+
+
+//setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+
+
 
 }

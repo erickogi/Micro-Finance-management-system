@@ -35,6 +35,7 @@ Methods m=new Methods();
         setTilteImage();
         refresh();
         getData();
+        jPanel2.setVisible(false);
       
         
     }

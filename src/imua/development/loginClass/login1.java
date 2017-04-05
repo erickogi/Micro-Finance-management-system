@@ -40,7 +40,7 @@ public class login1 extends javax.swing.JFrame {
       btnDb.setOpaque(false);
       btnDb.setContentAreaFilled(false);
       btnDb.setBorderPainted(false);
-       
+      //testBr.setMnemonic(KeyEvent.VK_T);
          setTilteImage();
          
  
@@ -269,6 +269,7 @@ pst.close();
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(105, 105, 105)
                         .addComponent(btnDb)
                         .addGap(18, 18, 18)
                         .addComponent(btnEnter))
@@ -302,7 +303,7 @@ pst.close();
                     .addComponent(btnEnter)
                     .addComponent(jCheckBox1)
                     .addComponent(btnDb))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

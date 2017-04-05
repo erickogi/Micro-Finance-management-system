@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,25 +85,57 @@ public class loantypes extends javax.swing.JFrame {
     }
     return usersList;
   }
-  
+  public String getAbbr(String name,String id){
+      String abbr=name;
+       try
+    {
+        Methods m=new Methods();
+        Connection con = m.getConnection();
+     // Connection con = getConnection();
+      Statement st = con.createStatement();
+     // String searchQuery = "SELECT * FROM `accounttypes`";
+      String searchQuery = "SELECT sname FROM `accounttypes` WHERE `id` = '" + id + "'";
+      ResultSet rs = st.executeQuery(searchQuery);
+      if (rs.next())
+      {
+        abbr=rs.getString(1);
+      }
+      else{
+           
+      }
+      st.close();
+      rs.close();
+      con.close();
+    }
+    catch (Exception ex)
+    {
+        ex.printStackTrace();
+      System.out.println(ex.getMessage());
+    }
+   
+      return abbr;
+  }
   public void findUsers()
   {
     ArrayList<loantypesholder> users = ListUsers();
     DefaultTableModel model = new DefaultTableModel();
     
-    model.setColumnIdentifiers(new Object[] { "ID", "Name","Rate","In","Aplication","Penalty","Balance" });
-    Object[] row = new Object[7];
+    model.setColumnIdentifiers(new Object[] { "ID", "Name","Abbr","Rate","In","Aplication","Penalty","Balance" });
+    Object[] row = new Object[8];
     for (int i = 0; i < users.size(); i++)
     {
       row[0] = ((loantypesholder)users.get(i)).getId();
       row[1] = ((loantypesholder)users.get(i)).getName();
-        row[2] = ((loantypesholder) users.get(i)).getRate();
+      
+       row[2] = getAbbr(((loantypesholder)users.get(i)).getName(),((loantypesholder)users.get(i)).getId());
+        row[3] = ((loantypesholder) users.get(i)).getRate();
         String rateper = ((loantypesholder) users.get(i)).getRatePer();
         String ratetime = ((loantypesholder) users.get(i)).getRateTime();
-        row[3] = ratetime+" "+rateper;
-        row[4] = ((loantypesholder) users.get(i)).getAppFee();
-        row[5] = ((loantypesholder) users.get(i)).getPenalty();
-        row[6] = ((loantypesholder) users.get(i)).getBalance();
+        row[4] = ratetime+" "+rateper;
+        row[5] = ((loantypesholder) users.get(i)).getAppFee();
+        double as=Double.valueOf(((loantypesholder) users.get(i)).getPenalty())*7;
+        row[6] = as;
+        row[7] = ((loantypesholder) users.get(i)).getBalance();
        
       
      
@@ -121,7 +154,7 @@ public class loantypes extends javax.swing.JFrame {
       if (st.executeUpdate(query) == 1)
       {
         DefaultTableModel model = (DefaultTableModel)this.table.getModel();
-        
+ 
         model.setRowCount(0);
         clear();
         findUsers();
@@ -177,6 +210,8 @@ public class loantypes extends javax.swing.JFrame {
         txtIntrestPer = new javax.swing.JLabel();
         jRadioButtonA = new javax.swing.JRadioButton();
         jRadioButtonN = new javax.swing.JRadioButton();
+        txtAbbreviation = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
 
         jTextField14.setText("jTextField14");
 
@@ -274,18 +309,14 @@ public class loantypes extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setText("Abbr");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jButton3))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -297,42 +328,65 @@ public class loantypes extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
                                     .addComponent(tpenalty, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
                                     .addComponent(trate, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
                                     .addComponent(jLabel4)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2)
-                            .addComponent(tappfee)
-                            .addComponent(tname)
-                            .addComponent(tbalance)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(txtIntrestPer))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(jRadioButtonA))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton2)
+                                    .addComponent(tappfee, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                    .addComponent(tbalance)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel7)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(txtAbbreviation)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(tname))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(85, 85, 85)
+                                    .addComponent(jLabel1))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(57, 57, 57)
+                                    .addComponent(jButton3))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(60, 60, 60)
+                                    .addComponent(txtIntrestPer))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel6)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jRadioButtonA)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jRadioButtonN, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel9)
-                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jRadioButtonN, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))))
+                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -342,49 +396,53 @@ public class loantypes extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAbbreviation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(trate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tappfee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(tappfee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(trate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tpenalty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tbalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButtonA)
                     .addComponent(jRadioButtonN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtIntrestPer, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(txtIntrestPer, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(175, 175, 175)
+                .addGap(96, 96, 96)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addGap(26, 26, 26)
                 .addComponent(jButton3)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
 
@@ -399,17 +457,17 @@ public class loantypes extends javax.swing.JFrame {
         this.tid.setText(model.getValueAt(i, 0).toString());
 
         this.tname.setText(model.getValueAt(i, 1).toString());
-      //  this.tname.setText(model.getValueAt(i, 2).toString());
-        this.trate.setText(model.getValueAt(i, 2).toString());
-        this.tappfee.setText(model.getValueAt(i, 4).toString());
-        if(model.getValueAt(i, 3).toString().equals("0 0")){
+       this.txtAbbreviation.setText(model.getValueAt(i, 2).toString());
+        this.trate.setText(model.getValueAt(i, 3).toString());
+        this.tappfee.setText(model.getValueAt(i, 5).toString());
+        if(model.getValueAt(i, 4).toString().equals("0 0")){
             this.txtIntrestPer.setText("NOT APPLICABLE");
         }else{
-           this.txtIntrestPer.setText(model.getValueAt(i, 3).toString()); 
+           this.txtIntrestPer.setText(model.getValueAt(i, 4).toString()); 
         }
         
-        this.tpenalty.setText(model.getValueAt(i, 5).toString());
-        this.tbalance.setText(model.getValueAt(i, 6).toString());
+        this.tpenalty.setText(model.getValueAt(i, 6).toString());
+        this.tbalance.setText(model.getValueAt(i, 7).toString());
         
       
     }//GEN-LAST:event_tableMouseClicked
@@ -476,6 +534,11 @@ private void  updateIntrestPerTxt(){
         PreparedStatement pst = con.prepareStatement(str);
         
         pst.setString(1, stru);
+        Double getpenalty=Double.valueOf(tpenalty.getText());
+        // DecimalFormat df=new DecimalFormat("#.0");
+        
+        String processpenalty=String.valueOf(getpenalty/7);
+        
         
         ResultSet rs = pst.executeQuery();
         if (rs.next())
@@ -484,8 +547,8 @@ private void  updateIntrestPerTxt(){
         }
         else
         {
-String query = "INSERT INTO `accounttypes`(`id`, `name`, `rate`,`appfee`,`penalt`,`balance`,`rateTime`,`ratePer`,`applicable`)"
- + " VALUES ('" + this.tid.getText() + "','" + this.tname.getText() + "','" + this.trate.getText() + "','" + this.tappfee.getText() + "','" + this.tpenalty.getText() + "'"
+String query = "INSERT INTO `accounttypes`(`id`, `name`,`sname`, `rate`,`appfee`,`penalt`,`balance`,`rateTime`,`ratePer`,`applicable`)"
+ + " VALUES ('" + this.tid.getText() + "','" + this.tname.getText() + "','" + this.txtAbbreviation.getText() + "','" + this.trate.getText() + "','" + this.tappfee.getText() + "','" + processpenalty + "'"
         + ",'" + this.tbalance.getText() + "','"+rateTime+"','"+ratePer+"','"+applicableStatus+"')";
           
           executeSQlQuery(query, "Inserted");
@@ -500,8 +563,13 @@ String query = "INSERT INTO `accounttypes`(`id`, `name`, `rate`,`appfee`,`penalt
       }
 }
 private void update(){
-    String query = "UPDATE `accounttypes` SET `name`='" + this.tname.getText() + "',`rate`= '" + this.trate.getText() + "'"
-            + ",`appfee`= '" + this.tappfee.getText() + "',`penalt`= '" + this.tpenalty.getText() + "',`balance`= '" + this.tbalance.getText() + "',"
+   Double getpenalty=Double.valueOf(tpenalty.getText());
+   DecimalFormat df=new DecimalFormat("#.0");
+  // String processpenalty=df.format(getpenalty/7);
+  String processpenalty=String.valueOf(getpenalty/7);
+        //long processpenalty=Math.round(getpenalty/7);
+    String query = "UPDATE `accounttypes` SET `name`='" + this.tname.getText() + "',`sname`='" + this.txtAbbreviation.getText() + "',`rate`= '" + this.trate.getText() + "'"
+            + ",`appfee`= '" + this.tappfee.getText() + "',`penalt`= '" + processpenalty + "',`balance`= '" + this.tbalance.getText() + "',"
             + "`ratePer`= '"+ratePer+"',`rateTime`='"+rateTime+"',"
             + "`applicable`='"+applicableStatus+"'WHERE id= '" + this.tid.getText()+"'";
       
@@ -526,8 +594,8 @@ public void check(int a){
             tappfee.getText().isEmpty()||
             applicableStatus.isEmpty()||
             tpenalty.getText().isEmpty()||
-            tbalance.getText().isEmpty()
-            
+            tbalance.getText().isEmpty()||
+            txtAbbreviation.getText().isEmpty()
             
             
             
@@ -566,6 +634,7 @@ public void clear(){
     rateTime="0";
     txtIntrestPer.setText("");
     btnGroup.clearSelection();
+    txtAbbreviation.setText("");
     
    
 }
@@ -611,6 +680,7 @@ public void clear(){
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -631,6 +701,7 @@ public void clear(){
     private javax.swing.JTextField tname;
     private javax.swing.JTextField tpenalty;
     private javax.swing.JTextField trate;
+    private javax.swing.JTextField txtAbbreviation;
     private javax.swing.JLabel txtIntrestPer;
     // End of variables declaration//GEN-END:variables
 

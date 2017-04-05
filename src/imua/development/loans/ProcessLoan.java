@@ -984,6 +984,8 @@ deleteApplication(lblPersonId.getText());
         }
         else if(bal<0){
              JOptionPane.showMessageDialog(null, "Balance is less by" +bal.toString());
+              clear();
+              refresh();
         }
       
         else if(bal==0){

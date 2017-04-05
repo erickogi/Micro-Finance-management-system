@@ -129,9 +129,83 @@ public void addToOrgAccount(Double amount,String Description,String mode){
             + ",now())";
     
     executeSQlQueryN(query);
+    switch (mode) {
+             case "Cash":
+                 
+              Double available=Double.valueOf(getDetails("cashinoffice"));
+                 
+              Double val=available+amount;
+                  // JOptionPane.showMessageDialog(null, val);
+               String c = "UPDATE `account` SET `cashinoffice`='"+val+"'";
+               
+              //if( 
+                      executeSQlQueryN(c);
+                      //==1){
+                  
+                //  JOptionPane.showMessageDialog(null, c);
+                  
+             // }
+               
+                 break;
+             case "Cheque":
+              Double available1=Double.valueOf(getDetails("bank"));
+                 
+              Double val1=available1+amount;
+                 
+              String c1 = "UPDATE `account` SET `bank`='"+val1+"'";
+              executeSQlQueryN(c1);
+                 break;
+             case "Mpesa":
+                 //JOptionPane.showMessageDialog(null, "wk");
+              Double available2=Double.valueOf(getDetails("mpesa"));
+                 
+              Double val2=available2+amount;
+                 // JOptionPane.showMessageDialog(null, val2);
+              String c2 = "UPDATE `account` SET `mpesa`='"+val2+"'";
+              executeSQlQueryN(c2);
+              // JOptionPane.showMessageDialog(null, c2);
+                 
+                 break;
+         }
     
     
-    
+}
+public String  getDetails(String value){
+    String val="0";
+    try {
+            
+            //Methods m = new Methods();
+            Connection con = getConnection();
+            Statement st = con.createStatement();
+            String one="1";
+             String searchQuery = "SELECT * FROM `account` WHERE autoid='"+one+"'";
+          
+            ResultSet rs = st.executeQuery(searchQuery);
+            while (rs.next()) {
+               if("cashonoffice".equals(value)){
+                val=rs.getString("cashinoffice");
+               }
+               else if("mpesa".equals(value)){
+                   val=rs.getString("mpesa");
+               }
+               else{
+                   val=rs.getString("bank");
+               }
+          //   JOptionPane.showMessageDialog(null, val);
+                
+                
+                
+            }
+            st.close();
+            rs.close();
+            con.close();
+            
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(Methods.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return val;
 }
 public void RemoveFromOrgAccount(Double amount,String Description,String mode){
     String xro="0";
@@ -150,6 +224,36 @@ public void RemoveFromOrgAccount(Double amount,String Description,String mode){
             + ",now())";
     
     executeSQlQueryN(query);
+    
+        if(  null != mode)
+            switch (mode) {
+             case "Cash":
+                 
+              Double available=Double.valueOf(getDetails("cashinoffice"));
+                 
+              Double val=available-amount;
+                 
+               String c = "UPDATE `account` SET `cashinoffice`='"+val+"'";
+               executeSQlQueryN(query);
+                 break;
+             case "Cheque":
+              Double available1=Double.valueOf(getDetails("bank"));
+                 
+              Double val1=available1-amount;
+                 
+              String c1 = "UPDATE `account` SET `bank`='"+val1+"'";
+              executeSQlQueryN(c1);
+                 break;
+             case "Mpesa":
+              Double available2=Double.valueOf(getDetails("mpesa"));
+                 
+              Double val2=available2-amount;
+                 
+              String c2 = "UPDATE `account` SET `mpesa`='"+val2+"'";
+              executeSQlQueryN(c2);
+                 
+                 break;
+         }
     
     
     
@@ -456,9 +560,5 @@ public void RemoveFromOrgAccount(Double amount,String Description,String mode){
        }
     return col;
   }
-   
-     
-        
-        
-        
+         
 }

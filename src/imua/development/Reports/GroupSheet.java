@@ -5,20 +5,26 @@
  */
 package imua.development.Reports;
 
+import IDataHolders.ILoanDataHolder;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import imua.development.HeaderFooterPageEvent;
 import imua.development.LoanDataHolder;
 import imua.development.Methods;
+import imua.development.Personalreports;
 import imua.development.UserDataHolder;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -29,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import static java.lang.System.out;
 import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,6 +44,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+// import java.sql.Date; 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.Doc;
@@ -48,6 +56,7 @@ import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -240,29 +249,43 @@ private void refresh(){
   public void findUsers() 
   {
    ArrayList<UserDataHolder> users = ListUsers(jComboBoxGroup.getSelectedItem().toString());
-                
+            DefaultTableModel model = new DefaultTableModel();
+  //   String ID, Date ate, String Installmentamount, String LoanAmount,String autoid,String instno
+    model.setColumnIdentifiers(new Object[] {"ID", "FNAME","SAVINGS","TYPE","BALANCE","INSTALLMENT" });    
                 for (int a=0;a<users.size();a++) {
                     String uid=  ((UserDataHolder) users.get(a)).getId();
                     String nid=  ((UserDataHolder) users.get(a)).getFname();
-                    ArrayList<LoanDataHolder> Loanusers = ListLoanUsers(uid);
-    DefaultTableModel model = new DefaultTableModel();
-  //   String ID, Date ate, String Installmentamount, String LoanAmount,String autoid,String instno
-    model.setColumnIdentifiers(new Object[] { "FNAME","TYPE","BALANCE","INSTALLMENT" });
-    Object[] row = new Object[4];
-    for (int i = 0; i < Loanusers.size(); i++)
-    {
-         row[0] = nid;
-       // row[1] = ((LoanDataHolder) Loanusers.get(i)).getId();
-        row[1] = ((LoanDataHolder)Loanusers.get(i)).getLoanType();
-        row[2] = ((LoanDataHolder)Loanusers.get(i)).getLoanBalance();
-        row[3] = ((LoanDataHolder)Loanusers.get(i)).getInstallmentAmount();
+                     String nuid=  String.valueOf(  maxid("id",uid));
+                     ArrayList<Personalreports> LoanSavingsusers = ListSavingsUsers(nuid);
+                     
+                     String savings=((Personalreports) LoanSavingsusers .get(0)).getBalance();
+                    ArrayList<ILoanDataHolder> Loanusers = ListLoanUsers(uid);
+    out.println(Loanusers.size());
+    Object[] row = new Object[6];
+  // int i=0;
+   for (int i = 0; i < Loanusers.size(); i++)
+        
+   { //out.println(Loanusers.size());
+        if(uid.equals("1")){
+        //    out.println(Loanusers.size());
+        }
+         row[0] = uid;
+         row[1] = nid;
+        
+         row[2] =savings;
+        
+        row[3] = ((ILoanDataHolder)Loanusers.get(i)).getLoantype();
+        row[4] = ((ILoanDataHolder)Loanusers.get(i)).getLoanbalance();
+        row[5] = ((ILoanDataHolder)Loanusers.get(i)).getInstallmentamount();
        
       
         model.addRow(row);
     }
-    this.table.setModel(model);
+    
+   
   
-  }
+  } 
+                this.table.setModel(model);
   }
     private void jComboBoxGroupItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxGroupItemStateChanged
 if (!"choose".equals(jComboBoxGroup.getSelectedItem().toString())){
@@ -327,8 +350,9 @@ public String[] getNameImage(){
 //     
 //     
 // }
- public ArrayList<UserDataHolder> ListUsers(String id )
+ public ArrayList<UserDataHolder> ListUsers(String groupid )
   {
+    //  System.gc();
     ArrayList<UserDataHolder> usersList = new ArrayList();
       
          String nl="null";
@@ -339,7 +363,7 @@ public String[] getNameImage(){
      // Connection con = getConnection();
       Statement st = con.createStatement();
      // String searchQuery = "SELECT * FROM `accounttypes`";
-      String searchQuery = "SELECT * FROM `users` WHERE `group`='"+id+"' ";
+      String searchQuery = "SELECT * FROM `users` WHERE `group`='"+groupid +"' ";
       ResultSet rs = st.executeQuery(searchQuery);
       while (rs.next())
       {
@@ -363,12 +387,13 @@ public String[] getNameImage(){
     }
     return usersList;
   }
-     public ArrayList<LoanDataHolder> ListLoanUsers(String id )
+ 
+     public ArrayList<ILoanDataHolder> ListLoanUsers(String id )
   {
-    ArrayList<LoanDataHolder> usersList = new ArrayList();
+    ArrayList<ILoanDataHolder> usersList = new ArrayList();
                  Calendar  c= Calendar.getInstance();
          Date today=c.getTime();
-         
+   //   Date dt=   Date.valueOf("20170101");
          java.util.Date d=(today);
   //Days d=Days.daysBeetween();
          java.sql.Date DATE=new java.sql.Date(d.getTime());
@@ -380,29 +405,83 @@ public String[] getNameImage(){
      // Connection con = getConnection();
       Statement st = con.createStatement();
      // String searchQuery = "SELECT * FROM `accounttypes`";
-      String searchQuery = "SELECT * FROM `loans`WHERE id='"+id+"' AND  targetdate>='" + DATE + "'";
+      String searchQuery = "SELECT * FROM `iloans`WHERE customerid='"+id+"' AND  datesupposed>='" + DATE + "'";
       ResultSet rs = st.executeQuery(searchQuery);
-      while (rs.next())
-      {
-        LoanDataHolder user = new LoanDataHolder(rs.getString("autoid"),rs.getString("id"), rs.getString("loanid"), rs.getString("loantype"),
-                rs.getString("applicable")
-                ,rs.getString("installmentamount"),rs.getString("installmentsno"),rs.getString("periodtype"),rs.getString("frequencyperperiod"),
-                rs.getDate("targetdate"),
-                rs.getString("loanAmount"),rs.getString("loanRequested"),rs.getString("loanbalance"),rs.getString("defaultacc"),
-                rs.getString("applicationfee"),rs.getString("todaypay")
-                ,rs.getString("givenOn"),rs.getString("paidon"));
-        
-        usersList.add(user);
+    
+      
+            while(rs.next()){
+      ILoanDataHolder data = new ILoanDataHolder(
+              rs.getString("autoid")
+              ,rs.getString("customerid"),
+                rs.getString("loanid")
+                ,rs.getString("loantype")
+                ,rs.getString("applicablestatus")
+                ,rs.getString("applicationfee")
+                ,rs.getString("periodtype")
+                ,rs.getString("frequencyperperiod")
+                ,rs.getDate("datesupposed")
+                ,rs.getString("installmentamount")
+                ,rs.getString("installmentsno")
+                ,rs.getString("loanAmount")
+                ,rs.getString("loanRequested")
+                ,rs.getString("loanbalance")
+                ,rs.getString("moreorlesspaid")
+                ,rs.getString("todaypay")
+                ,rs.getString("paymentstatus")
+                ,rs.getString("defaultstatus")
+                ,rs.getString("balancebf")
+                ,rs.getString("extra")
+                ,rs.getString("loangivenOn")
+                ,rs.getString("paidon")
+          
+          );
+    //    out.println(rs.getString("id")+"yes");
+        usersList.add(data);
       }
+      if (!usersList.isEmpty())
+      {
+      
+      }
+      else{
+         ILoanDataHolder data = new ILoanDataHolder(
+                 "-"
+               ,"-",
+                 "-"
+                 ,"-"
+                 ,"-"
+                 ,"-"
+                 ,"-"
+                 ,"-"
+                ,d
+                 ,"-"
+                 ,"-"
+                ,"-"
+                 ,"-"
+                ,"-"
+                 ,"-"
+                 ,"-"
+                 ,"-"
+                 ,"-"
+                ,"-"
+                 ,"-"
+                 ,"-"
+                 ,"-"
+               );
+        
+        usersList.add(data);  
+      }
+      
       st.close();
       rs.close();
       con.close();
+    
     }
     catch (Exception ex)
     {
         ex.printStackTrace();
       System.out.println(ex.getMessage());
     }
+    out.println(usersList.size());
     return usersList;
   }
 public void print (String groupName,String imgurl){
@@ -421,8 +500,13 @@ public void print (String groupName,String imgurl){
         if(chooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
             try {
                 Document pdfp=new Document();
-                PdfWriter.getInstance(pdfp, new FileOutputStream(new File(chooser.getSelectedFile(),"Group "+jComboBoxGroup.getSelectedItem().toString()+".pdf")));
+             PdfWriter writer= PdfWriter.getInstance(pdfp, new FileOutputStream(new File(chooser.getSelectedFile(),"Group "+jComboBoxGroup.getSelectedItem().toString()+".pdf")));
                 pdfp.open();
+               // PdfWriter writer = PdfWriter.getInstance(pdfp, new FileOutputStream(new File(chooser.getSelectedFile(),"Group "+jComboBoxGroup.getSelectedItem().toString()+".pdf")));
+                HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+                writer.setPageEvent(event);
+                
+                
                 PdfPTable header=new PdfPTable(2);
                 //  tbl.setWidthPercentage(100);
                 
@@ -441,24 +525,40 @@ public void print (String groupName,String imgurl){
                 }
                 
                 header.addCell(createTextCell(OrgDetails));
-                
-                PdfPTable group=new PdfPTable(1);
+                 Calendar  c= Calendar.getInstance();
+        Date today=c.getTime();
+         
+         java.util.Date d=(today);
+  //Days d=Days.daysBeetween();
+         java.sql.Date DATE=new java.sql.Date(d.getTime());
+         //get name and img of user
+                PdfPTable group=new PdfPTable(3);
                 // headings.s
+                  group.setSpacingBefore(10);
+                  group.addCell(creatTextCellHeader(""));
+                  group.addCell(creatTextCellHeader(""));
+                  group.addCell(creatTextCellHeader(""));
+                  group.addCell(creatTextCellHeader(""));
                 group.addCell(creatTextCellHeader("Group : "+jComboBoxGroup.getSelectedItem().toString()));
+                group.addCell(creatTextCellHeader(String.valueOf(DATE)));
+                group.setSpacingAfter(10);
                 
-                
-                PdfPTable headings=new PdfPTable(6);
+                PdfPTable headings=new PdfPTable(8);
                 headings.setTotalWidth(575);
+               headings.setWidths(new int[]{1,2,1,1,1,1,1,1});
                 
                 headings.setLockedWidth(true);
                 
                 
-                headings.addCell("Name");
-                headings.addCell("Product");
-                headings.addCell("Previous Balance");
-                headings.addCell("Installments value");
-                headings.addCell("Amount paid");
-                headings.addCell("Others");
+                    headings.addCell(creatTextCellTitles("Id"));
+                 headings.addCell(creatTextCellTitles("Name"));
+                headings.addCell(creatTextCellTitles("Savings"));
+                 headings.addCell(creatTextCellTitles("Deposit"));
+                  headings.addCell(creatTextCellTitles("Product"));
+                headings.addCell(creatTextCellTitles("Loan Balance"));
+               // headings.addCell("Installment");
+                headings.addCell(creatTextCellTitles("Amount paid"));
+                headings.addCell(creatTextCellTitles("Others"));
                 
                 
                 
@@ -467,22 +567,52 @@ public void print (String groupName,String imgurl){
                 for (int a=0;a<users.size();a++) {
                     String uid=  ((UserDataHolder) users.get(a)).getId();
                     String nid=  ((UserDataHolder) users.get(a)).getFname();
-                    ArrayList<LoanDataHolder> Loanusers = ListLoanUsers(uid);
+                   String nuid=  String.valueOf(  maxid("id",uid));
+                     ArrayList<Personalreports> LoanSavingsusers = ListSavingsUsers(nuid);
+                     
+                     String savings=((Personalreports) LoanSavingsusers .get(0)).getBalance();
+                    ArrayList<ILoanDataHolder> Loanusers = ListLoanUsers(uid);
                     for(int i=0;i<Loanusers.size();i++){
-                        
+                       
+                       
                         // String name=((LoanDataHolder)Loanusers.get(i)).getId().toString();
-                        headings.addCell(nid);
-                        headings.addCell(((LoanDataHolder)Loanusers.get(i)).getLoanType());
-                        headings.addCell(((LoanDataHolder)Loanusers.get(i)).getLoanBalance());
-                        headings.addCell(((LoanDataHolder)Loanusers.get(i)).getInstallmentAmount());
-                        headings.addCell("");
-                        headings.addCell("");
+                        headings.addCell(createTextCellcolor(uid,a));
+                        headings.addCell(createTextCellcolor(nid,a));
+                         headings.addCell(createTextCellcolor(savings,a));
+                          headings.addCell(createTextCellcolor("",1));
+                        headings.addCell(createTextCellcolor(loanSname(((ILoanDataHolder)Loanusers.get(i)).getLoantype()),a));
+                        headings.addCell(createTextCellcolor(((ILoanDataHolder)Loanusers.get(i)).getLoanbalance(),a));
+                       // headings.addCell(((LoanDataHolder)Loanusers.get(i)).getInstallmentAmount());
+                        headings.addCell(createTextCellcolor("",1));
+                        headings.addCell(createTextCellcolor("",1));
                     }
                     
                 }
+                 PdfPTable totals=new PdfPTable(4);
+                  totals.setTotalWidth(575);
+                   totals.setLockedWidth(true);
+               //   totals.setSpacingBefore(TOP_ALIGNMENT);
+                // headings.s
+                totals.addCell(creatTextCellHeader(""));
+                totals.addCell(creatTextCellHeader(""));
+               totals.addCell(creatTextCellHeader(""));
+               totals.addCell(creatTextCellHeader(""));
+             //  totals.setSpacingAfter(TOP_ALIGNMENT);
+                 totals.addCell(creatTextCellHeader("TOTAL SAVINGS COLLECTION"));
+                totals.addCell(creatTextCellHeader("_________________"));
                 
+               totals.addCell(creatTextCellHeader("TOTAL LOANS COLLECTION"));
+               totals.addCell(creatTextCellHeader("__________________"));
+               
+               totals.addCell(creatTextCellHeader("GRAND TOTAL COLLECTION"));
+               totals.addCell(creatTextCellHeader("__________________"));
+               totals.addCell(creatTextCellHeader(""));
+                totals.addCell(creatTextCellHeader(""));
+               
+          
+               
                 
-                
+           
                 
 //            headings.addCell("Name");
 //            headings.addCell("Product");
@@ -501,6 +631,7 @@ public void print (String groupName,String imgurl){
 pdfp.add(header);
 pdfp.add(group);
 pdfp.add(headings);
+pdfp.add(totals);
 pdfp.close();
 
 
@@ -530,19 +661,27 @@ pdfp.close();
         Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
         PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
         PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
-         
+       //  out.println(services[1]);
+          
+            JComboBox jcb=new JComboBox(services);
+            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
+           int mode=jcb.getSelectedIndex();
         // this step is necessary because I have several printers configured
         PrintService myPrinter = null;
         for (int i = 0; i < services.length; i++){
+            
           //  System.out.println("service found: "+svcName);
-            String svcName = services[i].toString();           
-            if (svcName.contains("printer closest to me")){
+            String svcName = services[i].toString();   
+            
+            
+           // JOptionPane.showInputDialog(i)
+            if (svcName.contains("Hp")){
                 myPrinter = services[i];
                 System.out.println("my printer found: "+svcName);
                 break;
             }
         }
-         
+         myPrinter=services[mode];
         if (myPrinter != null) {            
             DocPrintJob job = myPrinter.createPrintJob();
             try {
@@ -562,6 +701,27 @@ pdfp.close();
         m.printStackTrace();
     }
 }
+      public PdfPCell createTextCellcolor(String text ,int c){
+     PdfPCell cell=new PdfPCell();
+          if(c%2==0){
+        
+     Paragraph p=new Paragraph();
+    cell.setBackgroundColor(Color.CYAN);
+     p.add(text);
+     cell.addElement(p);
+     }
+          else{
+            Paragraph p=new Paragraph();
+    //cell.setBackgroundColor(Color.CYAN);
+     p.add(text);
+     cell.addElement(p);  
+          }
+     
+   
+    
+    return cell;
+     
+ } 
      public PdfPCell createTextCell(String text){
      
      PdfPCell cell=new PdfPCell();
@@ -602,6 +762,15 @@ pdfp.close();
         p.add(text);
         cell.addElement(p);
         cell.setBorder(Rectangle.NO_BORDER);
+        return cell;
+}
+          public PdfPCell creatTextCellTitles(String text){
+        PdfPCell cell = new PdfPCell();
+        Paragraph p = new Paragraph();
+        p.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, 12, Font.BOLD));
+        p.add(text);
+        cell.addElement(p);
+       // cell.setBorder(Rectangle.NO_BORDER);
         return cell;
 }
     String j =creatTextCellHeader("tags").toString();
@@ -647,4 +816,97 @@ pdfp.close();
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
+
+public int maxid(String where,String value){
+    int id=0;
+    Methods m = new Methods();Connection con = m.getConnection();
+    try{
+        String getMaxId="SELECT MAX(autoid) FROM `transactions` WHERE `" + where + "` = '" + value + "'";
+         Statement st = con.createStatement();
+           ResultSet rs = st.executeQuery(getMaxId);
+           if(rs.next()){
+               id=rs.getInt(1);
+           }
+       st.close();
+      rs.close();
+      con.close();
+    }
+    catch(Exception nw){
+        nw.printStackTrace();
+    }
+    return id;
+}
+     public ArrayList< Personalreports> ListSavingsUsers(String id )
+  {
+    ArrayList< Personalreports> usersList = new ArrayList();
+               
+    try
+    {
+        Methods m=new Methods();
+        Connection con = m.getConnection();
+     // Connection con = getConnection();
+      Statement st = con.createStatement();
+     // String searchQuery = "SELECT * FROM `accounttypes`";
+      String searchQuery = "SELECT * FROM `transactions` WHERE `autoid` = '" + id + "'";
+      ResultSet rs = st.executeQuery(searchQuery);
+      if (rs.next())
+      {
+        Personalreports user = new Personalreports(rs.getString("updated_at"), rs.getString("modeofpayment"),rs.getString("deposited")
+                ,rs.getString("withdrawn")
+                ,rs.getString("balance"),rs.getString("autoid"));
+        
+        usersList.add(user);
+      }
+      else{
+           Personalreports user = new Personalreports("-", "-","-"
+                ,"-"
+                ,"-","-");
+            usersList.add(user);
+      }
+      st.close();
+      rs.close();
+      con.close();
+    }
+    catch (Exception ex)
+    {
+        ex.printStackTrace();
+      System.out.println(ex.getMessage());
+    }
+    return usersList;
+  }
+
+public String loanSname(String name){
+   String sname=name;
+    try
+    {
+        Methods m=new Methods();
+        Connection con = m.getConnection();
+     // Connection con = getConnection();
+      Statement st = con.createStatement();
+     // String searchQuery = "SELECT * FROM `accounttypes`";
+      String searchQuery = "SELECT sname FROM `accounttypes` WHERE `name` = '" + name + "'";
+      ResultSet rs = st.executeQuery(searchQuery);
+      if (rs.next())
+      {
+        sname=rs.getString(1);
+      }
+      else{
+           
+      }
+      st.close();
+      rs.close();
+      con.close();
+    }
+    catch (Exception ex)
+    {
+        ex.printStackTrace();
+      System.out.println(ex.getMessage());
+    }
+   
+   
+   
+   return sname;
+}
+
+
 }

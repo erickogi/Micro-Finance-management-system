@@ -9,6 +9,8 @@ import imua.development.*;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,12 +33,84 @@ public     String phone;
     /**
      * Creates new form NewJFrame
      */
+public String [] userExistence(String id){
+    String []details={"",""};
+    try
+        {
+            //get database connection details
+           Methods n=new Methods();
+           
+          Connection con = n.getConnection();
+          String str="";
+            
+            str="select * from users where  id =?";
+            
+           PreparedStatement pst=con.prepareStatement(str);
+         
+           pst.setString(1, id);
+          
+           ResultSet rs;
+          // ResultSet rs1;
+           rs=pst.executeQuery();
+          
+           if (rs.next())
+               
+           {
+        details[0]=(rs.getString("fname")+" "+rs.getString("sname"));
+        details[1]=rs.getString("id");
+           }
+           else
+           {
+                JOptionPane.showMessageDialog(null, "User not in the system");
+           
+            }
+           con.close();
+           rs.close();
+           pst.close();
+
+        }
+        catch (Exception b)
+        {
+            System.err.println(b);
+           // System.exit(1);
+        }  
+     return details;
+}
     public garanters() {
         initComponents();
         setTilteImage();
        // String id=null;
         //getiD();
-        
+        this.txtGaranteeID.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent b) {
+               //;
+             String detail[]=  userExistence(txtGaranteeID.getText());
+               txtGaranteeName.setText(detail[0]);
+               txtGaranteeMobile.setText(detail[1]);
+            }
+        });
+        this.txtGaranteeID2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent b) {
+                  String detail[]=  userExistence(txtGaranteeID2.getText());
+               txtGaranteeName2.setText(detail[0]);
+               txtGaranteeMobile2.setText(detail[1]);
+            }
+        });
+        this.txtGaranteeID3.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent b) {
+                  String detail[]=  userExistence(txtGaranteeID3.getText());
+               txtGaranteeName3.setText(detail[0]);
+               txtGaranteeMobile3.setText(detail[1]);
+            }
+        });
+        this.txtGaranteeID4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent b) {
+                  String detail[]=  userExistence(txtGaranteeID4.getText());
+               txtGaranteeName4.setText(detail[0]);
+               txtGaranteeMobile4.setText(detail[1]);
+            }
+        });
     }
     private void setTilteImage(){
         try {
@@ -718,4 +792,9 @@ public     String phone;
     private javax.swing.JTextField txtGaranteeName3;
     private javax.swing.JTextField txtGaranteeName4;
     // End of variables declaration//GEN-END:variables
+
+
+
+
+
 }

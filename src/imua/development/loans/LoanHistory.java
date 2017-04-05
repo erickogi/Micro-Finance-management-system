@@ -319,7 +319,7 @@ String toLoan[];
                 group.addCell(creatTextCellHeader("Amount     :"+((LoanDataHolder)Loan.get(0)).getLoanAmount()));
                 group.addCell(creatTextCellHeader("Type       :"+jComboBoxLoanType.getSelectedItem().toString()));
                 group.addCell(creatTextCellHeader("Installment:"+String.valueOf(ap)));
-                group.addCell(creatTextCellHeader("Value      :"+((LoanDataHolder)Loan.get(0)).getInstallmentAmount()));
+                group.addCell(creatTextCellHeader("Value      :"+((LoanDataHolder)Loan.get(0)).getTodayPay()));
                 group.addCell(creatTextCellHeader("Given On   :"+((LoanDataHolder)Loan.get(0)).getGivenOn() ));
                 group.addCell(creatTextCellHeader(""));
               //   }

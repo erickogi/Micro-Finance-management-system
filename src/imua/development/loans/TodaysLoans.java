@@ -5,6 +5,7 @@
  */
 package imua.development.loans;
 
+import IDataHolders.ILoanDataHolder;
 import imua.development.LoanDataHolder;
 import imua.development.*;
 import java.awt.Color;
@@ -59,9 +60,9 @@ Methods m= new Methods();
             Logger.getLogger(LoanHistory.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
-public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
+public ArrayList<ILoanDataHolder> ListUsers(String ValToSearch)
   {
-    ArrayList<LoanDataHolder> usersList = new ArrayList();
+    ArrayList<ILoanDataHolder> usersList = new ArrayList();
     try
     {
     
@@ -69,7 +70,7 @@ public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
       Statement st = con.createStatement();
    //JOptionPane.showMessageDialog(this, today);
    String nxp="np";
-      String searchQuery = "SELECT * FROM `loans` WHERE `targetdate` ='" + DATE+ "'AND nxp='" + nxp+ "'";
+      String searchQuery = "SELECT * FROM `iloans` WHERE `datesupposed` ='" + DATE+ "'AND paymentstatus='" + nxp+ "'";
      
       ResultSet rs = st.executeQuery(searchQuery);
 //       int a=0;
@@ -86,15 +87,31 @@ public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
 //         applicationfee, todaypay, givenOn, paidon
           
       {
-        LoanDataHolder user = new LoanDataHolder(rs.getString("autoid"),rs.getString("id"), rs.getString("loanid"), rs.getString("loantype"),
-                rs.getString("applicable")
-                ,rs.getString("installmentamount"),rs.getString("installmentsno"),rs.getString("periodtype"),rs.getString("frequencyperperiod"),
-                rs.getDate("targetdate"),
-                rs.getString("loanAmount"),rs.getString("loanRequested"),rs.getString("loanbalance"),rs.getString("defaultacc"),
-                rs.getString("applicationfee"),rs.getString("todaypay")
-                ,rs.getString("givenOn"),rs.getString("paidon"));
+              ILoanDataHolder data = new ILoanDataHolder(rs.getString("autoid"),rs.getString("customerid"),
+                rs.getString("loanid")
+                ,rs.getString("loantype")
+                ,rs.getString("applicablestatus")
+                ,rs.getString("applicationfee")
+                ,rs.getString("periodtype")
+                ,rs.getString("frequencyperperiod")
+                ,rs.getDate("datesupposed")
+                ,rs.getString("installmentamount")
+                ,rs.getString("installmentsno")
+                ,rs.getString("loanAmount")
+                ,rs.getString("loanRequested")
+                ,rs.getString("loanbalance")
+                ,rs.getString("moreorlesspaid")
+                ,rs.getString("todaypay")
+                ,rs.getString("paymentstatus")
+                ,rs.getString("defaultstatus")
+                ,rs.getString("balancebf")
+                ,rs.getString("extra")
+                ,rs.getString("loangivenOn")
+                ,rs.getString("paidon")
+          
+          );
         
-        usersList.add(user);
+        usersList.add(data);
       }
       st.close();
       rs.close();
@@ -108,21 +125,21 @@ public ArrayList<LoanDataHolder> ListUsers(String ValToSearch)
   }
  public void findUsers()
   {
-    ArrayList<LoanDataHolder> users = ListUsers("");
+    ArrayList<ILoanDataHolder> users = ListUsers("");
     DefaultTableModel model = new DefaultTableModel();
     
     model.setColumnIdentifiers(new Object[] { "ID", "NAME","LOAN","BALANCE","TYPE","INSTALLMENTS","NO" });
     Object[] row = new Object[8];
     for (int i = 0; i < users.size(); i++)
     {
-      row[0] = ((LoanDataHolder)users.get(i)).getId();
-        String []res=   m.getNameImage(((LoanDataHolder)users.get(i)).getId());
+      row[0] = ((ILoanDataHolder)users.get(i)).getCustomerid();
+        String []res=   m.getNameImage(((ILoanDataHolder)users.get(i)).getCustomerid());
       row[1] = res[0];
-      row[2] = ((LoanDataHolder)users.get(i)).getLoanAmount();
-      row[3] = ((LoanDataHolder)users.get(i)).getLoanBalance();
-      row[4] = ((LoanDataHolder)users.get(i)).getLoanType();
-      row[5] = ((LoanDataHolder)users.get(i)).getInstallmentAmount();
-      row[6] = ((LoanDataHolder)users.get(i)).getInstallmentNo();
+      row[2] = ((ILoanDataHolder)users.get(i)).getLoanAmount();
+      row[3] = ((ILoanDataHolder)users.get(i)).getLoanbalance();
+      row[4] = ((ILoanDataHolder)users.get(i)).getLoantype();
+      row[5] = ((ILoanDataHolder)users.get(i)).getInstallmentamount();
+      row[6] = ((ILoanDataHolder)users.get(i)).getInstallmentsno();
       
      
       

@@ -675,7 +675,7 @@ JOptionPane.showMessageDialog(null,"rs ");
        int n= m.executeSQlQuery(query, "Inserted");
        if(n==1){
            if(wod==1){
-              m.addToOrgAccount(Double.valueOf(a),"Customer Account Deposit",jComboBox1.getSelectedItem().toString() );
+                 m.addToOrgAccount(Double.valueOf(a),"Customer Account Deposit",jComboBox1.getSelectedItem().toString() );
            }
            else {
                 m.RemoveFromOrgAccount(Double.valueOf(b),"Customer Account Withdrawal",jComboBox1.getSelectedItem().toString());
