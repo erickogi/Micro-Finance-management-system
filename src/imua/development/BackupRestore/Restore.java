@@ -92,13 +92,19 @@ public class Restore extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("XLS"));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Loans", "OrgAccount", "Customers", "LoanTypes", "Guranters", "Accounts", "Groups", "LoansArchives", "Prefrences", "Applications", "Transactions" }));
+        jComboBox1.setEnabled(false);
+        jComboBox1.setFocusCycleRoot(true);
 
         jButton1.setText("RESTORE");
+        jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jtfFileLocation.setEditable(false);
+        jtfFileLocation.setText("Disabled in favour of SQL format Which is more accurate");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -111,7 +117,7 @@ public class Restore extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(jButton1)
-                        .addGap(0, 126, Short.MAX_VALUE))
+                        .addGap(0, 127, Short.MAX_VALUE))
                     .addComponent(jtfFileLocation))
                 .addContainerGap())
         );

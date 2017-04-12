@@ -663,7 +663,7 @@ JOptionPane.showMessageDialog(null,"rs ");
             else
             {
                 int v=Integer.valueOf(txtId.getText());
-                fetchUserDetails(txtId.getText(), "id");
+                threadExecute(txtId.getText(), "id");
             }
 
         }
@@ -673,7 +673,22 @@ JOptionPane.showMessageDialog(null,"rs ");
         }
     }//GEN-LAST:event_BtnConfirmActionPerformed
 
+     public void threadExecute(String value, String where){
+Thread log=new Thread(){
+public void run(){
     
+    try{
+   
+   fetchUserDetails(value,  where);
+      
+    }
+      catch(Exception b){
+         System.out.println("Error");
+      }
+} 
+      }   ;  
+      log.start();
+  }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         getId();
@@ -874,7 +889,7 @@ String loanType;
             else
             {
                 int v=Integer.valueOf(txtId.getText());
-                fetchUserDetails(txtId.getText(), "id");
+             threadExecute(txtId.getText(), "id");
             }
 
         }
@@ -926,7 +941,7 @@ public Double getAccountBalanceNotFixed(){
            Connection con = m.getConnection();
            Statement st = con.createStatement();
            
-           String searchQuery = "SELECT loanRequested FROM `loans` WHERE `loantype` = '" +toLoan[b]+ "'AND `todaypay`='"+tdpy+"'AND `id`='"+txtId.getText()+"'";
+           String searchQuery = "SELECT loanRequested FROM `iloans` WHERE `loantype` = '" +toLoan[b]+ "'AND `customerid`='"+txtId.getText()+"'";
            ResultSet rs = st.executeQuery(searchQuery);
            if(rs.next()){
                

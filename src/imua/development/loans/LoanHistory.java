@@ -5,6 +5,7 @@
  */
 package imua.development.loans;
 
+import IDataHolders.ILoanDataHolder;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -17,7 +18,6 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import imua.development.LoanDataHolder;
 import imua.development.*;
 import imua.development.Reports.GroupSheet;
 import java.awt.Color;
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -311,16 +310,16 @@ String toLoan[];
                 
                 PdfPTable group=new PdfPTable(2);
                 // headings.s
-                 ArrayList<LoanDataHolder> Loan = ListUsers(txtId.getText()+jComboBoxLoanType.getSelectedItem().toString());
+                 ArrayList<ILoanDataHolder> Loan = ListUsers(txtId.getText()+jComboBoxLoanType.getSelectedItem().toString());
                 // for(int f=0;f<Loan.size();f++){
-                int ap=Integer.valueOf(((LoanDataHolder)Loan.get(0)).getInstallmentNo())+1;
+                int ap=Integer.valueOf(((ILoanDataHolder)Loan.get(0)).getInstallmentsno());
                 group.addCell(creatTextCellHeader("Name        :"+name));
                 group.addCell(creatTextCellHeader("ID          :"+txtId.getText()));
-                group.addCell(creatTextCellHeader("Amount     :"+((LoanDataHolder)Loan.get(0)).getLoanAmount()));
+                group.addCell(creatTextCellHeader("Amount     :"+((ILoanDataHolder)Loan.get(0)).getLoanAmount()));
                 group.addCell(creatTextCellHeader("Type       :"+jComboBoxLoanType.getSelectedItem().toString()));
                 group.addCell(creatTextCellHeader("Installment:"+String.valueOf(ap)));
-                group.addCell(creatTextCellHeader("Value      :"+((LoanDataHolder)Loan.get(0)).getTodayPay()));
-                group.addCell(creatTextCellHeader("Given On   :"+((LoanDataHolder)Loan.get(0)).getGivenOn() ));
+                group.addCell(creatTextCellHeader("Value      :"+((ILoanDataHolder)Loan.get(0)).getTodaypay()));
+                group.addCell(creatTextCellHeader("Given On   :"+((ILoanDataHolder)Loan.get(0)).getLoangivenOn() ));
                 group.addCell(creatTextCellHeader(""));
               //   }
                 
@@ -340,16 +339,16 @@ String toLoan[];
                 
                 
                 
-                ArrayList<LoanDataHolder> users = ListUsers(txtId.getText()+jComboBoxLoanType.getSelectedItem().toString());
+                ArrayList<ILoanDataHolder> users = ListUsers(txtId.getText()+jComboBoxLoanType.getSelectedItem().toString());
                 
                 for (int a=0;a<users.size();a++) {
                    
                     
                         
                         // String name=((LoanDataHolder)Loanusers.get(i)).getId().toString();
-                        headings.addCell(((LoanDataHolder)users.get(a)).getPaidOn());
-                        headings.addCell(((LoanDataHolder)users.get(a)).getLoanBalance());
-                        headings.addCell(((LoanDataHolder)users.get(a)).getInstallmentAmount());
+                        headings.addCell(((ILoanDataHolder)users.get(a)).getPaidon());
+                        headings.addCell(((ILoanDataHolder)users.get(a)).getLoanbalance());
+                        headings.addCell(((ILoanDataHolder)users.get(a)).getInstallmentamount());
                        // headings.addCell(((LoanDataHolder)users.get(a)).getInstallmentAmount());
                        // headings.addCell("");
                        // headings.addCell("");
@@ -438,47 +437,47 @@ pdfp.close();
         m.printStackTrace();
     }
 }
-      public ArrayList<LoanDataHolder> First(String loanid )
-  {
-    ArrayList<LoanDataHolder> usersList = new ArrayList();
-      
-         String nl="null";
-    try
-    {
-        Methods m=new Methods();
-        Connection con = m.getConnection();
-     // Connection con = getConnection();
-      Statement st = con.createStatement();
-      String xr="0";
-     // String searchQuery = "SELECT * FROM `accounttypes`";
-      String searchQuery = "SELECT * FROM `loans`WHERE loanid='"+loanid+"'AND `todaypay`='"+xr+" ";
-      ResultSet rs = st.executeQuery(searchQuery);
-      while (rs.next())
-      {
-        LoanDataHolder user = new LoanDataHolder(rs.getString("autoid"),rs.getString("id"), rs.getString("loanid"), rs.getString("loantype"),
-                rs.getString("applicable")
-                ,rs.getString("installmentamount"),rs.getString("installmentsno"),rs.getString("periodtype"),rs.getString("frequencyperperiod"),
-                rs.getDate("targetdate"),
-                rs.getString("loanAmount"),rs.getString("loanRequested"),rs.getString("loanbalance"),rs.getString("defaultacc"),
-                rs.getString("applicationfee"),rs.getString("todaypay")
-                ,rs.getString("givenOn"),rs.getString("paidon"));
-        
-        usersList.add(user);
-      }
-      st.close();
-      rs.close();
-      con.close();
-    }
-    catch (Exception ex)
-    {
-      System.out.println(ex.getMessage());
-    }
-    return usersList;
-  }
+//      public ArrayList<LoanDataHolder> First(String loanid )
+//  {
+//    ArrayList<LoanDataHolder> usersList = new ArrayList();
+//      
+//         String nl="null";
+//    try
+//    {
+//        Methods m=new Methods();
+//        Connection con = m.getConnection();
+//     // Connection con = getConnection();
+//      Statement st = con.createStatement();
+//      String xr="0";
+//     // String searchQuery = "SELECT * FROM `accounttypes`";
+//      String searchQuery = "SELECT * FROM `loans`WHERE loanid='"+loanid+"'AND `todaypay`='"+xr+" ";
+//      ResultSet rs = st.executeQuery(searchQuery);
+//      while (rs.next())
+//      {
+//        LoanDataHolder user = new LoanDataHolder(rs.getString("autoid"),rs.getString("id"), rs.getString("loanid"), rs.getString("loantype"),
+//                rs.getString("applicable")
+//                ,rs.getString("installmentamount"),rs.getString("installmentsno"),rs.getString("periodtype"),rs.getString("frequencyperperiod"),
+//                rs.getDate("targetdate"),
+//                rs.getString("loanAmount"),rs.getString("loanRequested"),rs.getString("loanbalance"),rs.getString("defaultacc"),
+//                rs.getString("applicationfee"),rs.getString("todaypay")
+//                ,rs.getString("givenOn"),rs.getString("paidon"));
+//        
+//        usersList.add(user);
+//      }
+//      st.close();
+//      rs.close();
+//      con.close();
+//    }
+//    catch (Exception ex)
+//    {
+//      System.out.println(ex.getMessage());
+//    }
+//    return usersList;
+//  }
     
-    public ArrayList<LoanDataHolder> ListUsers(String loanid )
+    public ArrayList<ILoanDataHolder> ListUsers(String loanid )
   {
-    ArrayList<LoanDataHolder> usersList = new ArrayList();
+    ArrayList<ILoanDataHolder> usersList = new ArrayList();
       
          String nl="null";
     try
@@ -488,19 +487,35 @@ pdfp.close();
      // Connection con = getConnection();
       Statement st = con.createStatement();
      // String searchQuery = "SELECT * FROM `accounttypes`";
-      String searchQuery = "SELECT * FROM `loans`WHERE loanid='"+loanid+"' ";
+      String searchQuery = "SELECT * FROM `iloans`WHERE loanid='"+loanid+"' ";
       ResultSet rs = st.executeQuery(searchQuery);
       while (rs.next())
       {
-        LoanDataHolder user = new LoanDataHolder(rs.getString("autoid"),rs.getString("id"), rs.getString("loanid"), rs.getString("loantype"),
-                rs.getString("applicable")
-                ,rs.getString("installmentamount"),rs.getString("installmentsno"),rs.getString("periodtype"),rs.getString("frequencyperperiod"),
-                rs.getDate("targetdate"),
-                rs.getString("loanAmount"),rs.getString("loanRequested"),rs.getString("loanbalance"),rs.getString("defaultacc"),
-                rs.getString("applicationfee"),rs.getString("todaypay")
-                ,rs.getString("givenOn"),rs.getString("paidon"));
+          ILoanDataHolder data = new ILoanDataHolder(rs.getString("autoid"),rs.getString("customerid"),
+                rs.getString("loanid")
+                ,rs.getString("loantype")
+                ,rs.getString("applicablestatus")
+                ,rs.getString("applicationfee")
+                ,rs.getString("periodtype")
+                ,rs.getString("frequencyperperiod")
+                ,rs.getDate("datesupposed")
+                ,rs.getString("installmentamount")
+                ,rs.getString("installmentsno")
+                ,rs.getString("loanAmount")
+                ,rs.getString("loanRequested")
+                ,rs.getString("loanbalance")
+                ,rs.getString("moreorlesspaid")
+                ,rs.getString("todaypay")
+                ,rs.getString("paymentstatus")
+                ,rs.getString("defaultstatus")
+                ,rs.getString("balancebf")
+                ,rs.getString("extra")
+                ,rs.getString("loangivenOn")
+                ,rs.getString("paidon")
+          
+          );
         
-        usersList.add(user);
+        usersList.add(data);
       }
       st.close();
       rs.close();
@@ -522,21 +537,21 @@ pdfp.close();
   }
   public void findUsers(String loanid) 
   {
-    ArrayList<LoanDataHolder> users = ListUsers(loanid);
+    ArrayList<ILoanDataHolder> users = ListUsers(loanid);
     DefaultTableModel model = new DefaultTableModel();
   //   String ID, Date ate, String Installmentamount, String LoanAmount,String autoid,String instno
-    model.setColumnIdentifiers(new Object[] { "DATE","ID", "AutoId","LOAN","BALANCE","TYPE","INSTALLMENTS","NO","PENALTY" });
-    Object[] row = new Object[9];
+    model.setColumnIdentifiers(new Object[] { "DATE","ID", "AutoId","LOAN","BALANCE","TYPE","INSTALLMENTS","NO" });
+    Object[] row = new Object[8];
     for (int i = 0; i < users.size(); i++)
-    {row[0] = ((LoanDataHolder)users.get(i)).getPaidOn();
-       row[1] = ((LoanDataHolder)users.get(i)).getId();
-      row[2] = ((LoanDataHolder)users.get(i)).getAutoId();
-      row[3] = ((LoanDataHolder)users.get(i)).getLoanAmount();
-      row[4] = ((LoanDataHolder)users.get(i)).getLoanBalance();
-      row[5] = ((LoanDataHolder)users.get(i)).getLoanType();
-      row[6] = ((LoanDataHolder)users.get(i)).getInstallmentAmount();
-      row[7] = ((LoanDataHolder)users.get(i)).getInstallmentNo();
-      row[8] = ((LoanDataHolder)users.get(i)).getPenalty();
+    {row[0] = ((ILoanDataHolder)users.get(i)).getPaidon();
+       row[1] = ((ILoanDataHolder)users.get(i)).getCustomerid();
+      row[2] = ((ILoanDataHolder)users.get(i)).getAutoid();
+      row[3] = ((ILoanDataHolder)users.get(i)).getLoanAmount();
+      row[4] = ((ILoanDataHolder)users.get(i)).getLoanbalance();
+      row[5] = ((ILoanDataHolder)users.get(i)).getLoantype();
+      row[6] = ((ILoanDataHolder)users.get(i)).getInstallmentamount();
+      row[7] = ((ILoanDataHolder)users.get(i)).getInstallmentsno();
+     // row[8] = ((ILoanDataHolder)users.get(i)).getPenalty();
         model.addRow(row);
     }
     this.table.setModel(model);

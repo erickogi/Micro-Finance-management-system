@@ -15,6 +15,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -68,17 +71,6 @@ private void setTilteImage(){
 
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jCheckBoxTransactions = new javax.swing.JCheckBox();
-        jCheckBoxLoans = new javax.swing.JCheckBox();
-        jCheckBoxOrgAccount = new javax.swing.JCheckBox();
-        jCheckBoxCustomers = new javax.swing.JCheckBox();
-        jCheckBoxLoanTypes = new javax.swing.JCheckBox();
-        jCheckBoxuseracctypes = new javax.swing.JCheckBox();
-        jCheckBoxusergroups = new javax.swing.JCheckBox();
-        jCheckBoxLoansArchives = new javax.swing.JCheckBox();
-        jCheckBoxApplications = new javax.swing.JCheckBox();
-        jCheckBoxGuranters = new javax.swing.JCheckBox();
-        jCheckBoxPrefrences = new javax.swing.JCheckBox();
         jComboBoxChoose = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -92,29 +84,7 @@ private void setTilteImage(){
             }
         });
 
-        jCheckBoxTransactions.setText("Transactions");
-
-        jCheckBoxLoans.setText("Loans");
-
-        jCheckBoxOrgAccount.setText("Org'S Account");
-
-        jCheckBoxCustomers.setText("Customers");
-
-        jCheckBoxLoanTypes.setText("Loan Types");
-
-        jCheckBoxuseracctypes.setText("Accounts Types");
-
-        jCheckBoxusergroups.setText("Groups");
-
-        jCheckBoxLoansArchives.setText("Loans Archives");
-
-        jCheckBoxApplications.setText("Applications");
-
-        jCheckBoxGuranters.setText("Guranters");
-
-        jCheckBoxPrefrences.setText("Prefrences");
-
-        jComboBoxChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "XLS", "SQL" }));
+        jComboBoxChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SQL" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -122,74 +92,30 @@ private void setTilteImage(){
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBoxChoose, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jCheckBoxTransactions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBoxLoans, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBoxOrgAccount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBoxCustomers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBoxLoanTypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBoxuseracctypes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxusergroups)
-                            .addComponent(jCheckBoxLoansArchives)
-                            .addComponent(jCheckBoxApplications)
-                            .addComponent(jCheckBoxGuranters)
-                            .addComponent(jCheckBoxPrefrences))
-                        .addGap(83, 83, 83))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(246, Short.MAX_VALUE))))
+                .addComponent(jComboBoxChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBoxTransactions)
-                            .addComponent(jCheckBoxusergroups)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jComboBoxChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(27, 27, 27)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxLoans)
-                    .addComponent(jCheckBoxLoansArchives))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxOrgAccount)
-                    .addComponent(jCheckBoxApplications))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxCustomers)
-                    .addComponent(jCheckBoxGuranters))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxLoanTypes)
-                    .addComponent(jCheckBoxPrefrences))
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBoxuseracctypes)
-                .addContainerGap(29, Short.MAX_VALUE))
+                    .addComponent(jButton1)
+                    .addComponent(jComboBoxChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -217,17 +143,22 @@ private void setTilteImage(){
     else {
       System.out.println("No Selection ");
       }
-    if(jComboBoxChoose.getSelectedItem().toString().equals("xls")){
-        work();
-    }
-    else{
+//    if(jComboBoxChoose.getSelectedItem().toString().equals("xls")){
+//      //  work();
+//    }
+//    else{
        sqlDump(); 
-    }
+ //   }
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
-private void sqlDump(){
-    
+
+    private void sqlDump(){
+    Calendar  c= Calendar.getInstance();
+
+Date today=(c.getTime());
+SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+        String   date = DATE_FORMAT.format(today);
       try {
           String path ="C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysqldump";
 //C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump
@@ -246,25 +177,25 @@ String command= "cmd.exe /c "
         +"\" "
         + ">"
         + " \""
-        + chooser.getSelectedFile()+"\\DATABACKUP.sql"
+        + chooser.getSelectedFile()+"\\DATABACKUP"+".sql"
         + "\""
         + " \"";
 Runtime r= Runtime.getRuntime();
 r.exec(command);
 
-
-jCheckBoxLoans.setSelected(true);
-jCheckBoxLoans.setSelected(true);
-jCheckBoxOrgAccount.setSelected(true);
-jCheckBoxLoanTypes.setSelected(true);
-jCheckBoxGuranters.setSelected(true);
-jCheckBoxuseracctypes.setSelected(true);
-jCheckBoxusergroups.setSelected(true);
-jCheckBoxLoansArchives.setSelected(true);
-jCheckBoxPrefrences.setSelected(true);
-jCheckBoxApplications.setSelected(true);
-jCheckBoxTransactions.setSelected(true);
-jCheckBoxLoans.setSelected(true);
+//
+//jCheckBoxLoans.setSelected(true);
+//jCheckBoxLoans.setSelected(true);
+//jCheckBoxOrgAccount.setSelected(true);
+//jCheckBoxLoanTypes.setSelected(true);
+//jCheckBoxGuranters.setSelected(true);
+//jCheckBoxuseracctypes.setSelected(true);
+//jCheckBoxusergroups.setSelected(true);
+//jCheckBoxLoansArchives.setSelected(true);
+//jCheckBoxPrefrences.setSelected(true);
+//jCheckBoxApplications.setSelected(true);
+//jCheckBoxTransactions.setSelected(true);
+//jCheckBoxLoans.setSelected(true);
 JOptionPane.showMessageDialog(null, "DONE", "MESSAGE",JOptionPane.PLAIN_MESSAGE);
 //Runtime runtime = Runtime.getRuntime(command);
       } catch (IOException ex) {
@@ -284,56 +215,56 @@ JOptionPane.showMessageDialog(null, "DONE", "MESSAGE",JOptionPane.PLAIN_MESSAGE)
     
     
     
-    private void work(){
-jCheckBoxLoans.setSelected(false);
-jCheckBoxLoans.setSelected(false);
-jCheckBoxOrgAccount.setSelected(false);
-jCheckBoxLoanTypes.setSelected(false);
-jCheckBoxGuranters.setSelected(false);
-jCheckBoxuseracctypes.setSelected(false);
-jCheckBoxusergroups.setSelected(false);
-jCheckBoxLoansArchives.setSelected(false);
-jCheckBoxPrefrences.setSelected(false);
-jCheckBoxApplications.setSelected(false);
-jCheckBoxTransactions.setSelected(false);
-jCheckBoxLoans.setSelected(false);
-if(transactions().equals("Succesful")){
-    jCheckBoxTransactions.setSelected(true);
-}
-if(Applications().equals("Succesful")){
-     jCheckBoxApplications.setSelected(true);
-}
-if(Prefrences().equals("Succesful")){
-     jCheckBoxPrefrences.setSelected(true);
-}
-if(Archiveloans().equals("Succesful")){
-     jCheckBoxLoansArchives.setSelected(true);
-}
-if(usergroups().equals("Succesful")){
-     jCheckBoxusergroups.setSelected(true);
-}
-if(useracctypes().equals("Succesful")){
-    jCheckBoxuseracctypes.setSelected(true);
-}
-if(guranters().equals("Succesful")){
-    jCheckBoxGuranters.setSelected(true);
-}
-if(LoanTypes().equals("Succesful")){
-    jCheckBoxLoanTypes.setSelected(true);
-}
-if(orgAccount().equals("Succesful")){
-    jCheckBoxOrgAccount.setSelected(true);
-}
-if(customers().equals("Succesful")){
-    jCheckBoxLoans.setSelected(true);
-}
-if(loans().equals("Succesful")){
-     jCheckBoxLoans.setSelected(true);
-}
-JOptionPane.showMessageDialog(null, "DONE", "MESSAGE",JOptionPane.PLAIN_MESSAGE);
-}
-    
-    
+//    private void work(){
+//jCheckBoxLoans.setSelected(false);
+//jCheckBoxLoans.setSelected(false);
+//jCheckBoxOrgAccount.setSelected(false);
+//jCheckBoxLoanTypes.setSelected(false);
+//jCheckBoxGuranters.setSelected(false);
+//jCheckBoxuseracctypes.setSelected(false);
+//jCheckBoxusergroups.setSelected(false);
+//jCheckBoxLoansArchives.setSelected(false);
+//jCheckBoxPrefrences.setSelected(false);
+//jCheckBoxApplications.setSelected(false);
+//jCheckBoxTransactions.setSelected(false);
+//jCheckBoxLoans.setSelected(false);
+//if(transactions().equals("Succesful")){
+//    jCheckBoxTransactions.setSelected(true);
+//}
+//if(Applications().equals("Succesful")){
+//     jCheckBoxApplications.setSelected(true);
+//}
+//if(Prefrences().equals("Succesful")){
+//     jCheckBoxPrefrences.setSelected(true);
+//}
+//if(Archiveloans().equals("Succesful")){
+//     jCheckBoxLoansArchives.setSelected(true);
+//}
+//if(usergroups().equals("Succesful")){
+//     jCheckBoxusergroups.setSelected(true);
+//}
+//if(useracctypes().equals("Succesful")){
+//    jCheckBoxuseracctypes.setSelected(true);
+//}
+//if(guranters().equals("Succesful")){
+//    jCheckBoxGuranters.setSelected(true);
+//}
+//if(LoanTypes().equals("Succesful")){
+//    jCheckBoxLoanTypes.setSelected(true);
+//}
+//if(orgAccount().equals("Succesful")){
+//    jCheckBoxOrgAccount.setSelected(true);
+//}
+//if(customers().equals("Succesful")){
+//    jCheckBoxLoans.setSelected(true);
+//}
+//if(loans().equals("Succesful")){
+//     jCheckBoxLoans.setSelected(true);
+//}
+//JOptionPane.showMessageDialog(null, "DONE", "MESSAGE",JOptionPane.PLAIN_MESSAGE);
+//}
+//    
+//    
     public String transactions(){
     String succ="Transactions Backup Error";
     BufferedInputStream bufferInput=null;
@@ -1103,17 +1034,6 @@ System.out.println(ioe);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBoxApplications;
-    private javax.swing.JCheckBox jCheckBoxCustomers;
-    private javax.swing.JCheckBox jCheckBoxGuranters;
-    private javax.swing.JCheckBox jCheckBoxLoanTypes;
-    private javax.swing.JCheckBox jCheckBoxLoans;
-    private javax.swing.JCheckBox jCheckBoxLoansArchives;
-    private javax.swing.JCheckBox jCheckBoxOrgAccount;
-    private javax.swing.JCheckBox jCheckBoxPrefrences;
-    private javax.swing.JCheckBox jCheckBoxTransactions;
-    private javax.swing.JCheckBox jCheckBoxuseracctypes;
-    private javax.swing.JCheckBox jCheckBoxusergroups;
     private javax.swing.JComboBox<String> jComboBoxChoose;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

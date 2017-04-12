@@ -926,7 +926,7 @@ deleteApplication(lblPersonId.getText());
      
      String nxp="np";
      
-     String query = "INSERT INTO loans("
+     String query = "INSERT INTO iloans("
              + "`id`,"
              + "`loanid`,"
              

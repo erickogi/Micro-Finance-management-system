@@ -101,7 +101,7 @@ public class Main extends javax.swing.JFrame {
        
   
         pic();
-    
+      // timerForDefaultersCheck();
        getTime();
        if(a==0){
          login();
@@ -151,9 +151,9 @@ public class Main extends javax.swing.JFrame {
      
      java.sql.Date DATE=new java.sql.Date(d.getTime());
       try {
-          Methods n = new Methods();
+         // Methods n = new Methods();
           
-          Connection con =n. getConnection();
+          Connection con =methods. getConnection();
           
           Statement st = con.createStatement();
           String nxps="np";
@@ -197,9 +197,9 @@ public class Main extends javax.swing.JFrame {
 //     
 //     java.sql.Date DATE=new java.sql.Date(d.getTime());
       try {
-          Methods n = new Methods();
+       //   Methods n = new Methods();
           
-          Connection con =n. getConnection();
+          Connection con =methods. getConnection();
           
           Statement st = con.createStatement();
           String searchQuery = "SELECT * FROM `applications` ";
@@ -229,7 +229,7 @@ public class Main extends javax.swing.JFrame {
          // JOptionPane.showMessageDialog(null, todays.size()+ "LOANS APPLICATIONS AVAILABLE");
           }
           //checkLoanRepayments();
-          checkiLoansDefaulters();
+          checkiLoansDefaulters(0);
           
       } catch (SQLException ex) {
           Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -516,7 +516,8 @@ public class Main extends javax.swing.JFrame {
     
     */
     
-    public void checkiLoansDefaulters(){
+    public void checkiLoansDefaulters(int a){
+        System.out.println("checked 000");
           Calendar  c= Calendar.getInstance();
           Date today=addOne(c.getTime(),-1);
           java.util.Date d=(today);
@@ -526,14 +527,14 @@ public class Main extends javax.swing.JFrame {
            ArrayList<ILoanDataHolder>notPushedToDefaulters=new ArrayList();
            ArrayList<ILoanDataHolder>setNewLoanEntry=new ArrayList();
            
-          Methods n = new Methods();
+          //Methods n = new Methods();
           
            try 
            {
           
           String nl="np";
           String lp="nfp";
-          Connection con =n. getConnection();
+          Connection con =methods. getConnection();
           
           Statement st = con.createStatement();
           String searchQuery = "SELECT * FROM `iloans` WHERE (datesupposed<'" + DATE + "'AND paymentstatus='"+nl+"') OR (datesupposed<'" + DATE + "'AND paymentstatus='"+lp+"')";
@@ -618,7 +619,7 @@ public class Main extends javax.swing.JFrame {
           
           
           
-          
+         if(a==0) {
         if(defaultersDataList.size()>0){
         int dialogButton=
         
@@ -634,7 +635,7 @@ public class Main extends javax.swing.JFrame {
           
           }
         
-        
+         }
         
        
           
@@ -978,6 +979,7 @@ public void run(){
       log.start();
   }  
     
+ 
     public void a(){
         login1 a=new login1();
         //this.setVisible(true);
@@ -990,6 +992,36 @@ public void run(){
    public void seten(){
         this.setEnabled(true);
     }
+   
+   
+   
+       public void timerForDefaultersCheck(){
+        Thread checkLoanD=new Thread(){
+            public void run(){
+    String x;
+    String z;
+for(;;){
+checkiLoansDefaulters(1);
+System.out.println("checked");
+try{
+sleep(1200000);
+}
+catch(InterruptedException ex){
+
+}
+}
+}  
+            
+        };
+        checkLoanD.start();
+    }
+   
+   
+   
+   
+   
+   
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1868,6 +1900,7 @@ Calendar cal=new GregorianCalendar();
           checkTodays();
           timerForLoanApplication();
           processGhash(hash);
+          timerForDefaultersCheck();
            
           ch=0;
        }
@@ -1892,10 +1925,10 @@ clock.start();
       //  this.txttymer.setFont(new java.awt.Font("Tahoma", 1, 11));
  //txttymer.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
  
- MarqueePanel mp= new MarqueePanel(s, 200);
+ MarqueePanel mp;//= new MarqueePanel(s, 200);
 public void b(String h){
     
-    mp= new MarqueePanel(h, 250);
+    mp= new MarqueePanel(h, 220);
     
      
       // MarqueePanel mp = new MarqueePanel(s, 100);
@@ -1933,7 +1966,7 @@ public void b(String h){
           
           if(todays.size()>0){
               jToolBar1.setVisible(true);
-             s=""+todays.size()+ " LOANS APPLICATIONS AVAILABLE FOR PROCESSING";
+             s=""+todays.size()+ " LOAN APPLICATIONS AVAILABLE FOR PROCESSING";
             
         } 
           else{
@@ -1944,9 +1977,9 @@ public void b(String h){
              mp.stop();
           }
           //ime blink araka sana
-          if(!"".equals(mesoLoan)){
+         // if(!"".equals(mesoLoan)){
              //  jToolBar1.setVisible(true);
-          }
+        //  }
         
 //              
  //JOptionPane.showMessageDialog(null, todays.size()+ "LOANS APPLICATIONS AVAILABLE");
@@ -1960,14 +1993,16 @@ public void b(String h){
       } catch (SQLException ex) {
           Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
       }
-      if("".equals(mesoLoan)){
-           String mesoYote=s;
-      b(mesoYote);
-      }
-      else{
-      String mesoYote=mesoLoan+""+s;
-      b(mesoYote);
-      }
+     // if("".equals(mesoLoan)){
+      //     String mesoYote=s;
+     // b(mesoYote);
+     // }
+     // else{
+     // String mesoYote=mesoLoan+""+s;
+     // b(mesoYote);
+     // }
+     
+     b(s);
     }
 //     public  String checkLoanRepayments1(){
 //       String meso="";
@@ -2189,7 +2224,7 @@ b.setVisible(true);
     }//GEN-LAST:event_jProcessActionPerformed
 
     private void jPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPayActionPerformed
-System.out.println("jj");
+//System.out.println("jj");
         Iloanpayment a=new Iloanpayment();
         a.setVisible(true);
     }//GEN-LAST:event_jPayActionPerformed
@@ -2250,7 +2285,7 @@ System.out.println("jj");
     private void jMSystemHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMSystemHelpActionPerformed
          try
     {
-      String url = "help.html";
+      String url = "help.htm";
       Desktop.getDesktop().browse(URI.create(url));
     }
     catch (IOException e1)
@@ -2587,4 +2622,4 @@ class MarqueePanel extends JPanel implements ActionListener {
     
 
 }
-///  1464 LINES
+///  2623 LINES

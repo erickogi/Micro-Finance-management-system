@@ -715,34 +715,34 @@ public double getDefaultRate(String loanType){
                  
             Calendar  c= Calendar.getInstance();
        
-           Date today=c.getTime();
+            Date today=c.getTime();
       
             Date startDate=(today);
        
-           try {
-               startDate = df.parse(((ILoanDataHolder1)singleDefaultLoan.get(0)).getPaidon());
-               
-               
-           } catch (ParseException ex) {
-               startDate=today;
-               ex.printStackTrace();
-               Logger.getLogger(IDefaulters.class.getName()).log(Level.SEVERE, null, ex);
-           }
+          // try {
+//               startDate = df.parse(((ILoanDataHolder1)singleDefaultLoan.get(0)).getPaidon());
+//               
+//               
+//           } catch (ParseException ex) {
+//               startDate=today;
+//               ex.printStackTrace();
+//               Logger.getLogger(IDefaulters.class.getName()).log(Level.SEVERE, null, ex);
+//           }
               Date columnValue  =  addPeriod(startDate,((ILoanDataHolder1)singleDefaultLoan.get(0)).getPeriodtype()
                  ,((ILoanDataHolder1)singleDefaultLoan.get(0)).getFrequencyperperiod());
-              int as=1;
+//              int as=1;
+//              
+//             while(columnValue.before(today)){
+//                  out.println(as);
+//                  as++;
+//                  columnValue = addPeriod(columnValue,((ILoanDataHolder1)singleDefaultLoan.get(0)).getPeriodtype()
+//                 ,((ILoanDataHolder1)singleDefaultLoan.get(0)).getFrequencyperperiod());
+//              }
               
-             while(columnValue.before(today)){
-                  out.println(as);
-                  as++;
-                  columnValue = addPeriod(columnValue,((ILoanDataHolder1)singleDefaultLoan.get(0)).getPeriodtype()
-                 ,((ILoanDataHolder1)singleDefaultLoan.get(0)).getFrequencyperperiod());
-              }
               
               
-              
-               jDateChooser1.setDate(columnValue);
-               txtBBF.setText(((ILoanDataHolder1)singleDefaultLoan.get(0)).getBalancebf());
+                jDateChooser1.setDate(columnValue);
+                txtBBF.setText(((ILoanDataHolder1)singleDefaultLoan.get(0)).getBalancebf());
                 process(((ILoanDataHolder1)singleDefaultLoan.get(0)).getLoantype());
      
     }//GEN-LAST:event_tableMouseClicked
@@ -850,9 +850,24 @@ public double getDefaultRate(String loanType){
     private void jRadioButtonWaiveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonWaiveItemStateChanged
         
     }//GEN-LAST:event_jRadioButtonWaiveItemStateChanged
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      if(jComboBox1.getSelectedItem().toString().equals("Mode")){
+public void threadExecute(){
+Thread log=new Thread(){
+public void run(){
+    
+    try{
+   
+      execute();
+      
+    }
+      catch(Exception b){
+         System.out.println("Error");
+      }
+} 
+      }   ;  
+      log.start();
+  }
+void execute(){
+          if(jComboBox1.getSelectedItem().toString().equals("Mode")){
         JOptionPane.showMessageDialog(null, "Select mode of payment","Message",JOptionPane.ERROR_MESSAGE);
       }
       else{
@@ -935,6 +950,11 @@ public double getDefaultRate(String loanType){
         }
        
       }
+}
+
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+     threadExecute();
     }//GEN-LAST:event_jButton1ActionPerformed
 private boolean setNewLoanEntry(String bbf,String newDate,double toMinusBalance) {
  boolean success=false;
@@ -1030,7 +1050,7 @@ private boolean setNewLoanEntry(String bbf,String newDate,double toMinusBalance)
            java.sql.Date DATE=new java.sql.Date(d.getTime());
          String query = "UPDATE `iloans` SET `todaypay`='" + todaypay + "',`moreorlesspaid`='" + moreorlesspaid + "',"
                 + "`paymentstatus`='" + paymentstatus + "'"
-                + "`defaultstatus`='" + defaultstatus + "'"
+                + ",`defaultstatus`='" + defaultstatus + "'"
                 + ",`paidon`='" + DATE + "'"
                 + "WHERE autoid= '" + autoid+ "' ";
       

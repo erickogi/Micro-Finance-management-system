@@ -23,12 +23,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -47,80 +47,22 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jComboBoxChoose" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jCheckBoxTransactions" max="32767" attributes="0"/>
-                          <Component id="jCheckBoxLoans" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jCheckBoxOrgAccount" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jCheckBoxCustomers" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jCheckBoxLoanTypes" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jCheckBoxuseracctypes" alignment="1" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxusergroups" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxLoansArchives" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxApplications" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxGuranters" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxPrefrences" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" pref="165" max="-2" attributes="0"/>
-                          <EmptySpace pref="246" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
+                  <Component id="jComboBoxChoose" min="-2" pref="101" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                  <Component id="jButton1" min="-2" pref="165" max="-2" attributes="0"/>
+                  <EmptySpace pref="73" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jCheckBoxTransactions" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxusergroups" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBoxChoose" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
-                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jCheckBoxLoans" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxLoansArchives" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboBoxChoose" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jCheckBoxOrgAccount" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxApplications" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jCheckBoxCustomers" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxGuranters" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jCheckBoxLoanTypes" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxPrefrences" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jCheckBoxuseracctypes" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="29" max="32767" attributes="0"/>
+                  <EmptySpace pref="187" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -134,67 +76,11 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxTransactions">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Transactions"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxLoans">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Loans"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxOrgAccount">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Org&apos;S Account"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxCustomers">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Customers"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxLoanTypes">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Loan Types"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxuseracctypes">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Accounts Types"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxusergroups">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Groups"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxLoansArchives">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Loans Archives"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxApplications">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Applications"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxGuranters">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Guranters"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBoxPrefrences">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Prefrences"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JComboBox" name="jComboBoxChoose">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
-                <StringItem index="0" value="XLS"/>
-                <StringItem index="1" value="SQL"/>
+              <StringArray count="1">
+                <StringItem index="0" value="SQL"/>
               </StringArray>
             </Property>
           </Properties>

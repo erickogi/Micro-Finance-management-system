@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Toolkit;
 import static java.lang.System.out;
+import static java.lang.Thread.sleep;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -264,7 +265,22 @@ public class Iloanpayment extends javax.swing.JFrame {
     
     
 }
+public void threadInsert(){
+Thread log=new Thread(){
+public void run(){
     
+    try{
+   insert();
+      
+      
+    }
+      catch(Exception b){
+         System.out.println("Error");
+      }
+} 
+      }   ;  
+      log.start();
+  } 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -636,17 +652,14 @@ public class Iloanpayment extends javax.swing.JFrame {
         
         
                         txtLoanBalance.setText(loanBalance.toString());
+                        
+                        
         Double installmentsRemaining= (Double.valueOf(txtLoanBalance.getText())/Double.valueOf(((ILoanDataHolder)dataList.get(0)).getInstallmentamount()));
                         txtInstallmentsRemaining.setText(String.valueOf(installmentsRemaining));
     }//GEN-LAST:event_txtPayingKeyReleased
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      try {
-          insert();
-
-      } catch (ParseException ex) {
-          Logger.getLogger(Iloanpayment.class.getName()).log(Level.SEVERE, null, ex);
-      }
+        threadInsert();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged

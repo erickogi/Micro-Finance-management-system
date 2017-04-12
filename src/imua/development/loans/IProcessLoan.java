@@ -34,6 +34,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import imua.development.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComboBox;
 
 /**
@@ -78,6 +80,69 @@ public class IProcessLoan extends javax.swing.JFrame {
         lblnoOfWeeks.setVisible(false);
         //sets frequency spinner  un editable will be set otherwise as per the type of loan requested
        ((DefaultEditor)jSpinnerFrequency.getEditor()).getTextField().setEditable(false);
+       
+       jDateChooser1.getDateEditor().addPropertyChangeListener(
+    new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent e) {
+              Date a=null;
+         try{
+         if(timeUnit.equals("Weekly")){
+           Date f= jDateChooser1.getDate();
+           Calendar  c= Calendar.getInstance();
+           a=addWeek(f,frequency);
+        }
+            
+            
+        else if (timeUnit.equals("Monthly")){
+         Date f= jDateChooser1.getDate();
+         Calendar  c= Calendar.getInstance();
+         a=addMonth(f,frequency);
+        }
+        
+        
+        else if (timeUnit.equals("Daily")){
+         Date f= jDateChooser1.getDate();
+         Calendar  c= Calendar.getInstance();
+         a=addDay(f,frequency);
+        }
+        
+        
+        else if (timeUnit.equals("Yearly")){
+         Date f= jDateChooser1.getDate();
+         Calendar  c= Calendar.getInstance();
+         a=addYear(f,frequency);
+        }
+        
+         jDateChooser2.setDate(a);
+            
+         }
+         catch(Exception ad){
+          Calendar  c1= Calendar.getInstance();
+        
+           Date   a1=addYear( c1.getTime(),frequency);
+           
+           jDateChooser2.setDate(a1);
+             //JOptionPane.showMessageDialog(null, "Enter other fields first");
+         }
+            
+            
+            
+            
+            
+            
+            
+            
+        }
+        
+
+           
+    });
+       
+       
+       
+       
+       
       
     }
     
@@ -327,6 +392,8 @@ private static JTable getNewRenderedTable(final JTable table) {
         jComboBoxMode = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jLabel11 = new javax.swing.JLabel();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -486,6 +553,12 @@ private static JTable getNewRenderedTable(final JTable table) {
 
         txtTotal.setText("TOTAL");
 
+        jDateChooser1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser1PropertyChange(evt);
+            }
+        });
+
         jComboBoxMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mode", "Cash", "Mpesa", "Cheque" }));
         jComboBoxMode.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -496,6 +569,15 @@ private static JTable getNewRenderedTable(final JTable table) {
         jLabel8.setText("Start Count As From");
 
         jLabel10.setText("Mode");
+
+        jDateChooser2.setEnabled(false);
+        jDateChooser2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser2PropertyChange(evt);
+            }
+        });
+
+        jLabel11.setText("First Installment On");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -582,6 +664,12 @@ private static JTable getNewRenderedTable(final JTable table) {
                                 .addComponent(jLabel9)
                                 .addComponent(totalpayable)))))
                 .addGap(52, 52, 52))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -640,16 +728,23 @@ private static JTable getNewRenderedTable(final JTable table) {
                         .addGap(22, 22, 22)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
-                .addGap(39, 39, 39))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton1)
+                            .addComponent(jButton3))
+                        .addGap(39, 39, 39))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -842,14 +937,29 @@ private static JTable getNewRenderedTable(final JTable table) {
     
     return res;
 }
+    public void threadExecute(){
+Thread log=new Thread(){
+public void run(){
     
+    try{
+   
+     check()  ;
+      
+    }
+      catch(Exception b){
+         System.out.println("Error");
+      }
+} 
+      }   ;  
+      log.start();
+  }
     
     //okay-------initiates  checkWetherLoanExist method 
                 //initiates loan processing procedures by calling check method
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     String lnId=lblPersonId.getText() +""+lblType.getText();
         if(checkWetherLoanExist(lnId)==0){
-        check()  ;
+        threadExecute();
     }
     else{
         JOptionPane.showMessageDialog(null, "Customer has this type of loan not fully paid","Warning",JOptionPane.WARNING_MESSAGE,null);
@@ -884,8 +994,8 @@ private static JTable getNewRenderedTable(final JTable table) {
 //okay--------clears all variables
     private void clear(){
          
-        
-        
+        jDateChooser1.setDate(null);
+        jDateChooser2.setDate(null);
     txtTotal.setText("TOTAL");
     totalpayable.setText("TOTAL PAYABLE");
     payablewithin.setText("THIS TIME");
@@ -947,6 +1057,14 @@ deleteApplication(lblPersonId.getText());
     private void jComboBoxModeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxModeItemStateChanged
        
     }//GEN-LAST:event_jComboBoxModeItemStateChanged
+
+    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
+       
+    }//GEN-LAST:event_jDateChooser2PropertyChange
+
+    private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser1PropertyChange
+        
+    }//GEN-LAST:event_jDateChooser1PropertyChange
  
     //okay-----adds one month to any date given
     public static Date addMonth(Date date,int hw){
@@ -992,6 +1110,7 @@ deleteApplication(lblPersonId.getText());
      
     private void insert(){
         Date a = null;
+       
        String applicationfee=appfee.toString();
        
       //confirm the action of processing this loan 
@@ -1025,6 +1144,7 @@ deleteApplication(lblPersonId.getText());
         else if (timeUnit.equals("Yearly")){
          Date f= jDateChooser1.getDate();
          Calendar  c= Calendar.getInstance();
+         
          a=addYear(f,frequency);
         }
             
@@ -1299,8 +1419,10 @@ deleteApplication(lblPersonId.getText());
     private javax.swing.JComboBox<String> jComboBoxChooseMode;
     private javax.swing.JComboBox<String> jComboBoxMode;
     private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
