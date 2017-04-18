@@ -286,7 +286,9 @@ JOptionPane.showMessageDialog(null,"rs ");
       con.close();
     }
     catch (SQLException  ex)
-    {      Logger.getLogger(loanform.class.getName()).log(Level.SEVERE, null, ex);
+        
+    {      JOptionPane.showMessageDialog(null, "Not " + message);
+        Logger.getLogger(loanform.class.getName()).log(Level.SEVERE, null, ex);
        //  JOptionPane.showMessageDialog(null, "Not " + ex);
     }
   }

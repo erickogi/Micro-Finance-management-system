@@ -1309,12 +1309,16 @@ deleteApplication(lblPersonId.getText());
     Double instalments=fullLoanAmount/NOI;
     lblTime.setText(String.valueOf(NOI));
     lblInstallment.setText(instalments.toString());
+    
+    txtTotal.setText(String.valueOf(fullLoanAmount));
     }
     else{
     Double ltime=(fullLoanAmount/NOI);
    // JOptionPane.showMessageDialog(null, fullLoanAmount+" "+NOI+" "+ltime);
     lblInstallment.setText(String.valueOf(NOI));
     lblTime.setText(String.valueOf(ltime.toString()));
+    
+    txtTotal.setText(String.valueOf(fullLoanAmount));
     }
     return String.valueOf(fullLoanAmount);
     

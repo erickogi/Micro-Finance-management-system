@@ -21,6 +21,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import imua.development.*;
 import imua.development.Reports.GroupSheet;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
@@ -389,47 +390,56 @@ pdfp.close();
                 Logger.getLogger(GroupSheet.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            
-            
-            
-             FileInputStream psStream = null;
-        try {
-            psStream = new FileInputStream(new File(chooser.getSelectedFile(),txtId.getText()+""+jComboBoxLoanType.getSelectedItem().toString()+""+DATE+".pdf"));
-            } catch (FileNotFoundException ffne) {
-              ffne.printStackTrace();
+                        
+            if(Desktop.isDesktopSupported()){
+                try{
+                    File file=new File(chooser.getSelectedFile(),txtId.getText()+""+jComboBoxLoanType.getSelectedItem().toString()+""+DATE+".pdf");
+                    Desktop.getDesktop().open(file);
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-            if (psStream == null) {
-                return;
-            }
-        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
-        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
-        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
-         
-        // this step is necessary because I have several printers configured
-        PrintService myPrinter = null;
-        for (int i = 0; i < services.length; i++){
-          //  System.out.println("service found: "+svcName);
-            String svcName = services[i].toString();           
-            if (svcName.contains("printer closest to me")){
-                myPrinter = services[i];
-                System.out.println("my printer found: "+svcName);
-                break;
-            }
-        }
-         
-        if (myPrinter != null) {            
-            DocPrintJob job = myPrinter.createPrintJob();
-            try {
-            job.print(myDoc, aset);
-             
-            } catch (Exception pe) {pe.printStackTrace();}
-        } else {
-            System.out.println("no printer services found");
-        }
             
             
-               JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE); 
+//             FileInputStream psStream = null;
+//        try {
+//            psStream = new FileInputStream(new File(chooser.getSelectedFile(),txtId.getText()+""+jComboBoxLoanType.getSelectedItem().toString()+""+DATE+".pdf"));
+//            } catch (FileNotFoundException ffne) {
+//              ffne.printStackTrace();
+//            }
+//            if (psStream == null) {
+//                return;
+//            }
+//        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
+//        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
+//        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+//        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
+//         
+//        // this step is necessary because I have several printers configured
+//        PrintService myPrinter = null;
+//        for (int i = 0; i < services.length; i++){
+//          //  System.out.println("service found: "+svcName);
+//            String svcName = services[i].toString();           
+//            if (svcName.contains("printer closest to me")){
+//                myPrinter = services[i];
+//                System.out.println("my printer found: "+svcName);
+//                break;
+//            }
+//        }
+//         
+//        if (myPrinter != null) {            
+//            DocPrintJob job = myPrinter.createPrintJob();
+//            try {
+//            job.print(myDoc, aset);
+//             
+//            } catch (Exception pe) {pe.printStackTrace();}
+//        } else {
+//            System.out.println("no printer services found");
+//        }
+//            
+//            
+//               JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE); 
         }  
         
 }

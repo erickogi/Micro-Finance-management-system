@@ -27,6 +27,7 @@ import imua.development.Methods;
 import imua.development.Personalreports;
 import imua.development.UserDataHolder;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -644,55 +645,64 @@ pdfp.close();
             } catch (IOException ex) {
                 Logger.getLogger(GroupSheet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
-            
-            
-            FileInputStream psStream = null;
-        try {
-            psStream = new FileInputStream(new File(chooser.getSelectedFile(),"Group "+jComboBoxGroup.getSelectedItem().toString()+".pdf"));
-            } catch (FileNotFoundException ffne) {
-              ffne.printStackTrace();
+                        
+            if(Desktop.isDesktopSupported()){
+                try{
+                    File file=new File(chooser.getSelectedFile(),"Group "+jComboBoxGroup.getSelectedItem().toString()+".pdf");
+                    Desktop.getDesktop().open(file);
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-            if (psStream == null) {
-                return;
-            }
-        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
-        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
-        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
-       //  out.println(services[1]);
-          
-            JComboBox jcb=new JComboBox(services);
-            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
-           int mode=jcb.getSelectedIndex();
-        // this step is necessary because I have several printers configured
-        PrintService myPrinter = null;
-        for (int i = 0; i < services.length; i++){
-            
-          //  System.out.println("service found: "+svcName);
-            String svcName = services[i].toString();   
             
             
-           // JOptionPane.showInputDialog(i)
-            if (svcName.contains("Hp")){
-                myPrinter = services[i];
-                System.out.println("my printer found: "+svcName);
-                break;
-            }
-        }
-         myPrinter=services[mode];
-        if (myPrinter != null) {            
-            DocPrintJob job = myPrinter.createPrintJob();
-            try {
-            job.print(myDoc, aset);
-             
-            } catch (Exception pe) {pe.printStackTrace();}
-        } else {
-            System.out.println("no printer services found");
-        } 
             
-            JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE);  
+//            FileInputStream psStream = null;
+//        try {
+//            psStream = new FileInputStream(new File(chooser.getSelectedFile(),"Group "+jComboBoxGroup.getSelectedItem().toString()+".pdf"));
+//            } catch (FileNotFoundException ffne) {
+//              ffne.printStackTrace();
+//            }
+//            if (psStream == null) {
+//                return;
+//            }
+//        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
+//        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
+//        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+//        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
+//       //  out.println(services[1]);
+//          
+//            JComboBox jcb=new JComboBox(services);
+//            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
+//           int mode=jcb.getSelectedIndex();
+//        // this step is necessary because I have several printers configured
+//        PrintService myPrinter = null;
+//        for (int i = 0; i < services.length; i++){
+//            
+//          //  System.out.println("service found: "+svcName);
+//            String svcName = services[i].toString();   
+//            
+//            
+//           // JOptionPane.showInputDialog(i)
+//            if (svcName.contains("Hp")){
+//                myPrinter = services[i];
+//                System.out.println("my printer found: "+svcName);
+//                break;
+//            }
+//        }
+//         myPrinter=services[mode];
+//        if (myPrinter != null) {            
+//            DocPrintJob job = myPrinter.createPrintJob();
+//            try {
+//            job.print(myDoc, aset);
+//             
+//            } catch (Exception pe) {pe.printStackTrace();}
+//        } else {
+//            System.out.println("no printer services found");
+//        } 
+//            
+//            JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE);  
             
         }  
         

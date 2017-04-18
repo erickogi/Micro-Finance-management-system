@@ -21,9 +21,9 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,15 +37,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -477,46 +468,58 @@ String imgurl;
             }
             
             
-             FileInputStream psStream = null;
-        try {
-            psStream = new FileInputStream(new File(chooser.getSelectedFile(),txtID.getText()+" TransactionReport"+DATE+".pdf"));
-            } catch (FileNotFoundException ffne) {
-              ffne.printStackTrace();
+            
+            if(Desktop.isDesktopSupported()){
+                try{
+                    File file=new File(chooser.getSelectedFile(),txtID.getText()+" TransactionReport"+DATE+".pdf");
+                    Desktop.getDesktop().open(file);
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-            if (psStream == null) {
-                return;
-            }
-        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
-        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
-        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
-        //  String []list={ "Cash", "Mpesa", "Cheque"};
-            JComboBox jcb=new JComboBox(services);
-            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
-           int mode=jcb.getSelectedIndex();
-        // this step is necessary because I have several printers configured
-        PrintService myPrinter = null;
-        for (int i = 0; i < services.length; i++){
-          //  System.out.println("service found: "+svcName);
-            String svcName = services[i].toString();           
-            if (svcName.contains("HP")){
-                myPrinter = services[i];
-                System.out.println("my printer found: "+svcName);
-                break;
-            }
-        }
-         myPrinter=services[mode];
-        if (myPrinter != null) {            
-            DocPrintJob job = myPrinter.createPrintJob();
-            try {
-            job.print(myDoc, aset);
-             
-            } catch (Exception pe) {pe.printStackTrace();}
-        } else {
-            System.out.println("no printer services found");
-        }
-
-        JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE);       
+            
+//            
+//             FileInputStream psStream = null;
+//        try {
+//            psStream = new FileInputStream(new File(chooser.getSelectedFile(),txtID.getText()+" TransactionReport"+DATE+".pdf"));
+//            } catch (FileNotFoundException ffne) {
+//              ffne.printStackTrace();
+//            }
+//            if (psStream == null) {
+//                return;
+//            }
+//        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
+//        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
+//        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+//        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
+//        //  String []list={ "Cash", "Mpesa", "Cheque"};
+//            JComboBox jcb=new JComboBox(services);
+//            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
+//           int mode=jcb.getSelectedIndex();
+//        // this step is necessary because I have several printers configured
+//        PrintService myPrinter = null;
+//        for (int i = 0; i < services.length; i++){
+//          //  System.out.println("service found: "+svcName);
+//            String svcName = services[i].toString();           
+//            if (svcName.contains("HP")){
+//                myPrinter = services[i];
+//                System.out.println("my printer found: "+svcName);
+//                break;
+//            }
+//        }
+//         myPrinter=services[mode];
+//        if (myPrinter != null) {            
+//            DocPrintJob job = myPrinter.createPrintJob();
+//            try {
+//            job.print(myDoc, aset);
+//             
+//            } catch (Exception pe) {pe.printStackTrace();}
+//        } else {
+//            System.out.println("no printer services found");
+//        }
+//
+//        JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE);       
 }
                 
     

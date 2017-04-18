@@ -689,7 +689,7 @@ public double getDefaultRate(String loanType){
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         int i = this.table.getSelectedRow();
-     ;
+     
                 TableModel model = this.table.getModel();
  
                //  this.autoidd=(model.getValueAt(i, 7).toString());

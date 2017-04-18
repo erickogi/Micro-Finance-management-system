@@ -20,6 +20,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import imua.development.LoanDataHolder;
 import imua.development.Methods;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -189,51 +190,60 @@ pdfp.close();
                 Logger.getLogger(GroupSheet.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            
-            
-            
-             FileInputStream psStream = null;
-        try {
-            psStream = new FileInputStream(new File(chooser.getSelectedFile(),loanid+""+DATE+".pdf"));
-            } catch (FileNotFoundException ffne) {
-              ffne.printStackTrace();
+                        
+            if(Desktop.isDesktopSupported()){
+                try{
+                    File file=new File(chooser.getSelectedFile(),loanid+""+DATE+".pdf");
+                    Desktop.getDesktop().open(file);
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
-            if (psStream == null) {
-                return rc;
-               // return;
-            }
-        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
-        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
-        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
-       //   String []list={ "Cash", "Mpesa", "Cheque"};
-            JComboBox jcb=new JComboBox(services);
-            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
-           int mode=jcb.getSelectedIndex();
-        // this step is necessary because I have several printers configured
-        PrintService myPrinter = null;
-        for (int i = 0; i < services.length; i++){
-          //  System.out.println("service found: "+svcName);
-            String svcName = services[i].toString();           
-            if (svcName.contains("printer closest to me")){
-                myPrinter = services[i];
-                System.out.println("my printer found: "+svcName);
-                break;
-            }
-        }
-         myPrinter=services[mode];
-        if (myPrinter != null) {            
-            DocPrintJob job = myPrinter.createPrintJob();
-            try {
-            job.print(myDoc, aset);
-             
-            } catch (Exception pe) {pe.printStackTrace();}
-        } else {
-            System.out.println("no printer services found");
-        }
             
-            
-               JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE); 
+//            
+//             FileInputStream psStream = null;
+//        try {
+//            psStream = new FileInputStream(new File(chooser.getSelectedFile(),loanid+""+DATE+".pdf"));
+//            } catch (FileNotFoundException ffne) {
+//              ffne.printStackTrace();
+//            }
+//            if (psStream == null) {
+//                return rc;
+//               // return;
+//            }
+//        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
+//        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
+//        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+//        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
+//       //   String []list={ "Cash", "Mpesa", "Cheque"};
+//            JComboBox jcb=new JComboBox(services);
+//            JOptionPane.showMessageDialog(null, jcb,"Select mode of printing",JOptionPane.QUESTION_MESSAGE);
+//           int mode=jcb.getSelectedIndex();
+//        // this step is necessary because I have several printers configured
+//        PrintService myPrinter = null;
+//        for (int i = 0; i < services.length; i++){
+//          //  System.out.println("service found: "+svcName);
+//            String svcName = services[i].toString();           
+//            if (svcName.contains("printer closest to me")){
+//                myPrinter = services[i];
+//                System.out.println("my printer found: "+svcName);
+//                break;
+//            }
+//        }
+//         myPrinter=services[mode];
+//        if (myPrinter != null) {            
+//            DocPrintJob job = myPrinter.createPrintJob();
+//            try {
+//            job.print(myDoc, aset);
+//             
+//            } catch (Exception pe) {pe.printStackTrace();}
+//        } else {
+//            System.out.println("no printer services found");
+//        }
+//            
+//            
+//               JOptionPane.showMessageDialog(null, "Done ","Success",JOptionPane.PLAIN_MESSAGE); 
                rc=1;
         }  
         

@@ -19,14 +19,11 @@ import imua.development.Reports.GroupSheet;
 import imua.development.Accounts.Users;
 import imua.development.BackupRestore.Restore;
 import imua.development.DepositandWithdrawal.Deposit;
-import imua.development.loans.Defaulters;
 import imua.development.loans.LoanHistory;
 import imua.development.loans.LoanWithSavings;
 import imua.development.loans.LoanWithoutSavings;
-import imua.development.loans.ProcessLoan;
 import imua.development.loans.TodaysLoans;
 import imua.development.loans.loanform;
-import imua.development.loans.loanpayment;
 import imua.development.loans.loantypes;
 import imua.development.loginClass.AddUsers;
 import imua.development.loginClass.login1;
@@ -44,10 +41,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 import java.net.URI;
 import java.sql.Connection;
@@ -644,7 +639,7 @@ public class Main extends javax.swing.JFrame {
           
           
           } catch (SQLException ex) {
-          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       }
            
            
@@ -1972,7 +1967,7 @@ public void b(String h){
           else{
               jToolBar1.setVisible(false);
            //  MarqueePanel mp = new MarqueePanel(s, 100); 
-            mp.stop();
+             mp.stop();
              jToolBar1.remove(mp);
              mp.stop();
           }
@@ -1991,7 +1986,7 @@ public void b(String h){
           //checkLoanRepayments();
           
       } catch (SQLException ex) {
-          Logger.getLogger(ProcessLoan.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
       }
      // if("".equals(mesoLoan)){
       //     String mesoYote=s;
@@ -2101,12 +2096,7 @@ public void b(String h){
          //a.typeoftransaction="withdrawal";
         a.setVisible(true);
     }
-//      public static void openLoanProcessings(){
-//        this.setEnabled(false);
-//        ProcessLoan a=new ProcessLoan();
-//         //a.typeoftransaction="withdrawal";
-//        a.setVisible(true);
-//    }
+
     public void openWithdrawForm(){
         openWithdrawal();
     }
